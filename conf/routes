@@ -1,15 +1,13 @@
-# Routes
-# This file defines all application routes (Higher priority routes first)
-# ~~~~
-
 # API
 GET     /api/wip                    controllers.Application.index
 
-# Home page
-GET     /                           controllers.Assets.at(path="/public/dist", file="index.html")
+# UI DEV
+GET     /dev/                       controllers.Application.dev(file="index.html")
+GET     /dev/*file                  controllers.Application.dev(file)
 
 # UI
+GET     /                           controllers.Assets.at(path="/public/dist", file="index.html")
 GET     /*file                      controllers.Assets.at(path="/public/dist", file)
 
 # Assets
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+# GET     /assets/*file               controllers.Assets.at(path="/public", file)
