@@ -1,5 +1,13 @@
+# redirect every query that ends with / to the same without the /
+# for example /ping/ will redirect to /ping
+GET     /*file/                     controllers.Application.redirectToResource(file: String)
+
 # API
-GET     /api/wip                    controllers.Application.index
+GET     /api/wip                    controllers.Api.wip
+
+# Errors
+GET     /error                      controllers.Application.error
+GET     /error/404                  controllers.Application.missingFile
 
 # UI DEV
 GET     /dev/                       controllers.Application.dev(file="index.html")
@@ -10,4 +18,4 @@ GET     /                           controllers.Assets.at(path="/public/dist", f
 GET     /*file                      controllers.Assets.at(path="/public/dist", file)
 
 # Assets
-# GET     /assets/*file               controllers.Assets.at(path="/public", file)
+# GET   /assets/*file               controllers.Assets.at(path="/public", file)
