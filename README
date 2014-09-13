@@ -1,4 +1,10 @@
-This is your new Play application
+Heroku test by Jerome Baudoux
 =================================
+http://www.jerome-baudoux.com
 
-This file will be packaged with your application, when using `activator dist`.
+This small web application was developed in order to practice the following technologies:
+- Play Framework
+- Angular JS
+- D3.js
+- bootstrap
+- Heroku

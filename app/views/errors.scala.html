@@ -4,10 +4,17 @@
 <html lang="en">
     <head>
         <title>@title</title>
+    	<link rel="stylesheet" href="/styles/vendor.css" />
     </head>
     <body>
-    	<div>:(</div>
-    	<div>@content</div>
-    	<div><a href="/">Back to main menu</a></div>
+    	<div class="container">
+    		<h1>I guess we both know that isn't going to happen.</h1>
+	    	<div class="jumbotron">
+			  <h1>:(</h1>
+			  <p>@content</p>
+			  <p><a class="btn btn-primary btn-lg" role="button" href="/">Back to main menu</a></p>
+			</div>
+		</div>
     </body>
+    <script src="/scripts/vendor.js"></script>
 </html>

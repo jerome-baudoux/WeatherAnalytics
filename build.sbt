@@ -1,4 +1,4 @@
-name := """play-scala"""
+name := """heroku-test"""
 
 version := "1.0-SNAPSHOT"
 

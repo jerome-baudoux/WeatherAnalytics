@@ -6,16 +6,14 @@ GET     /*file/                     controllers.Application.redirectToResource(f
 GET     /api/wip                    controllers.Api.wip
 
 # Errors
-GET     /error                      controllers.Application.error
-GET     /error/404                  controllers.Application.missingFile
+GET     /error                      controllers.Errors.unknown
+GET     /error/404                  controllers.Errors.missingFile
 
-# UI DEV
-GET     /dev/                       controllers.Application.dev(file="index.html")
-GET     /dev/*file                  controllers.Application.dev(file)
+# UI Dev
+GET     /dev                        controllers.Application.redirectToResource(file="dev/index.html")
+GET     /dev/*file                  controllers.Application.dev(path="ui/app", file)
 
-# UI
+# UI Prod
 GET     /                           controllers.Assets.at(path="/public/dist", file="index.html")
 GET     /*file                      controllers.Assets.at(path="/public/dist", file)
 
-# Assets
-# GET   /assets/*file               controllers.Assets.at(path="/public", file)
