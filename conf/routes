@@ -4,6 +4,7 @@ GET     /*file/                     controllers.Application.redirectToResource(f
 
 # API
 GET     /api/wip                    controllers.Api.wip
+GET     /api/*name                  controllers.Api.apiNotFound(name)
 
 # Errors
 GET     /error                      controllers.Errors.unknown
