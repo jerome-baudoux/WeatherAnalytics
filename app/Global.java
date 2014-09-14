@@ -11,8 +11,9 @@ import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Http.Request;
 import play.mvc.Http.RequestHeader;
-
 import controllers.Errors;
+import engine.Engine;
+import engine.MainEngine;
 
 /**
  * Global Play configuration
@@ -20,9 +21,18 @@ import controllers.Errors;
  */
 public class Global extends GlobalSettings {
 	
+	protected final Engine mainEngine = new MainEngine();
+	
 	@Override
-	public void onStart(Application arg0) {
-		super.onStart(arg0);
+	public void onStart(Application arg) {
+		super.onStart(arg);
+		this.mainEngine.start();
+	}
+	
+	@Override
+	public void onStop(Application arg) {
+		super.onStop(arg);
+		this.mainEngine.stop();
 	}
 
 	@Override
