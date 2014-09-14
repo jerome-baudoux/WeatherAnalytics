@@ -7,7 +7,6 @@ import play.Logger;
 import play.Play;
 import play.api.libs.ws.WS;
 import play.api.libs.ws.WSClient;
-import utils.Variables;
 import engine.Engine;
 
 /**
@@ -22,12 +21,14 @@ public class PingEngine implements Engine {
 	protected TimerTask timerTask;
 	protected Timer timer;
 	
+	protected String url;
+	
 	public class PingTask extends TimerTask {
 		@Override
 		public void run() {
 			// For now only send queries, do not fetch result
 			WS.url(
-				Variables.APPLICATION_URL, 
+				PingEngine.this.url, 
 				Play.application().getWrappedApplication()
 			).get();
 			Logger.info("Contacting website...");
@@ -36,6 +37,7 @@ public class PingEngine implements Engine {
 
 	@Override
 	public void start() {
+		this.url = Play.application().configuration().getString("heroku.http.url");
 		this.timerTask = new PingTask();
 		this.timer = new Timer(true);
 		this.timer.scheduleAtFixedRate(timerTask, 0, DELAY);

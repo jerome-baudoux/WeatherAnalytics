@@ -24,11 +24,10 @@ public class Application extends Controller {
     }
     
     /**
-     * 
-     * @param path
-     * @param resource
-     * @param allowsInProd
-     * @return
+     * Fetch ui files for DEV, returns 404 in PROD
+     * @param path folder
+     * @param resource file
+     * @return file or 404
      */
     public static Result dev(String path, String resource) {
     	

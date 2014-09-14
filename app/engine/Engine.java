@@ -6,6 +6,13 @@ package engine;
  */
 public interface Engine {
 
+	/**
+	 * Start the engine
+	 */
 	public abstract void start();
+	
+	/**
+	 * Stop the engine
+	 */
 	public abstract void stop();
 }

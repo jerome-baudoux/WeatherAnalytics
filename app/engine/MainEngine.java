@@ -32,6 +32,9 @@ public class MainEngine implements Engine {
 		}
 	}
 
+	/**
+	 * Stop main engine
+	 */
 	@Override
 	public synchronized void stop() {
 		for(Engine engine: this.engines) {
