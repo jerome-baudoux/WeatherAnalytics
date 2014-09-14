@@ -28,6 +28,6 @@ angular
         controller: 'AboutCtrl'
       })
       .otherwise({
-        redirectTo: '/'
+          templateUrl: 'views/404.html',
       });
   });
