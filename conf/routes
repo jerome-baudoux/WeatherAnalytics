@@ -14,6 +14,6 @@ GET     /dev                        controllers.Application.redirectToResource(f
 GET     /dev/*file                  controllers.Application.dev(path="ui/app", file)
 
 # UI Prod
-GET     /                           controllers.Assets.at(path="/public/dist", file="index.html")
-GET     /*file                      controllers.Assets.at(path="/public/dist", file)
+GET     /                           controllers.PublicAssets.at(path="/public/dist", file="index.html")
+GET     /*file                      controllers.PublicAssets.at(path="/public/dist", file)
 
