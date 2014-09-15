@@ -22,20 +22,6 @@ public class Api extends Controller {
 		return ok(
 				new SimpleApiResponse()
 				.setResult(ApiResultConstants.SUCCESS)
-				.setMessage("Pong")
-				.toJSON()
-		);
-	}
-
-	/**
-	 * For debug purpose only
-	 * @return Work In Progress
-	 */
-	public static Result wip() {
-		return ok(
-				new SimpleApiResponse()
-				.setResult(ApiResultConstants.SUCCESS)
-				.setMessage("Work In Progress")
 				.toJSON()
 		);
 	}

@@ -1,5 +1,7 @@
 package api;
 
+import javax.annotation.Nullable;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -29,6 +31,13 @@ public abstract class ApiResponse<T extends ApiResponse<T>> {
 	protected Throwable error;
 	
 	/**
+	 * Empty object
+	 */
+	public ApiResponse() {
+		this.result = ApiResultConstants.UNKNOWN;
+	}
+	
+	/**
 	 * Converts the current response to json
 	 */
 	public JsonNode toJSON() {
@@ -56,6 +65,7 @@ public abstract class ApiResponse<T extends ApiResponse<T>> {
 	/**
 	 * @return Description of what happened
 	 */
+	@Nullable
 	public String getMessage() {
 		return message;
 	}
@@ -72,6 +82,7 @@ public abstract class ApiResponse<T extends ApiResponse<T>> {
 	/**
 	 * @return If an error occurred, the stack trace should be there
 	 */
+	@Nullable
 	public Throwable getError() {
 		return error;
 	}

@@ -5,6 +5,7 @@ public class ApiResultConstants {
 	/*
 	 * Bellow 1000, all generic messages
 	 */
+	public static final int UNKNOWN = 0;
 
 	public static final int SUCCESS = 1;
 	public static final int PROCESSING = 2;
