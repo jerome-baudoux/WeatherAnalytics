@@ -1,10 +1,11 @@
+import com.google.inject.Injector;
+
 import play.Application;
 import play.GlobalSettings;
 import play.libs.F.Promise;
 import play.mvc.Result;
 import play.mvc.Http.RequestHeader;
 import controllers.Errors;
-import engine.Engine;
 import engine.MainEngine;
 
 /**
@@ -13,17 +14,28 @@ import engine.MainEngine;
  */
 public class Global extends GlobalSettings {
 	
-	protected final Engine mainEngine = new MainEngine();
+	/**
+	 * Main engine of the application
+	 * Used for everything that is not Views/Controllers
+	 */
+	protected final MainEngine mainEngine = new MainEngine();
 	
+	/**
+	 * @return get the Guice injector
+	 */
+	public Injector getInjector() {
+		return this.mainEngine.getInjector();
+	}
+
 	@Override
-	public void onStart(Application arg) {
-		super.onStart(arg);
+	public void onStart(Application app) {
+		super.onStart(app);
 		this.mainEngine.start();
 	}
 	
 	@Override
-	public void onStop(Application arg) {
-		super.onStop(arg);
+	public void onStop(Application app) {
+		super.onStop(app);
 		this.mainEngine.stop();
 	}
 

@@ -13,3 +13,5 @@ libraryDependencies ++= Seq(
   ws,
   javaWs 
 )
+
+libraryDependencies += "com.google.inject" % "guice" % "3.0"

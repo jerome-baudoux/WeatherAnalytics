@@ -3,6 +3,10 @@ package engine;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Stage;
+
 import engine.pingengine.PingEngine;
 
 /**
@@ -10,15 +14,28 @@ import engine.pingengine.PingEngine;
  * @author Jerome Baudoux
  */
 public class MainEngine implements Engine {
-	
+
+	protected final Injector injector;
 	protected final List<Engine> engines;
 	
 	/**
 	 * Main engine creation
 	 */
 	public MainEngine() {
+		
+		// Guice Injector
+		this.injector = Guice.createInjector(Stage.PRODUCTION, new MainModule());
+		
+		// Prepare all engines
 		this.engines = new LinkedList<Engine>();
-		this.engines.add(new PingEngine());
+		this.engines.add(this.injector.getInstance(PingEngine.class));
+	}
+	
+	/**
+	 * @return Get the Guice injector 
+	 */
+	public Injector getInjector() {
+		return injector;
 	}
 
 	/**

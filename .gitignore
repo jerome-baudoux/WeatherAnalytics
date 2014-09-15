@@ -13,3 +13,6 @@ tmp
 /.project
 /RUNNING_PID
 /.settings
+/bin
+unienv.bat
+.cache
