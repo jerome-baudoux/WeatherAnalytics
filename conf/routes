@@ -3,6 +3,7 @@
 GET     /*file/                     controllers.Application.redirectToResource(file: String)
 
 # API
+GET     /api/ping                   controllers.Api.ping
 GET     /api/wip                    controllers.Api.wip
 GET     /api/*name                  controllers.Api.apiNotFound(name)
 

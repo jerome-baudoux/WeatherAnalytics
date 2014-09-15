@@ -3,6 +3,8 @@ package engine.pingengine;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.google.inject.Singleton;
+
 import akka.actor.ActorSystem;
 import play.Logger;
 import play.Play;
@@ -17,6 +19,7 @@ import scala.runtime.AbstractPartialFunction;
  * And writes the result in the log
  * @author Jerome Baudoux
  */
+@Singleton
 public class PingEngineImpl implements PingEngine {
 	
 	public static final long DELAY = 1000 * 60 * 5; // 5 minutes

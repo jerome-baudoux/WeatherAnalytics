@@ -7,10 +7,13 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
+import com.google.inject.Singleton;
+
 /**
  * Main controller for the application
  * @author Jerome Baudoux
  */
+@Singleton
 public class Application extends Controller {
 
     /**

@@ -1,5 +1,7 @@
 package controllers;
 
+import com.google.inject.Singleton;
+
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -7,6 +9,7 @@ import play.mvc.Result;
  * Handle errors on the back end side
  * @author Jerome Baudoux
  */
+@Singleton
 public class Errors extends Controller {
 
 	public static String TITLE_ERROR_404 = "Error 404";

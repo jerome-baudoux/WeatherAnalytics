@@ -1,5 +1,7 @@
 package controllers;
 
+import com.google.inject.Singleton;
+
 import api.ApiResultConstants;
 import api.SimpleApiResponse;
 import play.mvc.Controller;
@@ -9,6 +11,7 @@ import play.mvc.Result;
  * A controller for all public API
  * @author Jerome Baudoux
  */
+@Singleton
 public class Api extends Controller {
 
 	/**
