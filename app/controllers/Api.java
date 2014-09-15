@@ -12,6 +12,19 @@ import play.mvc.Result;
 public class Api extends Controller {
 
 	/**
+	 * A simple ping request
+	 * @return Pong
+	 */
+	public static Result ping() {
+		return ok(
+				new SimpleApiResponse()
+				.setResult(ApiResultConstants.SUCCESS)
+				.setMessage("Pong")
+				.toJSON()
+		);
+	}
+
+	/**
 	 * For debug purpose only
 	 * @return Work In Progress
 	 */

@@ -1,6 +1,5 @@
 package controllers
 
-import play.api._
 import play.api.mvc._
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -18,7 +17,7 @@ object PublicAssets extends Controller {
 			// No error just send the result
 			if(result.header.status < 400) {
 				result
-			} 
+			}
 			// Specific 404 error
 			else if(result.header.status == 404) {
 				NotFound(views.html.errors(Errors.TITLE_ERROR_404)(Errors.MESSAGE_ERROR_404))
@@ -27,7 +26,6 @@ object PublicAssets extends Controller {
 			else {
 				InternalServerError(views.html.errors(Errors.TITLE_ERROR_500)(Errors.MESSAGE_ERROR_500))
 			}
-		}
-    )
+		})
   }
 }

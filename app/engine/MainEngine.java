@@ -1,6 +1,6 @@
 package engine;
 
-import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import engine.pingengine.PingEngine;
@@ -17,9 +17,8 @@ public class MainEngine implements Engine {
 	 * Main engine creation
 	 */
 	public MainEngine() {
-		this.engines = Arrays.asList(
-			new PingEngine()
-		);
+		this.engines = new LinkedList<Engine>();
+		this.engines.add(new PingEngine());
 	}
 
 	/**
