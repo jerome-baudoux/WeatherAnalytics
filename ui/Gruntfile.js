@@ -271,7 +271,7 @@ module.exports = function (grunt) {
           src: ['generated/*']
         }, {
           expand: true,
-          cwd: 'bower_components/bootstrap/dist',
+          cwd: 'bower_components/fontawesome',
           src: 'fonts/*',
           dest: '<%= yeoman.dist %>'
         }]
@@ -304,7 +304,28 @@ module.exports = function (grunt) {
         configFile: 'test/karma.conf.js',
         singleRun: true
       }
+    },
+    
+
+    less: {
+        options: {
+            compress: false
+        },
+        dist: {
+            files: [
+                {expand: true,cwd: '<%= yeoman.app %>/styles',
+                    src: '*.less',
+                    dest: '<%= yeoman.app %>/styles',
+                    ext: '.css'},
+                {expand: true,cwd: '<%= yeoman.app %>/styles_svg',
+                    src: '*.less',
+                    dest: '<%= yeoman.app %>/styles_svg',
+                    ext: '.css'}
+            ]
+        }
     }
+    
+    
   });
 
 
@@ -338,6 +359,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
+    'less',
     'wiredep',
     'useminPrepare',
     'concurrent:dist',
