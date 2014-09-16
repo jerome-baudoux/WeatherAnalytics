@@ -3,26 +3,46 @@ package engine;
 import java.util.LinkedList;
 import java.util.List;
 
+import play.Application;
+import play.GlobalSettings;
+import play.libs.F.Promise;
+import play.mvc.Result;
+import play.mvc.Http.RequestHeader;
+
 import com.google.inject.Injector;
 
+import controllers.Errors;
 import engine.pingengine.PingEngine;
 
 /**
  * Main engine for the application
  * @author Jerome Baudoux
  */
-public class MainEngine implements Engine {
+public class MainEngine extends GlobalSettings implements Engine {
+	
+	/**
+	 * Injector for dependency injection
+	 */
+	protected Injector injector; 
 
-	protected final List<Engine> engines;
+	/**
+	 * All engines of the application
+	 */
+	protected List<Engine> engines;
 	
 	/**
 	 * Main engine creation
 	 * @param injector Guice Injector
 	 */
 	public MainEngine(Injector injector) {
+		this.injector = injector;
 		this.engines = new LinkedList<Engine>();
 		this.engines.add(injector.getInstance(PingEngine.class));
 	}
+	
+	/*
+	 * Engine
+	 */
 
 	/**
 	 * Start main engine
@@ -42,5 +62,66 @@ public class MainEngine implements Engine {
 		for(Engine engine: this.engines) {
 			engine.stop();
 		}
+	}
+	
+	/*
+	 * Settings
+	 */
+
+    /**
+     * Each startup
+     */
+	@Override
+	public void onStart(Application app) {
+		super.onStart(app);
+		this.start();
+	}
+	
+	/**
+	 * Each shutdown
+	 */
+	@Override
+	public void onStop(Application app) {
+		super.onStop(app);
+		this.stop();
+	}
+
+	/**
+	 * On String error
+	 */
+	@Override
+	public Promise<Result> onBadRequest(RequestHeader header, String error) {
+		return Promise.promise(() -> getInjector().getInstance(Errors.class).message(error));
+	}
+
+	/**
+	 * On Throwable error
+	 */
+	@Override
+	public Promise<Result> onError(RequestHeader header, Throwable error) {
+		return Promise.promise(() -> getInjector().getInstance(Errors.class).message(error.getMessage()));
+	}
+
+	/**
+	 * When no handler is found
+	 */
+	@Override
+	public Promise<Result> onHandlerNotFound(RequestHeader header) {
+		return Promise.promise(() -> getInjector().getInstance(Errors.class).missingFile());
+	}
+
+	/**
+	 * Instrument controller to allow Guice injection 
+	 */
+    @Override
+    public <A> A getControllerInstance(Class<A> controllerClass) throws Exception {
+    	return this.injector.getInstance(controllerClass);
+    }
+	
+	/**
+	 * @return get the Guice injector
+	 */
+	public Injector getInjector() {
+		return this.injector;
 	}
 }

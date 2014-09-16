@@ -18,7 +18,7 @@ public class Api extends Controller {
 	 * A simple ping request
 	 * @return Pong
 	 */
-	public static Result ping() {
+	public Result ping() {
 		return ok(
 				new SimpleApiResponse()
 				.setResult(ApiResultConstants.SUCCESS)
@@ -31,7 +31,7 @@ public class Api extends Controller {
 	 * @param name name of the api
 	 * @return 404 error
 	 */
-	public static Result apiNotFound(String name) {
+	public Result apiNotFound(String name) {
 		return notFound(
 				new SimpleApiResponse()
 					.setResult(ApiResultConstants.ERROR_API_NOT_FOUND)

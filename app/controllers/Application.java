@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 /**
@@ -15,6 +16,20 @@ import com.google.inject.Singleton;
  */
 @Singleton
 public class Application extends Controller {
+	
+	/**
+	 * We need to delegate in case of errors
+	 */
+	protected Errors errorController;
+	
+	/**
+	 * For dependency injection
+	 * @param errorController We need to delegate in case of errors
+	 */
+	@Inject
+	public Application(Errors errorController) {
+		this.errorController = errorController;
+	}
 
     /**
      * Remove last slash, because /resource is not the same as /resource/
@@ -22,7 +37,7 @@ public class Application extends Controller {
      * @param file path to redirect
      * @return Redirection
      */
-    public static Result redirectToResource(String file) {
+    public Result redirectToResource(String file) {
     	return redirect("/"+file);
     }
     
@@ -32,12 +47,12 @@ public class Application extends Controller {
      * @param resource file
      * @return file or 404
      */
-    public static Result dev(String path, String resource) {
+    public Result dev(String path, String resource) {
     	
     	if(play.api.Play.isProd(play.api.Play.current())) {
         	// If in production
         	// do not serve the resource that does not exist anyway
-        	return Errors.missingFile();
+        	return this.errorController.missingFile();
     	}
     	
     	// Only available in DEV
@@ -51,7 +66,7 @@ public class Application extends Controller {
         try {
 			return ok(file, true);
 		} catch(Throwable t) {
-			return Errors.missingFile();
+			return this.errorController.missingFile();
 		}
     }
 }

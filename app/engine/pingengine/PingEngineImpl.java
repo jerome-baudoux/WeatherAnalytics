@@ -67,13 +67,13 @@ public class PingEngineImpl implements PingEngine {
 				).get();
 
 				// Checks http status
-				future.map(new AbstractFunction1<WSResponse, Void>() {
+				future.onSuccess(new AbstractPartialFunction<WSResponse, Void>() {
 					@Override
-					public Void apply(WSResponse response) {
+					public boolean isDefinedAt(WSResponse response) {
 						if(response.status()>400) {
 							Logger.error("Error, cannot reach application");
 						}
-						return null;
+						return false;
 					}
 				}, PingEngineImpl.this.context);
 				

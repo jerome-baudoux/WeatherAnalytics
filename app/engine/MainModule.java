@@ -1,9 +1,10 @@
 package engine;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.internal.Errors;
 
-import engine.pingengine.PingEngine;
-import engine.pingengine.PingEngineImpl;
+import controllers.*;
+import engine.pingengine.*;
 
 /**
  * Configure all binding for the production application
@@ -14,6 +15,16 @@ public class MainModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
+		
+		// Controller
+		bind(Api.class);
+		bind(Application.class);
+		bind(Errors.class);
+
+		// Engines
 		bind(PingEngine.class).to(PingEngineImpl.class);
+
+		// Services
+		
 	}
 }
