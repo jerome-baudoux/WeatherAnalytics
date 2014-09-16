@@ -11,7 +11,6 @@ import play.Play;
 import play.api.libs.ws.WS;
 import play.api.libs.ws.WSResponse;
 import scala.concurrent.*;
-import scala.runtime.AbstractFunction1;
 import scala.runtime.AbstractPartialFunction;
 
 /**
