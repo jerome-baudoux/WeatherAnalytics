@@ -9,15 +9,15 @@
 angular.module('uiApp').service('pageService', function PageService() {
 
 	// Names
-	this.applicationName  = '';
-    this.pageName = '';
+	this.applicationName  = undefined;
+    this.pageName = undefined;
     
     /**
      * @param applicationName name of the application
      */
     this.setApplicationName = function(applicationName) {
     	this.applicationName = applicationName;
-    }
+    };
 
     /**
      * @param pageName name of the current page
@@ -30,6 +30,21 @@ angular.module('uiApp').service('pageService', function PageService() {
      * @returns Name of the current title
      */
     this.getTitle = function() {
-    	return this.pageName + ' - ' + this.applicationName;
+    	
+    	var title = '';
+    	
+    	if(this.pageName) {
+    		title += this.pageName;
+    	}
+    	
+    	if(this.pageName && this.applicationName) {
+    		title += ' - ';
+    	}
+
+    	if(this.applicationName) {
+    		title += this.applicationName;
+    	}
+    	
+    	return title;
     };
 });

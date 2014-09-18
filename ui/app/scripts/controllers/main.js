@@ -11,6 +11,6 @@ angular.module('uiApp')
   .controller('MainCtrl', ['$scope', 'pageService', function ($scope, pageService) {
 
 	  // Page setup
-	  pageService.setPageName("Main");
+	  pageService.setPageName('Main');
 	  
   }]);

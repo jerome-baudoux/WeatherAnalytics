@@ -11,5 +11,5 @@ angular.module('uiApp')
   .controller('ErrorCtrl', ['$scope', 'pageService', function ($scope, pageService) {
 
 	  // Page setup
-	  pageService.setPageName("Error");
+	  pageService.setPageName('Error');
   }]);

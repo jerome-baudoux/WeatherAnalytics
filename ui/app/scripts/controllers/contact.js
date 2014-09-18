@@ -11,5 +11,5 @@ angular.module('uiApp')
   .controller('ContactCtrl', ['$scope', 'pageService', function ($scope, pageService) {
 
 	  // Page setup
-	  pageService.setPageName("Contact");
+	  pageService.setPageName('Contact');
   }]);
