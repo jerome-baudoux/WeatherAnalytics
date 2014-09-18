@@ -35,4 +35,10 @@ angular
           templateUrl: 'views/404.html',
           controller: 'ErrorCtrl'
       });
-  });
+  }).
+  run(['$rootScope', 'notificationsService', function($rootScope, notificationsService) {
+	  $rootScope.$on( '$routeChangeStart', function() {
+		  notificationsService.stopLoading();
+		  notificationsService.removeMessage();
+	  });
+  }]);

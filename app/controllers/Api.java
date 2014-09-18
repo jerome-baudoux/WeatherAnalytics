@@ -4,6 +4,7 @@ import com.google.inject.Singleton;
 
 import api.ApiResultConstants;
 import api.SimpleApiResponse;
+import play.libs.F.Promise;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -38,5 +39,27 @@ public class Api extends Controller {
 					.setMessage("No API found for the name: " + name)
 					.toJSON()
 		);
+	}
+	
+	/**
+	 * For debug only
+	 * @return sends a message
+	 */
+	public Promise<Result> longOperation(int time) {
+
+	    Promise<String> promise = Promise.promise(() -> {
+	    	Thread.sleep(time);
+	    	return "Current time: " + System.currentTimeMillis();
+	    });     
+	    
+	    return promise.map((String message) -> {
+	    	return ok(
+					new SimpleApiResponse()
+					.setResult(ApiResultConstants.SUCCESS)
+					.setMessage(message)
+					.toJSON()
+			);
+	    });
+		
 	}
 }

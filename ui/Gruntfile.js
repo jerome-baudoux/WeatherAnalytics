@@ -316,11 +316,11 @@ module.exports = function (grunt) {
                 {expand: true,cwd: '<%= yeoman.app %>/styles',
                     src: 'extern.less',
                     dest: '<%= yeoman.app %>/styles',
-                    ext: 'extern.css'},
+                    ext: '.css'},
                 {expand: true,cwd: '<%= yeoman.app %>/styles_svg',
                     src: 'extern.less',
                     dest: '<%= yeoman.app %>/styles_svg',
-                    ext: 'extern.css'}
+                    ext: '.css'}
             ]
         }
     }

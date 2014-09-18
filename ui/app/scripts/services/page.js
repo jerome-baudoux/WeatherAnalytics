@@ -12,6 +12,9 @@ angular.module('uiApp').service('pageService', function PageService() {
 	this.applicationName  = undefined;
     this.pageName = undefined;
     
+    // Loading
+    this.loading = false;
+    
     /**
      * @param applicationName name of the application
      */
@@ -30,21 +33,16 @@ angular.module('uiApp').service('pageService', function PageService() {
      * @returns Name of the current title
      */
     this.getTitle = function() {
-    	
     	var title = '';
-    	
     	if(this.pageName) {
     		title += this.pageName;
     	}
-    	
     	if(this.pageName && this.applicationName) {
     		title += ' - ';
     	}
-
     	if(this.applicationName) {
     		title += this.applicationName;
     	}
-    	
     	return title;
     };
 });

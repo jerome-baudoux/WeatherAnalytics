@@ -16,7 +16,7 @@ describe('Controller: AboutCtrl', function () {
     });
   }));
 
-  it('should attach a list of awesomeThings to the scope', function () {
+  it('The title of the page should be Heroku', function () {
     expect(scope.page.getTitle()).toBe('Heroku');
   });
 });
