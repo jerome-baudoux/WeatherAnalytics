@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" ng-app="uiApp" ng-controller="IndexCtrl">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>J&eacute;r&ocirc;me Baudoux Heroku</title>
+    <title ng-bind="page.getTitle()">Heroku</title>
     
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- endbuild -->
@@ -19,7 +19,7 @@
     <!-- endbuild -->
     
   </head>
-  <body ng-app="uiApp">
+  <body>
 
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -119,8 +119,12 @@
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/app.js"></script>
+    <script src="scripts/controllers/index.js"></script>
     <script src="scripts/controllers/main.js"></script>
     <script src="scripts/controllers/about.js"></script>
+    <script src="scripts/controllers/contact.js"></script>
+    <script src="scripts/controllers/error.js"></script>
+    <script src="scripts/services/page.js"></script>
     <!-- endbuild -->
 </body>
 </html>
