@@ -20,17 +20,21 @@ angular
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl'
+          templateUrl: 'views/main.html',
+          controller: 'MainCtrl'
       })
       .when('/about', {
           templateUrl: 'views/about.html',
           controller: 'AboutCtrl'
-        })
-        .when('/contact', {
-            templateUrl: 'views/contact.html',
-            controller: 'ContactCtrl'
-          })
+      })
+      .when('/contact', {
+          templateUrl: 'views/contact.html',
+          controller: 'ContactCtrl'
+      })
+      .when('/logs', {
+    	  templateUrl: 'views/product-logs.html',
+    	  controller: 'LogsCtrl'
+      })
       .otherwise({
           templateUrl: 'views/404.html',
           controller: 'ErrorCtrl'

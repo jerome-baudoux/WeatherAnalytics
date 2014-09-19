@@ -2,12 +2,18 @@ body {
     padding-top: 70px;
 }
 
+.navbar-inverse {
+	border: 0;
+}
+
 .navbar-fixed-top .nav {
     padding: 15px 0;
 }
 
 .navbar-fixed-top .navbar-brand {
-    padding: 0 15px;
+    padding: 6.5px 15px;
+    font-size: 35px;
+	line-height: 35px;
 }
 
 .jumbotron {
@@ -20,8 +26,8 @@ body {
 }
 
 .social-icons > li > a {
-	padding-top: 10px;
-	padding-bottom: 10px;
+	padding-top: 11px;
+	padding-bottom: 9px;
 }
 
 #notificationLoading {
@@ -57,8 +63,10 @@ footer {
     body {
         padding-top: 100px;
     }
-
-    .navbar-fixed-top .navbar-brand {
-        padding: 15px 0;
-    }
+    
+	.navbar-fixed-top .navbar-brand {
+	    padding: 19.5px 15px;
+	    font-size: 35px;
+		line-height: 35px;
+	}
 }

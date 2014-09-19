@@ -13,10 +13,10 @@ angular.module('uiApp')
 	// Page setup
 	pageService.setPageName('Contact');
 	  
-	// Ensure that page API calls are properly stopped after destory
+	// Ensure that page API calls are properly stopped after destroy
 	apiCallerService.watchDestroyed($scope);
 	
 	// Make an API call that is expected to fail
-	apiCallerService.get($scope, '/api/expeted/failure', apiCallerService.API_CONSTANTS.SUCCESS);
+	apiCallerService.get($scope, '/api/expected/to/fail', apiCallerService.API_CONSTANTS.SUCCESS);
 		
   }]);

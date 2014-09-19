@@ -6,7 +6,7 @@
  * @description
  * A service to call APIs
  */
-angular.module('uiApp').service('apiCallerService', ['$http', 'notificationsService', function CallerService($http, notificationsService) {
+angular.module('uiApp').service('apiCallerService', ['$http', 'notificationsService', 'exceptionLogger', function CallerService($http, notificationsService, exceptionLogger) {
 	
 	/**
 	 * API codes
@@ -36,11 +36,17 @@ angular.module('uiApp').service('apiCallerService', ['$http', 'notificationsServ
 	 * @param status http status
 	 */
 	this.handleError = function(data) {
+		
+		var message = '';
+		
 		if(!data.result || !data.message) {
-			notificationsService.addError('An unknown error occurred during the current operation');
+			message = 'An unknown error occurred during the current operation';
 		} else {
-			notificationsService.addError('The following error occurred during the current operation: ' + data.message);
+			message = 'The following error occurred during the current operation: ' + data.message;
 		}
+		
+		notificationsService.addError(message);
+		exceptionLogger.handleError(message);
 	};
 	
 	/**
@@ -82,7 +88,7 @@ angular.module('uiApp').service('apiCallerService', ['$http', 'notificationsServ
     			if($scope.destroyed) {
     				return;
     			}
-    			
+
     			// Stop loading
     			notificationsService.stopLoading();
 
@@ -95,6 +101,7 @@ angular.module('uiApp').service('apiCallerService', ['$http', 'notificationsServ
     		});
     	} catch (e) {
     		notificationsService.stopLoading();
+    		exceptionLogger.handleError('An unknown error occurred during an API request', e);
     	}
     };
 }]);
