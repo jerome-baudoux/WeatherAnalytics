@@ -1,5 +1,5 @@
 body {
-    padding-top: 70px;
+    padding-top: 100px;
 }
 
 .navbar-inverse {
@@ -9,9 +9,9 @@ body {
 .navbar-fixed-top .nav {
     padding: 15px 0;
 }
-
+    
 .navbar-fixed-top .navbar-brand {
-    padding: 6.5px 15px;
+    padding: 19.5px 15px;
     font-size: 35px;
 	line-height: 35px;
 }
@@ -19,15 +19,15 @@ body {
 .jumbotron {
 	text-align: center;
 }
+	
+.social-icons > li > a {
+	padding-top: 11px;
+	padding-bottom: 9px;
+}
 
 .social-icons {
 	font-size: 30px;
 	line-height: 30px;
-}
-
-.social-icons > li > a {
-	padding-top: 11px;
-	padding-bottom: 9px;
 }
 
 #notificationLoading {
@@ -59,13 +59,38 @@ footer {
     padding: 30px 0;
 }
 
-@media(min-width:768px) {
-    body {
-        padding-top: 100px;
-    }
+
+
+/* Smaller versions */
+
+@media(max-width:1199px) {
+	
+	.social-icons {
+		font-size: 15px;
+		line-height: 15px;
+	}
+	
+	.social-icons > li > a{
+		padding: 15px 10px;
+	}
+}
+
+@media(max-width:991px) {
     
+	.social-icons > li > a{
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+}
+
+@media(max-width:767px) {
+	
+	body {
+	    padding-top: 70px;
+	}
+	
 	.navbar-fixed-top .navbar-brand {
-	    padding: 19.5px 15px;
+	    padding: 6.5px 15px;
 	    font-size: 35px;
 		line-height: 35px;
 	}
