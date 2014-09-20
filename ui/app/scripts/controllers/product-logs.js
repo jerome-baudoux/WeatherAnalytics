@@ -8,31 +8,32 @@
  * Controller of the uiApp
  */
 angular.module('uiApp')
-  .controller('LogsCtrl', ['$scope', 'pageService', 'exceptionLogger', function ($scope, pageService, exceptionLogger) {
+  .controller('LogsCtrl', ['$scope', 'pageService', 'exceptionLogger', 'messagesService', 
+    function ($scope, pageService, exceptionLogger, messagesService) {
 
-	// Page setup
-	pageService.setPageName('Product Logs');
+		// Page setup
+		pageService.setPageName(messagesService.get('TITLE_PAGE_LOGS'));
+		
+		// Init
+		$scope.content = messagesService.get('MESSAGE_LOGS_EMPTY');
 	
-	// Init
-	$scope.content = 'Nothing to show yet';
-
-	// Reload
-    $scope.reload = function() {
-        var logs = exceptionLogger.getLogs();
-        if(!logs || logs==='') {
-        	$scope.content = 'There are no errors to show';
-        } else {
-        	$scope.content = logs;
-        }
-    };
-
-    // Empty logs
-    $scope.clear = function() {
-        exceptionLogger.clearLogs();
-        $scope.reload();
-    };
-
-    // First load
-    $scope.reload();
+		// Reload
+	    $scope.reload = function() {
+	        var logs = exceptionLogger.getLogs();
+	        if(!logs || logs==='') {
+	        	$scope.content = messagesService.get('MESSAGE_LOGS_EMPTY');
+	        } else {
+	        	$scope.content = logs;
+	        }
+	    };
+	
+	    // Empty logs
+	    $scope.clear = function() {
+	        exceptionLogger.clearLogs();
+	        $scope.reload();
+	    };
+	
+	    // First load
+	    $scope.reload();
 		
   }]);

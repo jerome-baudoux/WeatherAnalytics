@@ -8,9 +8,10 @@
  * Controller of the uiApp
  */
 angular.module('uiApp')
-  .controller('IndexCtrl', ['$scope', 'pageService', function ($scope, pageService) {
+  .controller('IndexCtrl', ['$scope', 'pageService', 'messagesService', 
+    function ($scope, pageService, messagesService) {
 
-	  // Page setup
-	  pageService.setApplicationName('Weather Analytics');
-	  $scope.page = pageService;
+		// Page setup
+		pageService.setApplicationName(messagesService.get('TITLE_APPLICATION'));
+		$scope.page = pageService;
   }]);

@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Controller: IndexCtrl', function () {
+describe('Controller: ForecastCtrl', function () {
 
   // load the controller's module
   beforeEach(module('uiApp'));
@@ -11,12 +11,8 @@ describe('Controller: IndexCtrl', function () {
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
-    AboutCtrl = $controller('IndexCtrl', {
+    AboutCtrl = $controller('ForecastCtrl', {
       $scope: scope
     });
   }));
-
-  it('The title of the page should be Heroku', function () {
-    expect(scope.page.getTitle()).toBe('Weather Analytics');
-  });
 });
