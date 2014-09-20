@@ -2,11 +2,14 @@
 
 /**
  * @ngdoc function
- * @name uiApp.service:notificationsService
+ * @name weatherAnalytics.service:notificationsService
  * @description
  * A service to control the notifications
+ * - Loading
+ * - Error messages
+ * - Info messages
  */
-angular.module('uiApp').service('notificationsService', ['$timeout', function NotificationService($timeout) {
+angular.module('weatherAnalytics').service('notificationsService', ['$timeout', function NotificationService($timeout) {
 
     // Errors
     this.MESAGE_TYPE = {

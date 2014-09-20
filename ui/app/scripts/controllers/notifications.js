@@ -2,12 +2,14 @@
 
 /**
  * @ngdoc function
- * @name uiApp.controller:NotificationsCtrl
+ * @name weatherAnalytics.controller:NotificationsCtrl
  * @description
- * # NotificationsCtrl
- * Controller of the uiApp
+ * Controller of every notification shown on screen:
+ * - Loading
+ * - Error messages
+ * - Info messages
  */
-angular.module('uiApp')
+angular.module('weatherAnalytics')
   .controller('NotificationsCtrl', ['$scope', 'notificationsService', function ($scope, notificationsService) {
 	  $scope.notifications = notificationsService;
   }]);

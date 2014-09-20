@@ -2,12 +2,11 @@
 
 /**
  * @ngdoc function
- * @name uiApp.controller:ErrorCtrl
+ * @name weatherAnalytics.controller:ErrorCtrl
  * @description
- * # ErrorCtrl
- * Controller of the uiApp
+ * Controller of the Error page
  */
-angular.module('uiApp')
+angular.module('weatherAnalytics')
   .controller('ErrorCtrl', ['$scope', 'pageService', 'messagesService', 
     function ($scope, pageService, messagesService) {
 

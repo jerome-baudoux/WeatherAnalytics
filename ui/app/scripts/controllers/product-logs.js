@@ -2,12 +2,11 @@
 
 /**
  * @ngdoc function
- * @name uiApp.controller:LogsCtrl
+ * @name weatherAnalytics.controller:LogsCtrl
  * @description
- * # LogsCtrl
- * Controller of the uiApp
+ * Controller of the client side logs
  */
-angular.module('uiApp')
+angular.module('weatherAnalytics')
   .controller('LogsCtrl', ['$scope', 'pageService', 'exceptionLogger', 'messagesService', 
     function ($scope, pageService, exceptionLogger, messagesService) {
 

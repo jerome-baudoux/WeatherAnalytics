@@ -2,12 +2,11 @@
 
 /**
  * @ngdoc function
- * @name uiApp.controller:ForecastCtrl
+ * @name weatherAnalytics.controller:ForecastCtrl
  * @description
- * # ForecastCtrl
- * Controller of the uiApp
+ * Controller of the Forecast page
  */
-angular.module('uiApp')
+angular.module('weatherAnalytics')
   .controller('ForecastCtrl', ['$scope', 'pageService', 'messagesService', 
     function ($scope, pageService, messagesService) {
 

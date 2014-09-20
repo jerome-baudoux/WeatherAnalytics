@@ -19,14 +19,13 @@
 
 /**
  * @ngdoc overview
- * @name uiApp
+ * @name weatherAnalytics
  * @description
- * # uiApp
- *
+ * # weatherAnalytics
  * Main module of the application.
  */
 angular
-  .module('uiApp', [
+  .module('weatherAnalytics', [
     'ngAnimate',
     'ngCookies',
     'ngResource',

@@ -2,12 +2,11 @@
 
 /**
  * @ngdoc function
- * @name uiApp.controller:HistoryCtrl
+ * @name weatherAnalytics.controller:HistoryCtrl
  * @description
- * # HistoryCtrl
- * Controller of the uiApp
+ * Controller of the History page
  */
-angular.module('uiApp')
+angular.module('weatherAnalytics')
   .controller('HistoryCtrl', ['$scope', 'pageService', 'messagesService', 
     function ($scope, pageService, messagesService) {
 

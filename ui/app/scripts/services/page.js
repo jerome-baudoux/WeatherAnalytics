@@ -6,7 +6,7 @@
  * @description
  * A service to control the page configuration
  */
-angular.module('uiApp').service('pageService', function PageService() {
+angular.module('weatherAnalytics').service('pageService', function PageService() {
 
 	// Names
 	this.applicationName  = undefined;

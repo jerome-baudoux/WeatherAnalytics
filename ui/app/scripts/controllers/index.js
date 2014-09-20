@@ -2,12 +2,11 @@
 
 /**
  * @ngdoc function
- * @name uiApp.controller:IndexCtrl
+ * @name weatherAnalytics.controller:IndexCtrl
  * @description
- * # IndexCtrl
- * Controller of the uiApp
+ * Controller of the Index, everything that always shown
  */
-angular.module('uiApp')
+angular.module('weatherAnalytics')
   .controller('IndexCtrl', ['$scope', 'pageService', 'messagesService', 
     function ($scope, pageService, messagesService) {
 

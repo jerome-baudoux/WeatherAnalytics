@@ -2,12 +2,11 @@
 
 /**
  * @ngdoc function
- * @name uiApp.controller:ContactCtrl
+ * @name weatherAnalytics.controller:ContactCtrl
  * @description
- * # ContactCtrl
- * Controller of the uiApp
+ * Controller of the Contact page
  */
-angular.module('uiApp')
+angular.module('weatherAnalytics')
   .controller('ContactCtrl', ['$scope', 'pageService', 'messagesService', 'apiCallerService', 
     function ($scope, pageService, messagesService, apiCallerService) {
 

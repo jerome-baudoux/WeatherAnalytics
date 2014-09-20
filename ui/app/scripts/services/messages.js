@@ -6,7 +6,7 @@
  * @description
  * A service to fetch messages
  */
-angular.module('uiApp').service('messagesService', [function MessagesService() {
+angular.module('weatherAnalytics').service('messagesService', [function MessagesService() {
 	
 	var binding = {
 			

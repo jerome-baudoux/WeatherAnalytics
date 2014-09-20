@@ -1,14 +1,14 @@
 /*global ErrorLogger:false*/
-
 'use strict';
 
-/*
+/**
+ * @ngdoc function
+ * @name weatherAnalytics.service:apiCallerService
+ * @description
  * Error catcher
- *
  * This class catches all error not handled inside a try catch that
  */
-
-angular.module('uiApp')
+angular.module('weatherAnalytics')
     .factory('$exceptionHandler', function () {
         return function errorCatcherHandler(exception) {
 		

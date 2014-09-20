@@ -6,7 +6,7 @@
  * @description
  * A service to call APIs
  */
-angular.module('uiApp').service('apiCallerService', ['$http', 'notificationsService', 'exceptionLogger', 'messagesService', 
+angular.module('weatherAnalytics').service('apiCallerService', ['$http', 'notificationsService', 'exceptionLogger', 'messagesService', 
     function CallerService($http, notificationsService, exceptionLogger, messagesService) {
 	
 		/**

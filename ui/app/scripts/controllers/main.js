@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc function
- * @name uiApp.controller:MainCtrl
+ * @name weatherAnalytics.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of the uiApp
+ * Controller of the main page
  */
-angular.module('uiApp')
+angular.module('weatherAnalytics')
   .controller('MainCtrl', ['$scope', 'pageService', 'messagesService', 
     function ($scope, pageService, messagesService) {
 
