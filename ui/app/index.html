@@ -29,7 +29,7 @@
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <button type="button" class="navbar-toggle" ng-click="headerClick()">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -37,7 +37,7 @@
                 </button>
                 <a class="navbar-brand" href="#"><i class="fa fa-line-chart"></i> Weather Analytics</a>
             </div>
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <div class="collapse navbar-collapse" id="navbar-collapse" ng-class="{'in':headerIn}">
                 <ul class="nav navbar-nav">
                     <li>
                         <a href="#/history">History</a>
@@ -47,28 +47,28 @@
                     </li>
                 </ul>
 	      		<ul class="nav navbar-nav navbar-right social-icons">
-	      			<li>
-	      				<a href="https://github.com/leonsulivan" target="_blank" title="Visit my Github">
+	      			<li data-placement="bottom" bs-tooltip="tooltipGithub">
+	      				<a href="https://github.com/leonsulivan" target="_blank">
 							<i class="fa fa-github-square"></i>
 						</a>
 					</li>
-	      			<li>
-		      			<a href="http://hg.jerome-baudoux.com" target="_blank" title="Visit my Bitbucket">
+	      			<li data-placement="bottom" bs-tooltip="tooltipBitBucket">
+		      			<a href="http://hg.jerome-baudoux.com" target="_blank">
 							<i class="fa fa-bitbucket-square"></i> 
 						</a>
 					</li>
-	      			<li>
-	      				<a href="http://www.youtube.com/leonsulivan" target="_blank" title="Visit my Youtube chanel">
+	      			<li data-placement="bottom" bs-tooltip="tooltipYoutube">
+	      				<a href="http://www.youtube.com/leonsulivan" target="_blank">
 							<i class="fa fa-youtube-square"></i>
 						</a>
 					</li>
-	      			<li>
-		      			<a href="https://www.linkedin.com/in/jeromebaudoux" target="_blank" title="Check me on Linkedin">
+	      			<li data-placement="bottom" bs-tooltip="tooltipLinkedin">
+		      			<a href="https://www.linkedin.com/in/jeromebaudoux" target="_blank">
 							<i class="fa fa-linkedin-square"></i>
 						</a>
 					</li>
-	      			<li>
-	      				<a href="http://www.jerome-baudoux.com" target="_blank" title="Visit my website">
+	      			<li data-placement="bottom" bs-tooltip="tooltipWebsite">
+	      				<a href="http://www.jerome-baudoux.com" target="_blank">
 	      					<i class="fa fa-plus-square"></i>
 						</a>
 	      			</li>
@@ -125,6 +125,8 @@
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-touch/angular-touch.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-strap/dist/angular-strap.min.js"></script>
+    <script src="bower_components/angular-strap/dist/angular-strap.tpl.min.js"></script>
     <!-- endbower -->
     <script src="bower_components/error-logger/dist/error-logger.min.js"></script>
     <!-- endbuild -->

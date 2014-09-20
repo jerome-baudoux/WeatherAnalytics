@@ -77,7 +77,7 @@ footer {
 
 @media(max-width:991px) {
     
-	.social-icons > li > a{
+	.social-icons > li > a {
 		padding-left: 5px;
 		padding-right: 5px;
 	}
@@ -93,5 +93,22 @@ footer {
 	    padding: 15px 15px;
 	    font-size: 20px;
 		line-height: 20px;
+	}
+	
+	.social-icons {
+		font-size: 25px;
+		line-height: 25px;
+	}
+    
+	.social-icons > li > a {
+	    padding: 0 10px;
+	}
+    
+	.social-icons > li {
+	    float: right;
+	}
+    
+	.navbar-fixed-top .nav {
+		padding: 0 10px;
 	}
 }

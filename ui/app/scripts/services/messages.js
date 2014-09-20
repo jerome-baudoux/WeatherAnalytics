@@ -20,6 +20,13 @@ angular.module('uiApp').service('messagesService', [function MessagesService() {
 		TITLE_PAGE_HISTORY: 'History',
 		TITLE_PAGE_FORECAST: 'Forecast',
 		
+		// Index
+		MESSAGE_SOCIAL_GITHUB: 'Visit my Github',
+		MESSAGE_SOCIAL_BITBUCKET: 'Visit my BitBucket',
+		MESSAGE_SOCIAL_YOUTUBE: 'Visit my Youtube channel',
+		MESSAGE_SOCIAL_LINKEDIN: 'Check me on Linkedin',
+		MESSAGE_SOCIAL_WEBSITE: 'Visit my website',
+		
 		// Logs
 		MESSAGE_LOGS_EMPTY: 'There are no errors to show',
 		
