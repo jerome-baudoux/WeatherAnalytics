@@ -78,8 +78,8 @@ module.exports = function (grunt) {
             return [
               connect.static('.tmp'),
               connect().use(
-                '/app/bower_components',
-                connect.static('./app/bower_components')
+                '/bower_components',
+                connect.static('./bower_components')
               ),
               connect.static(appConfig.app)
             ];
@@ -94,8 +94,8 @@ module.exports = function (grunt) {
               connect.static('.tmp'),
               connect.static('test'),
               connect().use(
-                '/app/bower_components',
-                connect.static('.//appbower_components')
+                '/bower_components',
+                connect.static('./bower_components')
               ),
               connect.static(appConfig.app)
             ];
@@ -241,13 +241,6 @@ module.exports = function (grunt) {
       }
     },
 
-    // Replace Google CDN references
-    cdnify: {
-      dist: {
-        html: ['<%= yeoman.dist %>/*.html']
-      }
-    },
-
     // Copies remaining files to places other tasks can use
     copy: {
       dist: {
@@ -271,7 +264,7 @@ module.exports = function (grunt) {
           src: ['generated/*']
         }, {
           expand: true,
-          cwd: 'app/bower_components/fontawesome',
+          cwd: 'bower_components/fontawesome',
           src: 'fonts/*',
           dest: '<%= yeoman.dist %>'
         }]
@@ -367,7 +360,6 @@ module.exports = function (grunt) {
     'concat',
     'ngAnnotate',
     'copy:dist',
-    'cdnify',
     'cssmin',
     'uglify',
     'usemin',

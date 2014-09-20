@@ -13,6 +13,7 @@ GET     /error/404                  @controllers.Errors.missingFile
 
 # UI Dev
 GET     /dev/fonts/*file            controllers.PublicAssets.at(path="/public/dist/fonts", file)
+GET     /dev/bower_components/*file @controllers.Application.dev(path="ui/bower_components", file)
 GET     /dev                        @controllers.Application.redirectToResource(file="dev/index.html")
 GET     /dev/*file                  @controllers.Application.dev(path="ui/app", file)
 
