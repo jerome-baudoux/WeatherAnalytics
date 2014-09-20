@@ -14,7 +14,7 @@ angular.module('uiApp')
 		// Page setup
 		pageService.setPageName(messagesService.get('TITLE_PAGE_LOGS'));
 		
-		// Init
+		// Initialize
 		$scope.content = messagesService.get('MESSAGE_LOGS_EMPTY');
 	
 		// Reload

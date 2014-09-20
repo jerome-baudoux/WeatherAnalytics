@@ -14,7 +14,7 @@ angular.module('uiApp')
 		// Page setup
 		pageService.setPageName(messagesService.get('TITLE_PAGE_ABOUT'));
 		
-		// Ensure that page API calls are properly stopped after destory
+		// Ensure that page API calls are properly stopped after destroy
 		apiCallerService.watchDestroyed($scope);
 	
 		// Make an API call
