@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc function
- * @name uiApp.service:apiCallerService
+ * @name weatherAnalytics.service:apiCallerService
  * @description
  * A service to call APIs
  */

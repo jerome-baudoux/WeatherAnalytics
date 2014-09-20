@@ -16,7 +16,13 @@ describe('Controller: IndexCtrl', function () {
     });
   }));
 
-  it('The title of the page should be Heroku', function () {
+  it('The title of the page should be Weather Analytics', function () {
     expect(scope.page.getTitle()).toBe('Weather Analytics');
+  });
+
+  it('The header menu should open if we click on the button', function () {
+    expect(scope.headerIn).toBe(false);
+    scope.headerClick();
+    expect(scope.headerIn).toBe(true);
   });
 });

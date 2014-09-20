@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc function
- * @name uiApp.service:pageService
+ * @name weatherAnalytics.service:pageService
  * @description
  * A service to control the page configuration
  */

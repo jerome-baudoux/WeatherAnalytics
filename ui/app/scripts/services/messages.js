@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc function
- * @name uiApp.service:messagesService
+ * @name weatherAnalytics.service:messagesService
  * @description
  * A service to fetch messages
  */

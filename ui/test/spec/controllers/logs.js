@@ -15,5 +15,8 @@ describe('Controller: LogsCtrl', function () {
       $scope: scope
     });
   }));
-  
+
+  it('There should be no logs', function () {
+    expect(scope.content).toBe('There are no errors to show');
+  });
 });
