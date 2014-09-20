@@ -11,6 +11,6 @@ angular.module('uiApp')
   .controller('IndexCtrl', ['$scope', 'pageService', function ($scope, pageService) {
 
 	  // Page setup
-	  pageService.setApplicationName('Heroku');
+	  pageService.setApplicationName('Weather Analytics');
 	  $scope.page = pageService;
   }]);

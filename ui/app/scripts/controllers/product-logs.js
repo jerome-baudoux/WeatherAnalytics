@@ -19,10 +19,11 @@ angular.module('uiApp')
 	// Reload
     $scope.reload = function() {
         var logs = exceptionLogger.getLogs();
-        if(!logs) {
-        	$scope.content = 'Nothing to show yet';
+        if(!logs || logs==='') {
+        	$scope.content = 'There are no errors to show';
+        } else {
+        	$scope.content = logs;
         }
-        $scope.content = logs;
     };
 
     // Empty logs
