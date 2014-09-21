@@ -1,5 +1,7 @@
 package engines;
 
+import services.chipher.CipherService;
+import services.chipher.CipherServiceImpl;
 import services.http.HttpService;
 import services.http.HttpServiceImpl;
 import services.weather.WeatherService;
@@ -35,5 +37,6 @@ public class MainModule extends AbstractModule {
 		// Services
 		bind(HttpService.class).to(HttpServiceImpl.class);
 		bind(WeatherService.class).to(WeatherServiceImpl.class);
+		bind(CipherService.class).to(CipherServiceImpl.class);
 	}
 }

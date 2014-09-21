@@ -1,6 +1,6 @@
 package engines;
 
-import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import play.Application;
@@ -13,6 +13,7 @@ import com.google.inject.Injector;
 
 import controllers.Errors;
 import engines.ping.PingEngine;
+import engines.weatherfetcher.WeatherFetcherEngine;
 
 /**
  * Main engine for the application
@@ -36,9 +37,9 @@ public class MainEngine extends GlobalSettings implements Engine {
 	 */
 	public MainEngine(Injector injector) {
 		this.injector = injector;
-		this.engines = Arrays.asList(new Engine[]{
-			injector.getInstance(PingEngine.class)
-		});
+		this.engines = new LinkedList<>();
+		this.engines.add(injector.getInstance(PingEngine.class));
+		this.engines.add(injector.getInstance(WeatherFetcherEngine.class));
 	}
 	
 	/*

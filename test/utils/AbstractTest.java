@@ -58,7 +58,9 @@ public class AbstractTest {
 	 */
 	protected Injector createInjector() {
 		return Guice.createInjector(Stage.DEVELOPMENT, 
-			Modules.override(new MainModule()).with(getTestModules(), getSpecificModules())
+			Modules.override(
+					Modules.override(new MainModule()).with(getTestModules())
+			).with(getSpecificModules())
 		);
 	}
 
