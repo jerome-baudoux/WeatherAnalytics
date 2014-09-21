@@ -3,9 +3,9 @@ package controllers;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import api.ApiResultConstants;
-import api.SimpleApiResponse;
-import api.weather.CitiesResponse;
+import api.response.ApiResultConstants;
+import api.response.SimpleApiResponse;
+import api.response.weather.CitiesResponse;
 import play.libs.F.Promise;
 import play.mvc.Controller;
 import play.mvc.Result;

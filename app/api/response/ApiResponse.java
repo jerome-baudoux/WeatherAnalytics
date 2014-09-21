@@ -1,4 +1,4 @@
-package api;
+package api.response;
 
 import javax.annotation.Nullable;
 
@@ -34,7 +34,7 @@ public abstract class ApiResponse<T extends ApiResponse<T>> {
 	 * Empty object
 	 */
 	public ApiResponse() {
-		this.result = ApiResultConstants.UNKNOWN;
+		this.result = ApiResultConstants.UNKNOWN.getCode();
 	}
 	
 	/**
@@ -59,6 +59,16 @@ public abstract class ApiResponse<T extends ApiResponse<T>> {
 	@SuppressWarnings("unchecked")
 	public T setResult(int result) {
 		this.result = result;
+		return (T)this;
+	}
+
+	/**
+	 * Check {@link ApiResultConstants} for more information
+	 * @param result A code representing the result of the task.
+	 */
+	@SuppressWarnings("unchecked")
+	public T setResult(ApiResultConstants result) {
+		this.result = result.getCode();
 		return (T)this;
 	}
 

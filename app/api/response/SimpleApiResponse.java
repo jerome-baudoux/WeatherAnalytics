@@ -1,4 +1,4 @@
-package api;
+package api.response;
 
 /**
  * A simple response for API

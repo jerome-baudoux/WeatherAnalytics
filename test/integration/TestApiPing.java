@@ -2,10 +2,9 @@ package integration;
 
 import org.junit.*;
 
-import api.ApiResultConstants;
-import api.SimpleApiResponse;
+import api.response.ApiResultConstants;
+import api.response.SimpleApiResponse;
 import play.test.TestBrowser;
-
 import static org.fest.assertions.Assertions.*;
 
 /**
@@ -23,7 +22,7 @@ public class TestApiPing extends AbstractIntegrationTest {
     public void testPingOk() {
     	runTest("api/ping", (TestBrowser browser) -> {
             SimpleApiResponse response = getJson(browser, SimpleApiResponse.class);
-            assertThat(response.getResult()).isEqualTo(ApiResultConstants.SUCCESS);
+            assertThat(response.getResult()).isEqualTo(ApiResultConstants.SUCCESS.getCode());
     	});
     }
 
@@ -35,7 +34,7 @@ public class TestApiPing extends AbstractIntegrationTest {
     public void testPingErrorInName() {
     	runTest("api/ping/wrong/name", (TestBrowser browser) -> {
             SimpleApiResponse response = getJson(browser, SimpleApiResponse.class);
-            assertThat(response.getResult()).isEqualTo(ApiResultConstants.ERROR_API_NOT_FOUND);
+            assertThat(response.getResult()).isEqualTo(ApiResultConstants.ERROR_API_NOT_FOUND.getCode());
     	});
     }
 }

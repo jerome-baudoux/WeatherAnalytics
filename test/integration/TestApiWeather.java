@@ -2,8 +2,8 @@ package integration;
 
 import org.junit.*;
 
-import api.ApiResultConstants;
-import api.weather.CitiesResponse;
+import api.response.ApiResultConstants;
+import api.response.weather.CitiesResponse;
 import play.test.TestBrowser;
 import static org.fest.assertions.Assertions.*;
 
@@ -23,7 +23,7 @@ public class TestApiWeather extends AbstractIntegrationTest {
 
     	runTest("api/cities", (TestBrowser browser) -> {
     		CitiesResponse response = getJson(browser, CitiesResponse.class);
-            assertThat(response.getResult()).isEqualTo(ApiResultConstants.SUCCESS);
+            assertThat(response.getResult()).isEqualTo(ApiResultConstants.SUCCESS.getCode());
             assertThat(response.getCities()).hasSize(10);
     	});
     }

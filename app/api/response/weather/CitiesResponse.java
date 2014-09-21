@@ -1,8 +1,8 @@
-package api.weather;
+package api.response.weather;
 
 import java.util.List;
 
-import api.ApiResponse;
+import api.response.ApiResponse;
 
 /**
  * Response of a city request
