@@ -1,6 +1,6 @@
 package engines;
 
-import java.util.LinkedList;
+import java.util.Arrays;
 import java.util.List;
 
 import play.Application;
@@ -36,8 +36,9 @@ public class MainEngine extends GlobalSettings implements Engine {
 	 */
 	public MainEngine(Injector injector) {
 		this.injector = injector;
-		this.engines = new LinkedList<Engine>();
-		this.engines.add(injector.getInstance(PingEngine.class));
+		this.engines = Arrays.asList(new Engine[]{
+			injector.getInstance(PingEngine.class)
+		});
 	}
 	
 	/*

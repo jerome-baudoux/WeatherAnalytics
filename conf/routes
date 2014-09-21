@@ -4,6 +4,7 @@ GET     /*file/                     @controllers.Application.redirectToResource(
 
 # API
 GET     /api/ping                   @controllers.Api.ping
+GET     /api/cities                 @controllers.Api.cities
 GET     /api/wait/:time             @controllers.Api.longOperation(time : Integer)
 GET     /api/*name                  @controllers.Api.apiNotFound(name)
 

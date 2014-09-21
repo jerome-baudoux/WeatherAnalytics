@@ -44,7 +44,7 @@ public class AbstractIntegrationTest extends AbstractTest {
 	 * @param callback function to call
 	 */
 	public void runTest(final String route, final BrowserCallback callback) {
-        running(testServer(3333, fakeApplication(inMemoryDatabase(), new MainEngine(getInjector()))), HTMLUNIT, (TestBrowser browser) -> {
+        running(testServer(PORT, fakeApplication(inMemoryDatabase(), new MainEngine(getInjector()))), HTMLUNIT, (TestBrowser browser) -> {
 			browser.goTo(HOSTNAME+":"+PORT+"/"+route);
 			callback.test(browser);
         });

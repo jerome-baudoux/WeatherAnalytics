@@ -6,6 +6,8 @@ import com.google.inject.Injector;
 import com.google.inject.Stage;
 import com.google.inject.util.Modules;
 
+import engines.MainModule;
+
 /**
  * A base class for tests
  * @author Jerome Baudoux
@@ -55,7 +57,9 @@ public class AbstractTest {
 	 * @return Guice Injector
 	 */
 	protected Injector createInjector() {
-		return Guice.createInjector(Stage.DEVELOPMENT, Modules.override(getTestModules()).with(getSpecificModules()));
+		return Guice.createInjector(Stage.DEVELOPMENT, 
+			Modules.override(new MainModule()).with(getTestModules(), getSpecificModules())
+		);
 	}
 
 }
