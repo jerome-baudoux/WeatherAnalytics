@@ -42,10 +42,5 @@ public class WeatherDay {
 	/**
 	 * Code of the weather condition
 	 */
-	protected int weatherCode;
-	
-	/**
-	 * Description of the weather condition
-	 */
-	protected String weatherDescription;
+	protected WeatherDayCondition condition;
 }

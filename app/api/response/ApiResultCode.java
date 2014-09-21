@@ -1,6 +1,6 @@
 package api.response;
 
-public enum ApiResultConstants {
+public enum ApiResultCode {
 
 	/*
 	 * Bellow 1000, all generic messages
@@ -21,7 +21,7 @@ public enum ApiResultConstants {
 
 	private final int code;
 	
-	private ApiResultConstants(int code) {
+	private ApiResultCode(int code) {
 		this.code = code;
 	}
 

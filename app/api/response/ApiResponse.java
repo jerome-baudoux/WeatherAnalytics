@@ -34,7 +34,7 @@ public abstract class ApiResponse<T extends ApiResponse<T>> {
 	 * Empty object
 	 */
 	public ApiResponse() {
-		this.result = ApiResultConstants.UNKNOWN.getCode();
+		this.result = ApiResultCode.UNKNOWN.getCode();
 	}
 	
 	/**
@@ -45,7 +45,7 @@ public abstract class ApiResponse<T extends ApiResponse<T>> {
 	}
 
 	/**
-	 * Check {@link ApiResultConstants} for more information
+	 * Check {@link ApiResultCode} for more information
 	 * @return A code representing the result of the task.
 	 */
 	public int getResult() {
@@ -53,7 +53,7 @@ public abstract class ApiResponse<T extends ApiResponse<T>> {
 	}
 
 	/**
-	 * Check {@link ApiResultConstants} for more information
+	 * Check {@link ApiResultCode} for more information
 	 * @param result A code representing the result of the task.
 	 */
 	@SuppressWarnings("unchecked")
@@ -63,11 +63,11 @@ public abstract class ApiResponse<T extends ApiResponse<T>> {
 	}
 
 	/**
-	 * Check {@link ApiResultConstants} for more information
+	 * Check {@link ApiResultCode} for more information
 	 * @param result A code representing the result of the task.
 	 */
 	@SuppressWarnings("unchecked")
-	public T setResult(ApiResultConstants result) {
+	public T setResult(ApiResultCode result) {
 		this.result = result.getCode();
 		return (T)this;
 	}

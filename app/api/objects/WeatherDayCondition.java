@@ -4,7 +4,7 @@ package api.objects;
  * Weather conditions code
  * @author Jerome Baudoux
  */
-public enum WeatherDayConstants {
+public enum WeatherDayCondition {
 	
 	SYNNY(0, "Sunny"), // 113
 	CLOUDY(1, "Cloudy"), // 116 122 119
@@ -36,7 +36,7 @@ public enum WeatherDayConstants {
 	private final int code;
 	private final String description;
 	
-	private WeatherDayConstants(int code, String description) {
+	private WeatherDayCondition(int code, String description) {
 		this.code = code;
 		this.description = description;
 	}

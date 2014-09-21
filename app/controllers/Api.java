@@ -3,7 +3,7 @@ package controllers;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import api.response.ApiResultConstants;
+import api.response.ApiResultCode;
 import api.response.SimpleApiResponse;
 import api.response.weather.CitiesResponse;
 import play.libs.F.Promise;
@@ -35,7 +35,7 @@ public class Api extends Controller {
 	public Result ping() {
 		return ok(
 			new SimpleApiResponse()
-				.setResult(ApiResultConstants.SUCCESS)
+				.setResult(ApiResultCode.SUCCESS)
 				.toJSON()
 		);
 	}
@@ -48,7 +48,7 @@ public class Api extends Controller {
 	public Result apiNotFound(String name) {
 		return notFound(
 			new SimpleApiResponse()
-				.setResult(ApiResultConstants.ERROR_API_NOT_FOUND)
+				.setResult(ApiResultCode.ERROR_API_NOT_FOUND)
 				.setMessage("No API found for the name: " + name)
 				.toJSON()
 		);
@@ -62,7 +62,7 @@ public class Api extends Controller {
 		try {
 			return ok(
 				new CitiesResponse()	
-					.setResult(ApiResultConstants.SUCCESS)
+					.setResult(ApiResultCode.SUCCESS)
 					.setCities(this.weatherService.getCities())
 					.toJSON()
 			);
@@ -85,7 +85,7 @@ public class Api extends Controller {
 	    return promise.map((String message) -> {
 	    	return ok(
 				new SimpleApiResponse()
-					.setResult(ApiResultConstants.SUCCESS)
+					.setResult(ApiResultCode.SUCCESS)
 					.setMessage(message)
 					.toJSON()
 			);
@@ -104,7 +104,7 @@ public class Api extends Controller {
 	protected Result getError(Throwable t) {
 		return internalServerError(
 			new SimpleApiResponse()
-				.setResult(ApiResultConstants.ERROR_UNKNOWN)
+				.setResult(ApiResultCode.ERROR_UNKNOWN)
 				.setMessage(t.getMessage())
 				.setError(t)
 				.toJSON()
