@@ -1,8 +1,8 @@
 import com.google.inject.Guice;
 import com.google.inject.Stage;
 
-import engine.MainEngine;
-import engine.MainModule;
+import engines.MainEngine;
+import engines.MainModule;
 
 /**
  * Global Play configuration

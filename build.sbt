@@ -1,4 +1,4 @@
-name := """heroku-test"""
+name := """weather-anaytics"""
 
 version := "1.0-SNAPSHOT"
 

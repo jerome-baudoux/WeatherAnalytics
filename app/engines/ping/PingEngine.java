@@ -1,6 +1,6 @@
-package engine.pingengine;
+package engines.ping;
 
-import engine.Engine;
+import engines.Engine;
 
 /**
  * An engine that pings the interface every few minutes, 

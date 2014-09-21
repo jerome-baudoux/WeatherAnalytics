@@ -2,7 +2,7 @@ package utils;
 
 import com.google.inject.AbstractModule;
 
-import engine.pingengine.PingEngine;
+import engines.ping.PingEngine;
 
 /**
  * Configure all binding for the test application
@@ -12,6 +12,8 @@ public class TestModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
+		
+		// Engines
 		bind(PingEngine.class).to(MockEngine.class);
 	}
 }

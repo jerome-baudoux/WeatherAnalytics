@@ -1,4 +1,4 @@
-package engine;
+package engines;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -12,7 +12,7 @@ import play.mvc.Http.RequestHeader;
 import com.google.inject.Injector;
 
 import controllers.Errors;
-import engine.pingengine.PingEngine;
+import engines.ping.PingEngine;
 
 /**
  * Main engine for the application

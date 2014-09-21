@@ -1,10 +1,13 @@
-package engine;
+package engines;
+
+import services.http.HttpService;
+import services.http.HttpServiceImpl;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.internal.Errors;
 
 import controllers.*;
-import engine.pingengine.*;
+import engines.ping.*;
 
 /**
  * Configure all binding for the production application
@@ -25,6 +28,6 @@ public class MainModule extends AbstractModule {
 		bind(PingEngine.class).to(PingEngineImpl.class);
 
 		// Services
-		
+		bind(HttpService.class).to(HttpServiceImpl.class);
 	}
 }
