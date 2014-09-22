@@ -18,7 +18,7 @@ import services.http.HttpService;
 @Singleton
 public class PingEngineImpl implements PingEngine {
 	
-	public static final long DELAY = 1000 * 60 * 5; // 5 minutes
+	protected static final long DELAY = 1000 * 60 * 5; // 5 minutes
 	
 	protected HttpService http;
 

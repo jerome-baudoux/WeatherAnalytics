@@ -1,11 +1,18 @@
 package controllers;
 
+import java.util.List;
+
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+
+import api.objects.City;
+import api.objects.WeatherDay;
 import api.response.ApiResultCode;
 import api.response.SimpleApiResponse;
 import api.response.weather.CitiesResponse;
+import api.response.weather.ForecastResponse;
 import play.libs.F.Promise;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -72,24 +79,43 @@ public class Api extends Controller {
 	}
 	
 	/**
+	 * Gets the forecast for the specified city
+	 * @return
+	 */
+	public Promise<Result> forecast(String city, String country) {
+		return Promise.promise(() -> {
+			return this.weatherService.getForecast(new City(city, country));
+		}).map((List<WeatherDay> days) -> {
+			if(days.size()==0) {
+				return ok(
+					new ForecastResponse()
+						.setResult(ApiResultCode.ERROR_PARAMETER_WRONG_VALUE)
+						.setMessage("Unknown city: " + city + ", " + country)
+						.toJSON()
+				);
+			} else {
+				return ok(
+					new ForecastResponse()
+						.setResult(ApiResultCode.SUCCESS)
+						.setForecast(days)
+						.toJSON()
+				);
+			}
+		});
+	}
+	
+	/**
 	 * For debug only
 	 * @return sends a message
 	 */
 	public Promise<Result> longOperation(int time) {
-
-	    Promise<String> promise = Promise.promise(() -> {
-	    	Thread.sleep(time);
-	    	return "Current time: " + System.currentTimeMillis();
-	    });     
-	    
-	    return promise.map((String message) -> {
-	    	return ok(
-				new SimpleApiResponse()
-					.setResult(ApiResultCode.SUCCESS)
-					.setMessage(message)
-					.toJSON()
-			);
-	    });
+		return Promise.promise(() -> {
+			Thread.sleep(time);
+			return "Current time: " + System.currentTimeMillis();
+		}).map((String message) -> {
+			return ok(new SimpleApiResponse().setResult(ApiResultCode.SUCCESS)
+					.setMessage(message).toJSON());
+		});
 	}
 	
 	/*

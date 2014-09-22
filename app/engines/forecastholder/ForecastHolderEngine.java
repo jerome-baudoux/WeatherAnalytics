@@ -2,6 +2,7 @@ package engines.forecastholder;
 
 import java.util.List;
 
+import api.objects.City;
 import api.objects.WeatherDay;
 import engines.Engine;
 
@@ -21,5 +22,5 @@ public interface ForecastHolderEngine extends Engine {
 	 * @param city city to look for
 	 * @return all known forecast
 	 */
-	public List<WeatherDay> getForecast(String city);
+	public List<WeatherDay> getForecast(City city);
 }

@@ -2,6 +2,7 @@ package api.response.weather;
 
 import java.util.List;
 
+import api.objects.City;
 import api.response.ApiResponse;
 
 /**
@@ -13,12 +14,12 @@ public class CitiesResponse extends ApiResponse<CitiesResponse> {
 	/**
 	 * List of cities
 	 */
-	protected List<String> cities;
+	protected List<City> cities;
 
 	/**
 	 * @return List of cities
 	 */
-	public List<String> getCities() {
+	public List<City> getCities() {
 		return cities;
 	}
 
@@ -26,7 +27,7 @@ public class CitiesResponse extends ApiResponse<CitiesResponse> {
 	 * @param cities List of cities
 	 * @return current object
 	 */
-	public CitiesResponse setCities(List<String> cities) {
+	public CitiesResponse setCities(List<City> cities) {
 		this.cities = cities;
 		return this;
 	}

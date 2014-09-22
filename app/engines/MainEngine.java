@@ -12,6 +12,7 @@ import play.mvc.Http.RequestHeader;
 import com.google.inject.Injector;
 
 import controllers.Errors;
+import engines.forecastholder.ForecastHolderEngine;
 import engines.ping.PingEngine;
 import engines.weatherfetcher.WeatherFetcherEngine;
 
@@ -39,6 +40,7 @@ public class MainEngine extends GlobalSettings implements Engine {
 		this.injector = injector;
 		this.engines = new LinkedList<>();
 		this.engines.add(injector.getInstance(PingEngine.class));
+		this.engines.add(injector.getInstance(ForecastHolderEngine.class));
 		this.engines.add(injector.getInstance(WeatherFetcherEngine.class));
 	}
 	

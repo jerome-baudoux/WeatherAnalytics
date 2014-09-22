@@ -1,24 +1,25 @@
 # redirect every query that ends with / to the same without the /
 # for example /ping/ will redirect to /ping
-GET     /*file/                     @controllers.Application.redirectToResource(file: String)
+GET     /*file/                        @controllers.Application.redirectToResource(file: String)
 
 # API
-GET     /api/ping                   @controllers.Api.ping
-GET     /api/cities                 @controllers.Api.cities
-GET     /api/wait/:time             @controllers.Api.longOperation(time : Integer)
-GET     /api/*name                  @controllers.Api.apiNotFound(name)
+GET     /api/ping                      @controllers.Api.ping
+GET     /api/cities                    @controllers.Api.cities
+GET     /api/forecast/:city/:country   @controllers.Api.forecast(city, country)
+GET     /api/wait/:time                @controllers.Api.longOperation(time : Integer)
+GET     /api/*name                     @controllers.Api.apiNotFound(name)
 
 # Errors
-GET     /error                      @controllers.Errors.unknown
-GET     /error/404                  @controllers.Errors.missingFile
+GET     /error                         @controllers.Errors.unknown
+GET     /error/404                     @controllers.Errors.missingFile
 
 # UI Dev
-GET     /dev/fonts/*file            controllers.PublicAssets.at(path="/public/dist/fonts", file)
-GET     /dev/bower_components/*file @controllers.Application.dev(path="ui/bower_components", file)
-GET     /dev                        @controllers.Application.redirectToResource(file="dev/index.html")
-GET     /dev/*file                  @controllers.Application.dev(path="ui/app", file)
+GET     /dev/fonts/*file               controllers.PublicAssets.at(path="/public/dist/fonts", file)
+GET     /dev/bower_components/*file    @controllers.Application.dev(path="ui/bower_components", file)
+GET     /dev                           @controllers.Application.redirectToResource(file="dev/index.html")
+GET     /dev/*file                     @controllers.Application.dev(path="ui/app", file)
 
 # UI Prod
-GET     /                           controllers.PublicAssets.at(path="/public/dist", file="index.html")
-GET     /*file                      controllers.PublicAssets.at(path="/public/dist", file)
+GET     /                              controllers.PublicAssets.at(path="/public/dist", file="index.html")
+GET     /*file                         controllers.PublicAssets.at(path="/public/dist", file)
 

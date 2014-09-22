@@ -10,7 +10,7 @@ public class WeatherDay {
 	/**
 	 * Current city
 	 */
-	protected String city;
+	protected City city;
 	
 	/**
 	 * Date, format: yyyy-MM-dd
@@ -20,27 +20,27 @@ public class WeatherDay {
 	/**
 	 * Precipitation in millimeters
 	 */
-	protected float precipitation;
+	protected double precipitation;
 	
 	/**
 	 * Max temperature in celsius
 	 */
-	protected float temperatureMax;
+	protected double temperatureMax;
 	
 	/**
 	 * Min temperature in celsius
 	 */
-	protected float temperatureMin;
+	protected double temperatureMin;
 	
 	/**
 	 * Wind speed in Km/h
 	 */
-	protected float windSpeed;
+	protected double windSpeed;
 	
 	/**
 	 * Wind direction in degree
 	 */
-	protected float windDirection;
+	protected double windDirection;
 	
 	/**
 	 * Code of the weather condition
@@ -50,14 +50,14 @@ public class WeatherDay {
 	/**
 	 * @return the city
 	 */
-	public String getCity() {
+	public City getCity() {
 		return city;
 	}
 
 	/**
 	 * @param city the city to set
 	 */
-	public WeatherDay setCity(String city) {
+	public WeatherDay setCity(City city) {
 		this.city = city;
 		return this;
 	}
@@ -80,14 +80,14 @@ public class WeatherDay {
 	/**
 	 * @return the precipitation
 	 */
-	public float getPrecipitation() {
+	public double getPrecipitation() {
 		return precipitation;
 	}
 
 	/**
 	 * @param precipitation the precipitation to set
 	 */
-	public WeatherDay setPrecipitation(float precipitation) {
+	public WeatherDay setPrecipitation(double precipitation) {
 		this.precipitation = precipitation;
 		return this;
 	}
@@ -95,14 +95,14 @@ public class WeatherDay {
 	/**
 	 * @return the temperature max
 	 */
-	public float getTemperatureMax() {
+	public double getTemperatureMax() {
 		return temperatureMax;
 	}
 
 	/**
 	 * @param temperatureMax the temperature max to set
 	 */
-	public WeatherDay setTemperatureMax(float temperatureMax) {
+	public WeatherDay setTemperatureMax(double temperatureMax) {
 		this.temperatureMax = temperatureMax;
 		return this;
 	}
@@ -110,14 +110,14 @@ public class WeatherDay {
 	/**
 	 * @return the temperature min
 	 */
-	public float getTemperatureMin() {
+	public double getTemperatureMin() {
 		return temperatureMin;
 	}
 
 	/**
 	 * @param temperatureMin the temperature min to set
 	 */
-	public WeatherDay setTemperatureMin(float temperatureMin) {
+	public WeatherDay setTemperatureMin(double temperatureMin) {
 		this.temperatureMin = temperatureMin;
 		return this;
 	}
@@ -125,14 +125,14 @@ public class WeatherDay {
 	/**
 	 * @return the wind speed
 	 */
-	public float getWindSpeed() {
+	public double getWindSpeed() {
 		return windSpeed;
 	}
 
 	/**
 	 * @param windSpeed the wind speed to set
 	 */
-	public WeatherDay setWindSpeed(float windSpeed) {
+	public WeatherDay setWindSpeed(double windSpeed) {
 		this.windSpeed = windSpeed;
 		return this;
 	}
@@ -140,14 +140,14 @@ public class WeatherDay {
 	/**
 	 * @return the wind direction
 	 */
-	public float getWindDirection() {
+	public double getWindDirection() {
 		return windDirection;
 	}
 
 	/**
 	 * @param windDirection the wind direction to set
 	 */
-	public WeatherDay setWindDirection(float windDirection) {
+	public WeatherDay setWindDirection(double windDirection) {
 		this.windDirection = windDirection;
 		return this;
 	}
@@ -165,5 +165,36 @@ public class WeatherDay {
 	public WeatherDay setConditions(WeatherDayConditions conditions) {
 		this.conditions = conditions;
 		return this;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((city == null) ? 0 : city.hashCode());
+		result = prime * result + ((date == null) ? 0 : date.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		WeatherDay other = (WeatherDay) obj;
+		if (city == null) {
+			if (other.city != null)
+				return false;
+		} else if (!city.equals(other.city))
+			return false;
+		if (date == null) {
+			if (other.date != null)
+				return false;
+		} else if (!date.equals(other.date))
+			return false;
+		return true;
 	}
 }

@@ -1,9 +1,12 @@
 package api.objects;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * Weather conditions code
  * @author Jerome Baudoux
  */
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum WeatherDayConditions {
 	
 	UNKNOWN(0, "Unknown"),

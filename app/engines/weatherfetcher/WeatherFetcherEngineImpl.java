@@ -13,6 +13,7 @@ import play.Logger;
 import play.libs.Json;
 import services.http.HttpService;
 import services.weather.WeatherService;
+import api.objects.City;
 import api.objects.WeatherDay;
 import api.objects.WeatherDayConditions;
 
@@ -27,8 +28,8 @@ import engines.weatherfetcher.WorldWeatherOnlineResponse.WorldWeatherOnlineRespo
  */
 public class WeatherFetcherEngineImpl implements WeatherFetcherEngine {
 
-	protected String API_KEY = "WWO_API_KEY";
-	protected String API_URL = "http://api.worldweatheronline.com/free/v1/weather.ashx?q={C}&format=json&num_of_days=5&cc=no&key={K}";
+	protected static final String API_KEY = "WWO_API_KEY";
+	protected static final String API_URL = "http://api.worldweatheronline.com/free/v1/weather.ashx?q={C}&format=json&num_of_days=5&cc=no&key={K}";
 	
 	protected long DELAY_BETWEEN_REFRESH = 1000 * 60 * 60; // 1 hour
 	protected long DELAY_BETWEEN_TWO_GET = 1000 * 5; // 5 seconds
@@ -66,6 +67,7 @@ public class WeatherFetcherEngineImpl implements WeatherFetcherEngine {
 		this.timerTask = new FetchTask();
 		this.timer = new Timer(true);
 		this.timer.scheduleAtFixedRate(timerTask, 0, DELAY_BETWEEN_REFRESH);
+		fillConditionMap();
 	}
 
 	/**
@@ -133,17 +135,17 @@ public class WeatherFetcherEngineImpl implements WeatherFetcherEngine {
 	 * @param response WorldWeatherOnlineResponse
 	 * @return List<WeatherDay>
 	 */
-	protected List<WeatherDay> makeWeatherDays(String city, WorldWeatherOnlineResponse response) {
+	protected List<WeatherDay> makeWeatherDays(City city, WorldWeatherOnlineResponse response) {
 		return Arrays.asList(response.getData().getWeather()).stream().map((WorldWeatherOnlineResponseWeather weather)-> {
 			try {
 				return new WeatherDay()
 					.setCity(city)
 					.setDate(weather.getDate())
-					.setPrecipitation(Float.parseFloat(weather.getPrecipMM()))
-					.setTemperatureMax(Float.parseFloat(weather.getTempMaxC()))
-					.setTemperatureMin(Float.parseFloat(weather.getTempMinC()))
-					.setWindDirection(Float.parseFloat(weather.getWinddirDegree()))
-					.setWindSpeed(Float.parseFloat(weather.getWindspeedKmph()))
+					.setPrecipitation(Double.parseDouble(weather.getPrecipMM()))
+					.setTemperatureMax(Double.parseDouble(weather.getTempMaxC()))
+					.setTemperatureMin(Double.parseDouble(weather.getTempMinC()))
+					.setWindDirection(Double.parseDouble(weather.getWinddirDegree()))
+					.setWindSpeed(Double.parseDouble(weather.getWindspeedKmph()))
 					.setConditions(makeWeatherDayConditions(weather.getWeatherCode()));
 			} catch(Throwable t) {
 				Logger.error("Error while tranforming forecast for the city: " + city, t);
@@ -166,7 +168,9 @@ public class WeatherFetcherEngineImpl implements WeatherFetcherEngine {
 				}
 				
 				// For every city, do a query
-				for(String city: WeatherFetcherEngineImpl.this.weather.getCities()) {
+				for(City cityObject: WeatherFetcherEngineImpl.this.weather.getCities()) {
+					
+					final String city = cityObject.getNameAndCountry();
 
 					// URL for the query
 					String url = API_URL
@@ -183,7 +187,7 @@ public class WeatherFetcherEngineImpl implements WeatherFetcherEngine {
 							Logger.trace("Forecast for " + city + " fetched for the next: " + response.getData().getWeather().length + " days");
 							
 							// Transform into an API object
-							List<WeatherDay> apiObjects = makeWeatherDays(city, response);
+							List<WeatherDay> apiObjects = makeWeatherDays(cityObject, response);
 							Logger.trace("Forecast for " + city + " transformed for the next: " + apiObjects.size() + " days");
 							
 							// TODO -> Send to History Database and Forecast cache
