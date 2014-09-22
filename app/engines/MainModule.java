@@ -11,6 +11,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.internal.Errors;
 
 import controllers.*;
+import engines.forecastholder.ForecastHolderEngine;
+import engines.forecastholder.ForecastHolderEngineImpl;
 import engines.ping.*;
 import engines.weatherfetcher.WeatherFetcherEngine;
 import engines.weatherfetcher.WeatherFetcherEngineImpl;
@@ -33,6 +35,7 @@ public class MainModule extends AbstractModule {
 		// Engines
 		bind(PingEngine.class).to(PingEngineImpl.class);
 		bind(WeatherFetcherEngine.class).to(WeatherFetcherEngineImpl.class);
+		bind(ForecastHolderEngine.class).to(ForecastHolderEngineImpl.class);
 
 		// Services
 		bind(HttpService.class).to(HttpServiceImpl.class);

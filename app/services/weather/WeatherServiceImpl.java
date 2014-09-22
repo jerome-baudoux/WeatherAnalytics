@@ -41,7 +41,7 @@ public class WeatherServiceImpl implements WeatherService {
 	 */
 	private List<String> buildCities() {
 		List<String> cities = new LinkedList<>();
-		cities.add("London, England");
+		cities.add("London, United Kingdom");
 		cities.add("Bangkok, Thailand");
 		cities.add("Paris, France");
 		cities.add("Singapore, Singapore");

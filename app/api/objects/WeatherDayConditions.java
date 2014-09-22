@@ -6,9 +6,11 @@ package api.objects;
  */
 public enum WeatherDayConditions {
 	
-	SYNNY(0, "Sunny"), // 113
-	CLOUDY(1, "Cloudy"), // 116 122 119
-	MIST(2, "Mist"), // 143 248
+	UNKNOWN(0, "Unknown"),
+	
+	SUNNY(1, "Sunny"), // 113
+	CLOUDY(2, "Cloudy"), // 116 122 119
+	MIST(3, "Mist"), // 143 248
 	THUNDER(4, "Thunder"), // 200
 	DRIZZLE(5, "Drizzle"), // 263 266
 
