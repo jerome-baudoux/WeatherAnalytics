@@ -4,7 +4,9 @@ import javax.annotation.Nullable;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import play.libs.Json;
 
@@ -42,6 +44,15 @@ public abstract class ApiResponse<T extends ApiResponse<T>> {
 	 */
 	public JsonNode toJSON() {
 		return Json.toJson(this);
+	}
+	
+	/**
+	 * Converts the current response to pretty json
+	 * @return pretty json
+	 * @throws JsonProcessingException
+	 */
+	public String toPrettyJSON() throws JsonProcessingException {
+		return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(this);
 	}
 
 	/**

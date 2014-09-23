@@ -7,6 +7,7 @@ import com.google.inject.Singleton;
 
 import api.objects.City;
 import api.objects.WeatherDay;
+import api.response.ApiResponse;
 import api.response.ApiResultCode;
 import api.response.SimpleApiResponse;
 import api.response.weather.CitiesResponse;
@@ -23,6 +24,8 @@ import services.weather.WeatherService;
 @Singleton
 public class Api extends Controller {
 	
+	private static final String CONTENT_TYPE_JSON = "application/json";
+	
 	/**
 	 * Constructor
 	 */
@@ -38,10 +41,8 @@ public class Api extends Controller {
 	 * @return Ok message
 	 */
 	public Result ping() {
-		return ok(new SimpleApiResponse()
-			.setResult(ApiResultCode.SUCCESS.getCode())
-			.toJSON()
-		);
+		return okJson(new SimpleApiResponse()
+			.setResult(ApiResultCode.SUCCESS.getCode()));
 	}
 
 	/**
@@ -50,11 +51,9 @@ public class Api extends Controller {
 	 * @return 404 error
 	 */
 	public Result apiNotFound(String name) {
-		return notFound(new SimpleApiResponse()
+		return notFoundJson(new SimpleApiResponse()
 			.setResult(ApiResultCode.ERROR_API_NOT_FOUND.getCode())
-			.setMessage("No API found for the name: " + name)
-			.toJSON()
-		);
+			.setMessage("No API found for the name: " + name));
 	}
 	
 	/**
@@ -64,10 +63,9 @@ public class Api extends Controller {
 	public Promise<Result> cities() {
 		
 		// Request / Result
-		return Promise.promise(() -> (Result) ok(new CitiesResponse()	
+		return Promise.promise(() -> (Result) okJson(new CitiesResponse()	
 				.setResult(ApiResultCode.SUCCESS.getCode())
-				.setCities(this.weatherService.getCities())
-				.toJSON())
+				.setCities(this.weatherService.getCities()))
 		// Error
 		).recoverWith(Api::getError);
 	}
@@ -82,10 +80,9 @@ public class Api extends Controller {
 		return Promise.promise(() -> this.weatherService.getForecast(new City(city, country))
 				
 		// Result
-		).map((List<WeatherDay> days) -> (Result) ok(new ForecastResponse()
+		).map((List<WeatherDay> days) -> (Result) okJson(new ForecastResponse()
 				.setResult(ApiResultCode.SUCCESS.getCode())
-				.setForecast(days)
-				.toJSON())
+				.setForecast(days))
 				
 		// Error
 		).recoverWith(Api::getError);
@@ -107,9 +104,9 @@ public class Api extends Controller {
 			return "Current time: " + System.currentTimeMillis();
 			
 		// Result
-		}).map((String message) -> (Result) ok(new SimpleApiResponse()
+		}).map((String message) -> (Result) okJson(new SimpleApiResponse()
 				.setResult(ApiResultCode.SUCCESS.getCode())
-				.setMessage(message).toJSON())
+				.setMessage(message))
 			
 		// Error
 		).recoverWith(Api::getError);
@@ -121,11 +118,49 @@ public class Api extends Controller {
 	 * @return error message
 	 */
 	protected static Promise<Result> getError(Throwable t) {
-		return Promise.promise(() -> (Result) internalServerError(new SimpleApiResponse()
+		return Promise.promise(() -> (Result) internalServerErrorJson(new SimpleApiResponse()
 				.setResult(ApiResultCode.ERROR_UNKNOWN.getCode())
 				.setMessage(t.getMessage())
-				.setError(t)
-				.toJSON())
+				.setError(t))
 		);
+	}
+	
+	/**
+	 * Returns a pretty print JSON result
+	 * @param response JSON
+	 * @return result
+	 */
+	protected static Result okJson(ApiResponse<?> response) {
+		try {
+			return ok(response.toPrettyJSON()).as(CONTENT_TYPE_JSON);
+		} catch (Throwable t) {
+			return ok(response.toJSON());
+		}
+	}
+	
+	/**
+	 * Returns a pretty print JSON result
+	 * @param response JSON
+	 * @return result
+	 */
+	protected static Result internalServerErrorJson(ApiResponse<?> response) {
+		try {
+			return internalServerError(response.toPrettyJSON()).as(CONTENT_TYPE_JSON);
+		} catch (Throwable t) {
+			return internalServerError(response.toJSON());
+		}
+	}
+	
+	/**
+	 * Returns a pretty print JSON result
+	 * @param response JSON
+	 * @return result
+	 */
+	protected static Result notFoundJson(ApiResponse<?> response) {
+		try {
+			return notFound(response.toPrettyJSON()).as(CONTENT_TYPE_JSON);
+		} catch (Throwable t) {
+			return notFound(response.toJSON());
+		}
 	}
 }
