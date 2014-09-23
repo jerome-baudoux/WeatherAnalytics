@@ -156,7 +156,13 @@ public class ForecastHolderEngineImpl implements ForecastHolderEngine {
 	protected class CleanTask extends TimerTask {
 		@Override
 		public void run() {
+			
+			// Amount of removed data
+			int dataRemoved = 0;
+			
+			// Calculate the threshold 
 			LocalDateTime threshold = LocalDateTime.now().minusDays(FORECAST_DAYS_RETENTIONS);
+			
 			synchronized (ForecastHolderEngineImpl.this.cache) {
 				// For every city
 				for(Map<String, WeatherDay> days : ForecastHolderEngineImpl.this.cache.values()) {
@@ -165,10 +171,14 @@ public class ForecastHolderEngineImpl implements ForecastHolderEngine {
 						// If day if older than threshold
 						if(LocalDateTime.parse(date, formatter).isBefore(threshold)) {
 							days.remove(date);
+							dataRemoved++;
 						}
 					}
 				}
 			}
+
+			// Amount of removed data
+			Logger.trace(dataRemoved + " Forecast days were removed from the cache.");
 		}
 	}
 }
