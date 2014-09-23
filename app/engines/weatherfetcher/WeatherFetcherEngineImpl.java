@@ -89,18 +89,20 @@ public class WeatherFetcherEngineImpl implements WeatherFetcherEngine {
 		fillConditionMap(WeatherDayConditions.DRIZZLE, "263", "266");
 		fillConditionMap(WeatherDayConditions.LIGHT_RAIN, "176", "293", "353", "296");
 		fillConditionMap(WeatherDayConditions.LIGHT_SNOW, "179", "323", "368", "326");
-		fillConditionMap(WeatherDayConditions.LIGHT_ICE_PELLET, "182", "362", "317", "374");
+		fillConditionMap(WeatherDayConditions.LIGHT_SLEET, "182", "317");
+		fillConditionMap(WeatherDayConditions.LIGHT_ICE_PELLET, "362", "374");
 		fillConditionMap(WeatherDayConditions.LIGHT_FROZEN_RAIN_OR_DRIZZLE, "185", "311", "260");
 		fillConditionMap(WeatherDayConditions.LIGHT_RAIN_WITH_THUNDER, "386");
 		fillConditionMap(WeatherDayConditions.LIGHT_SNOW_WITH_THUNDER, "392");
 		fillConditionMap(WeatherDayConditions.MODERATE_RAIN, "302", "299", "356");
-		fillConditionMap(WeatherDayConditions.MODERATE_SNOW, "332", "329");
-		fillConditionMap(WeatherDayConditions.MODERATE_ICE_PELLET, "320", "365", "350");
+		fillConditionMap(WeatherDayConditions.MODERATE_SNOW, "332", "329", "227");
+		fillConditionMap(WeatherDayConditions.MODERATE_SLEET, "320", "365");
+		fillConditionMap(WeatherDayConditions.MODERATE_ICE_PELLET, "350");
 		fillConditionMap(WeatherDayConditions.MODERATE_FROZEN_RAIN_OR_DRIZZLE, "314", "281");
 		fillConditionMap(WeatherDayConditions.MODERATE_OR_HEAVY_RAIN_WITH_THUNDER, "395");
 		fillConditionMap(WeatherDayConditions.MODERATE_OR_HEAVY_SNOW_WITH_THUNDER, "389");
 		fillConditionMap(WeatherDayConditions.HEAVY_RAIN, "308", "359", "305");
-		fillConditionMap(WeatherDayConditions.HEAVY_SNOW, "230", "338", "371", "227", "335");
+		fillConditionMap(WeatherDayConditions.HEAVY_SNOW, "230", "338", "371", "335");
 		fillConditionMap(WeatherDayConditions.HEAVY_ICE_PELLET, "377");
 		fillConditionMap(WeatherDayConditions.HEAVY_FROZEN_RAIN_OR_DRIZZLE, "284");
 	}
