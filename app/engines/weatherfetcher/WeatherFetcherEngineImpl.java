@@ -14,12 +14,13 @@ import play.libs.Json;
 import services.http.HttpService;
 import services.weather.WeatherService;
 import api.objects.City;
+import api.objects.Speed;
+import api.objects.Temperature;
 import api.objects.WeatherDay;
 import api.objects.WeatherDayConditions;
 
 import com.google.inject.Inject;
 
-import engines.forecastholder.ForecastHolderEngine;
 import engines.weatherfetcher.WorldWeatherOnlineResponse.WorldWeatherOnlineResponseWeather;
 
 /**
@@ -130,6 +131,15 @@ public class WeatherFetcherEngineImpl implements WeatherFetcherEngine {
 		return condition;
 	}
 	
+	protected Integer parseInt(String value) {
+		try {
+			return Integer.parseInt(value);
+		} catch (Throwable t) {
+			Logger.error("Cannot parse value: " + value + " into an Integer");
+			return null;
+		}
+	}
+	
 	/**
 	 * Transforms a WorldWeatherOnlineResponse into a List<WeatherDay>
 	 * Use of map/collect so that we don't have to loop and create a new object
@@ -143,10 +153,16 @@ public class WeatherFetcherEngineImpl implements WeatherFetcherEngine {
 					.setCity(city)
 					.setDate(weather.getDate())
 					.setPrecipitation(Double.parseDouble(weather.getPrecipMM()))
-					.setTemperatureMax(Double.parseDouble(weather.getTempMaxC()))
-					.setTemperatureMin(Double.parseDouble(weather.getTempMinC()))
-					.setWindDirection(Double.parseDouble(weather.getWinddirDegree()))
-					.setWindSpeed(Double.parseDouble(weather.getWindspeedKmph()))
+					.setWindDirection(Integer.parseInt(weather.getWinddirDegree()))
+					.setTemperatureMax(new Temperature()
+						.setCelsius(parseInt(weather.getTempMaxC()))
+						.setFahrenheit(parseInt(weather.getTempMaxF())))
+					.setTemperatureMin(new Temperature()
+						.setCelsius(parseInt(weather.getTempMinC()))
+						.setFahrenheit(parseInt(weather.getTempMinF())))
+					.setWindSpeed(new Speed()
+						.setKmph(parseInt(weather.getWindspeedKmph()))
+						.setMph(parseInt(weather.getWindspeedMiles())))
 					.setConditions(makeWeatherDayConditions(weather.getWeatherCode()));
 			} catch(Throwable t) {
 				Logger.error("Error while tranforming forecast for the city: " + city, t);
@@ -174,7 +190,7 @@ public class WeatherFetcherEngineImpl implements WeatherFetcherEngine {
 					final String city = cityObject.getNameAndCountry();
 
 					// URL for the query
-					String url = API_URL
+					final String url = API_URL
 							.replace("{C}", URLEncoder.encode(city, "UTF-8"))
 							.replace("{K}", URLEncoder.encode(WeatherFetcherEngineImpl.this.apiKey, "UTF-8"));
 					
@@ -199,7 +215,6 @@ public class WeatherFetcherEngineImpl implements WeatherFetcherEngine {
 						}
 						
 					}, (String body, int status, Throwable t) -> {
-						
 						// An error occurred
 						Logger.error("Error while fetching forecast for the city: " + city);
 					});

@@ -10,9 +10,8 @@ import static org.fest.assertions.Assertions.*;
 /**
  * Test the Weather APIs
  * @author Jerome Baudoux
- *
  */
-public class TestApiWeather extends AbstractIntegrationTest {
+public class TestApiWeatherCities extends AbstractIntegrationTest {
 
 	/**
 	 * Fetch cities
@@ -20,7 +19,6 @@ public class TestApiWeather extends AbstractIntegrationTest {
 	 */
     @Test
     public void testCitiesOk() {
-
     	runTest("api/cities", (TestBrowser browser) -> {
     		CitiesResponse response = getJson(browser, CitiesResponse.class);
             assertThat(response.getResult()).isEqualTo(ApiResultCode.SUCCESS.getCode());

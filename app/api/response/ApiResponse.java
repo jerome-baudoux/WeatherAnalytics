@@ -63,16 +63,6 @@ public abstract class ApiResponse<T extends ApiResponse<T>> {
 	}
 
 	/**
-	 * Check {@link ApiResultCode} for more information
-	 * @param result A code representing the result of the task.
-	 */
-	@SuppressWarnings("unchecked")
-	public T setResult(ApiResultCode result) {
-		this.result = result.getCode();
-		return (T)this;
-	}
-
-	/**
 	 * @return Description of what happened
 	 */
 	@Nullable

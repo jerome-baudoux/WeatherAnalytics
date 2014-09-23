@@ -5,6 +5,9 @@ import static play.test.Helpers.fakeApplication;
 import static play.test.Helpers.inMemoryDatabase;
 import static play.test.Helpers.running;
 import static play.test.Helpers.testServer;
+
+import com.google.inject.AbstractModule;
+
 import engines.MainEngine;
 import play.libs.Json;
 import play.test.TestBrowser;
@@ -19,6 +22,17 @@ public class AbstractIntegrationTest extends AbstractTest {
 	
 	private static final int PORT = 3333;
 	private static final String HOSTNAME = "http://localhost";
+	
+	/**
+	 * Method to override in each tests if you want different bindings
+	 * @return specific module for the test
+	 */
+	public AbstractModule getSpecificModules() {
+		return new AbstractModule() {
+			@Override
+			protected void configure() {}
+		};
+	}
 	
 	/**
 	 * Default constructor
@@ -38,16 +52,30 @@ public class AbstractIntegrationTest extends AbstractTest {
 		return Json.fromJson(Json.parse(browser.pageSource()), expected);
 	}
 	
+
+	public void runTest(final String route, final BrowserCallback callback) {
+		runTest(route, ()->{}, callback);
+	}
+	
 	/**
 	 * Run the test and call our function
 	 * @param route route to test
 	 * @param callback function to call
 	 */
-	public void runTest(final String route, final BrowserCallback callback) {
+	public void runTest(final String route, final TestInit initializer, final BrowserCallback callback) {
         running(testServer(PORT, fakeApplication(inMemoryDatabase(), new MainEngine(getInjector()))), HTMLUNIT, (TestBrowser browser) -> {
+        	initializer.init();
 			browser.goTo(HOSTNAME+":"+PORT+"/"+route);
 			callback.test(browser);
         });
+	}
+	
+	/**
+	 * A simple interface to initialize tests
+	 * @author Jerome Baudoux
+	 */
+	interface TestInit {
+		public void init();
 	}
 
 	/**

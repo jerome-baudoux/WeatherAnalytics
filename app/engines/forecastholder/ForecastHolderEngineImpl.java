@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.annotation.Nonnull;
 
@@ -22,9 +24,12 @@ import api.objects.WeatherDay;
 @Singleton
 public class ForecastHolderEngineImpl implements ForecastHolderEngine {
 	
-	// TODO -- Purge the cache
+	// TODO -- Handle timezones ?
 	
+	protected static final long DELAY = 1000 * 60 * 60 * 12; // 12 hours
+
 	protected static final int FORECAST_DAYS = 5;
+	protected static final int FORECAST_DAYS_RETENTIONS = 1;
 	
 	/**
 	 * Internal cache
@@ -35,12 +40,16 @@ public class ForecastHolderEngineImpl implements ForecastHolderEngine {
 	 * Date formatter
 	 */
 	protected DateTimeFormatter formatter;
+
+	protected TimerTask timerTask;
+	protected Timer timer;
 	
 	/**
 	 * Constructor
 	 */
 	public ForecastHolderEngineImpl() {
 		this.formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		this.cache = new HashMap<>();
 	}
 
 	/**
@@ -48,7 +57,10 @@ public class ForecastHolderEngineImpl implements ForecastHolderEngine {
 	 */
 	@Override
 	public void start() {
-		this.cache = new HashMap<>();
+		this.cache.clear();
+		this.timerTask = new CleanTask();
+		this.timer = new Timer(true);
+		this.timer.scheduleAtFixedRate(timerTask, DELAY, DELAY);
 	}
 
 	/**
@@ -100,13 +112,14 @@ public class ForecastHolderEngineImpl implements ForecastHolderEngine {
 	@Override
 	@Nonnull
 	public List<WeatherDay> getForecast(City city) {
+		
 		List<WeatherDay> daysToReturn = new LinkedList<WeatherDay>();
 		
 		// For the next 5 days
 		LocalDateTime now = LocalDateTime.now();
 		for(int i=0; i<FORECAST_DAYS; i++) {
 			daysToReturn.add(getForecast(city, now.format(formatter)));
-			now.plusDays(1);
+			now = now.plusDays(1);
 		}
 		return daysToReturn;
 	}
@@ -129,6 +142,33 @@ public class ForecastHolderEngineImpl implements ForecastHolderEngine {
 				}
 			}
 			return new WeatherDay().setCity(city).setDate(date);
+		}
+	}
+	
+	/*
+	 * Internal
+	 */
+	
+	/**
+	 * The cleaning task
+	 * @author Jerome Baudoux
+	 */
+	protected class CleanTask extends TimerTask {
+		@Override
+		public void run() {
+			LocalDateTime threshold = LocalDateTime.now().minusDays(FORECAST_DAYS_RETENTIONS);
+			synchronized (ForecastHolderEngineImpl.this.cache) {
+				// For every city
+				for(Map<String, WeatherDay> days : ForecastHolderEngineImpl.this.cache.values()) {
+					// For every days
+					for(String date: days.keySet()) {
+						// If day if older than threshold
+						if(LocalDateTime.parse(date, formatter).isBefore(threshold)) {
+							days.remove(date);
+						}
+					}
+				}
+			}
 		}
 	}
 }

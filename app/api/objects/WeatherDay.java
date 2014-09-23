@@ -20,32 +20,39 @@ public class WeatherDay {
 	/**
 	 * Precipitation in millimeters
 	 */
-	protected double precipitation;
+	protected Double precipitation;
 	
 	/**
-	 * Max temperature in celsius
+	 * Max temperature 
 	 */
-	protected double temperatureMax;
+	protected Temperature temperatureMax;
 	
 	/**
-	 * Min temperature in celsius
+	 * Min temperature 
 	 */
-	protected double temperatureMin;
+	protected Temperature temperatureMin;
 	
 	/**
-	 * Wind speed in Km/h
+	 * Wind speed 
 	 */
-	protected double windSpeed;
+	protected Speed windSpeed;
 	
 	/**
 	 * Wind direction in degree
 	 */
-	protected double windDirection;
+	protected Integer windDirection;
 	
 	/**
 	 * Code of the weather condition
 	 */
 	protected WeatherDayConditions conditions;
+	
+	/**
+	 * Constructor
+	 */
+	public WeatherDay() {
+		this.conditions = WeatherDayConditions.UNKNOWN;
+	}
 
 	/**
 	 * @return the city
@@ -80,14 +87,14 @@ public class WeatherDay {
 	/**
 	 * @return the precipitation
 	 */
-	public double getPrecipitation() {
+	public Double getPrecipitation() {
 		return precipitation;
 	}
 
 	/**
 	 * @param precipitation the precipitation to set
 	 */
-	public WeatherDay setPrecipitation(double precipitation) {
+	public WeatherDay setPrecipitation(Double precipitation) {
 		this.precipitation = precipitation;
 		return this;
 	}
@@ -95,14 +102,14 @@ public class WeatherDay {
 	/**
 	 * @return the temperature max
 	 */
-	public double getTemperatureMax() {
+	public Temperature getTemperatureMax() {
 		return temperatureMax;
 	}
 
 	/**
 	 * @param temperatureMax the temperature max to set
 	 */
-	public WeatherDay setTemperatureMax(double temperatureMax) {
+	public WeatherDay setTemperatureMax(Temperature temperatureMax) {
 		this.temperatureMax = temperatureMax;
 		return this;
 	}
@@ -110,14 +117,14 @@ public class WeatherDay {
 	/**
 	 * @return the temperature min
 	 */
-	public double getTemperatureMin() {
+	public Temperature getTemperatureMin() {
 		return temperatureMin;
 	}
 
 	/**
 	 * @param temperatureMin the temperature min to set
 	 */
-	public WeatherDay setTemperatureMin(double temperatureMin) {
+	public WeatherDay setTemperatureMin(Temperature temperatureMin) {
 		this.temperatureMin = temperatureMin;
 		return this;
 	}
@@ -125,14 +132,14 @@ public class WeatherDay {
 	/**
 	 * @return the wind speed
 	 */
-	public double getWindSpeed() {
+	public Speed getWindSpeed() {
 		return windSpeed;
 	}
 
 	/**
 	 * @param windSpeed the wind speed to set
 	 */
-	public WeatherDay setWindSpeed(double windSpeed) {
+	public WeatherDay setWindSpeed(Speed windSpeed) {
 		this.windSpeed = windSpeed;
 		return this;
 	}
@@ -140,14 +147,14 @@ public class WeatherDay {
 	/**
 	 * @return the wind direction
 	 */
-	public double getWindDirection() {
+	public Integer getWindDirection() {
 		return windDirection;
 	}
 
 	/**
 	 * @param windDirection the wind direction to set
 	 */
-	public WeatherDay setWindDirection(double windDirection) {
+	public WeatherDay setWindDirection(Integer windDirection) {
 		this.windDirection = windDirection;
 		return this;
 	}

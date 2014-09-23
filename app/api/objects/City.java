@@ -14,6 +14,11 @@ public class City implements Comparable<City> {
 	
 	/**
 	 * City constructor
+	 */
+	public City() {}
+	
+	/**
+	 * City constructor
 	 * @param name city name
 	 * @param country country name
 	 */
@@ -54,7 +59,7 @@ public class City implements Comparable<City> {
 	 */
 	@JsonIgnore
 	public String getNameAndCountry() {
-		return name + ", " + country;
+		return this.name + ", " + this.country;
 	}
 
 	/**
@@ -67,20 +72,22 @@ public class City implements Comparable<City> {
 		return getNameAndCountry().compareTo(o.getNameAndCountry());
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
+	/**
+	 * Warning: modified content !
+	 * Lower case was added to the stings !
 	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((country == null) ? 0 : country.toLowerCase().hashCode());
-		result = prime * result + ((name == null) ? 0 : name.toLowerCase().hashCode());
+		result = prime * result + ((this.country == null) ? 0 : this.country.toLowerCase().hashCode());
+		result = prime * result + ((this.name == null) ? 0 : this.name.toLowerCase().hashCode());
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
+	/**
+	 * Warning: modified content !
+	 * equalsIgnoreCase was used to compare the stings !
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -91,15 +98,15 @@ public class City implements Comparable<City> {
 		if (getClass() != obj.getClass())
 			return false;
 		City other = (City) obj;
-		if (country == null) {
+		if (this.country == null) {
 			if (other.country != null)
 				return false;
-		} else if (!country.equalsIgnoreCase(other.country))
+		} else if (!this.country.equalsIgnoreCase(other.country))
 			return false;
-		if (name == null) {
+		if (this.name == null) {
 			if (other.name != null)
 				return false;
-		} else if (!name.equalsIgnoreCase(other.name))
+		} else if (!this.name.equalsIgnoreCase(other.name))
 			return false;
 		return true;
 	}

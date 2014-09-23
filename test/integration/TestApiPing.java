@@ -10,7 +10,6 @@ import static org.fest.assertions.Assertions.*;
 /**
  * Test the Ping API
  * @author Jerome Baudoux
- *
  */
 public class TestApiPing extends AbstractIntegrationTest {
 
