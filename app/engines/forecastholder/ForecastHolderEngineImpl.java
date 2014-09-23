@@ -1,11 +1,11 @@
 package engines.forecastholder;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.Nonnull;
 
@@ -24,10 +24,24 @@ public class ForecastHolderEngineImpl implements ForecastHolderEngine {
 	
 	// TODO -- Purge the cache
 	
+	protected static final int FORECAST_DAYS = 5;
+	
 	/**
 	 * Internal cache
 	 */
-	protected Map<City, Set<WeatherDay>> cache;
+	protected Map<City, Map<String, WeatherDay>> cache;
+	
+	/**
+	 * Date formatter
+	 */
+	protected DateTimeFormatter formatter;
+	
+	/**
+	 * Constructor
+	 */
+	public ForecastHolderEngineImpl() {
+		this.formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	}
 
 	/**
 	 * on Startup
@@ -69,12 +83,12 @@ public class ForecastHolderEngineImpl implements ForecastHolderEngine {
 	 */
 	private void addForecast(WeatherDay forecast) {
 		synchronized (this.cache) {
-			Set<WeatherDay> days = this.cache.get(forecast.getCity());
+			Map<String, WeatherDay> days = this.cache.get(forecast.getCity());
 			if(days==null) {
-				days = new LinkedHashSet<>();
+				days = new HashMap<>();
 				this.cache.put(forecast.getCity(), days);
 			}
-			days.add(forecast);
+			days.put(forecast.getDate(), forecast);
 		}
 	}
 
@@ -86,10 +100,35 @@ public class ForecastHolderEngineImpl implements ForecastHolderEngine {
 	@Override
 	@Nonnull
 	public List<WeatherDay> getForecast(City city) {
-		Set<WeatherDay> days = this.cache.get(city);
-		if(days==null) {
-			return new LinkedList<WeatherDay>();
+		List<WeatherDay> daysToReturn = new LinkedList<WeatherDay>();
+		
+		// For the next 5 days
+		LocalDateTime now = LocalDateTime.now();
+		for(int i=0; i<FORECAST_DAYS; i++) {
+			daysToReturn.add(getForecast(city, now.format(formatter)));
+			now.plusDays(1);
 		}
-		return new LinkedList<WeatherDay>(days);
+		return daysToReturn;
+	}
+	
+	/**
+	 * Fetch a day of data from the cache
+	 * @param city city
+	 * @param date day
+	 * @return data
+	 */
+	protected WeatherDay getForecast(City city, String date) {
+		synchronized (this.cache) {
+			// Check if the city is known
+			Map<String, WeatherDay> days = this.cache.get(city);
+			if(days!=null) {
+				// Check if the day is known
+				WeatherDay day = days.get(date);
+				if(days!=null) {
+					return day;
+				}
+			}
+			return new WeatherDay().setCity(city).setDate(date);
+		}
 	}
 }

@@ -34,8 +34,7 @@ public class WeatherFetcherEngineImpl implements WeatherFetcherEngine {
 	protected long DELAY_BETWEEN_REFRESH = 1000 * 60 * 60; // 1 hour
 	protected long DELAY_BETWEEN_TWO_GET = 1000 * 5; // 5 seconds
 	
-	protected ForecastHolderEngine forecastHolderEngine;
-	
+	protected WeatherService weatherService;
 	protected HttpService http;
 	protected WeatherService weather;
 
@@ -51,8 +50,8 @@ public class WeatherFetcherEngineImpl implements WeatherFetcherEngine {
 	 * @param cypher cypher service
 	 */
 	@Inject
-	public WeatherFetcherEngineImpl(ForecastHolderEngine forecastHolderEngine, HttpService http, WeatherService weather) {
-		this.forecastHolderEngine = forecastHolderEngine;
+	public WeatherFetcherEngineImpl(WeatherService weatherService, HttpService http, WeatherService weather) {
+		this.weatherService = weatherService;
 		this.http = http;
 		this.weather = weather;
 		this.apiKey = System.getenv().get("WWO_API_KEY");
@@ -192,8 +191,8 @@ public class WeatherFetcherEngineImpl implements WeatherFetcherEngine {
 							List<WeatherDay> apiObjects = makeWeatherDays(cityObject, response);
 							Logger.trace("Forecast for " + city + " transformed for the next: " + apiObjects.size() + " days");
 							
-							// TODO -> Send to History Database and Forecast cache
-							forecastHolderEngine.addForecast(apiObjects);
+							// Send to History Database and Forecast cache
+							WeatherFetcherEngineImpl.this.weatherService.addForecast(apiObjects);
 							
 						} catch (Throwable t) {
 							Logger.error("Error while parsing forecast for the city: " + city, t);
