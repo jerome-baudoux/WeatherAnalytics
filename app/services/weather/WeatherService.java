@@ -27,7 +27,7 @@ public interface WeatherService {
 	 * @param city city to look for
 	 * @return all known forecast
 	 */
-	public List<WeatherDay> getForecast(City city);
+	public List<WeatherDay> getForecast(City city) throws NoSuchCityException;
 	
 	/**
 	 * Fetch all known forecast for this city
@@ -36,5 +36,21 @@ public interface WeatherService {
 	 * @param end until this date
 	 * @return all known forecast
 	 */
-	public List<WeatherDay> getHistory(String city, Date begin, Date end);
+	public List<WeatherDay> getHistory(City city, Date begin, Date end) throws NoSuchCityException;
+	
+	/**
+	 * 
+	 * @author Jerome Baudoux
+	 *
+	 */
+	public static class NoSuchCityException extends Exception {
+
+		private static final long serialVersionUID = 1L;
+		
+		protected City city;
+		
+		public NoSuchCityException(City city) {
+			super("The city: " + city.getNameAndCountry() + " cannot be found");
+		}
+	}
 }

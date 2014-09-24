@@ -16,6 +16,7 @@ import play.libs.F.Promise;
 import play.mvc.Controller;
 import play.mvc.Result;
 import services.weather.WeatherService;
+import services.weather.WeatherService.NoSuchCityException;
 
 /**
  * A controller for all public API
@@ -119,7 +120,7 @@ public class Api extends Controller {
 	 */
 	protected static Promise<Result> getError(Throwable t) {
 		return Promise.promise(() -> (Result) internalServerErrorJson(new SimpleApiResponse()
-				.setResult(ApiResultCode.ERROR_UNKNOWN.getCode())
+				.setResult(getCodeForException(t))
 				.setMessage(t.getMessage())
 				.setError(t))
 		);
@@ -162,5 +163,17 @@ public class Api extends Controller {
 		} catch (Throwable t) {
 			return notFound(response.toJSON());
 		}
+	}
+	
+	/**
+	 * Transform an exception into code
+	 * @param t exception
+	 * @return code
+	 */
+	protected static int getCodeForException(Throwable t) {
+		if(t instanceof NoSuchCityException) {
+			return ApiResultCode.ERROR_PARAMETER_WRONG_VALUE.getCode();
+		}
+		return ApiResultCode.UNKNOWN.getCode();
 	}
 }

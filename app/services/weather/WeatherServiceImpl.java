@@ -83,7 +83,10 @@ public class WeatherServiceImpl implements WeatherService {
 	 * @return all known forecast
 	 */
 	@Override
-	public List<WeatherDay> getForecast(City city) {
+	public List<WeatherDay> getForecast(City city) throws NoSuchCityException {
+		if(!this.cities.contains(city)) {
+			throw new NoSuchCityException(city);
+		}
 		return this.forecastHolderEngine.getForecast(city);
 	}
 	
@@ -95,7 +98,10 @@ public class WeatherServiceImpl implements WeatherService {
 	 * @return all known forecast
 	 */
 	@Override
-	public List<WeatherDay> getHistory(String city, Date begin, Date end) {
+	public List<WeatherDay> getHistory(City city, Date begin, Date end) throws NoSuchCityException {
+		if(!this.cities.contains(city)) {
+			throw new NoSuchCityException(city);
+		}
 		return new LinkedList<>();
 	}
 }
