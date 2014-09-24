@@ -5,12 +5,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.stream.Collectors;
 
 import play.Logger;
 import play.libs.Json;
+import services.conf.ConfigurationService;
 import services.http.HttpService;
 import services.weather.WeatherService;
 import api.objects.City;
@@ -21,6 +20,7 @@ import api.objects.WeatherDayConditions;
 
 import com.google.inject.Inject;
 
+import engines.pool.PoolEngine;
 import engines.weatherfetcher.WorldWeatherOnlineResponse.WorldWeatherOnlineResponseWeather;
 
 /**
@@ -32,30 +32,33 @@ public class WeatherFetcherEngineImpl implements WeatherFetcherEngine {
 	protected static final String API_KEY = "WWO_API_KEY";
 	protected static final String API_URL = "http://api.worldweatheronline.com/free/v1/weather.ashx?q={C}&format=json&num_of_days=5&cc=no&key={K}";
 	
-	protected long DELAY_BETWEEN_REFRESH = 1000 * 60 * 60; // 1 hour
-	protected long DELAY_BETWEEN_TWO_GET = 1000 * 5; // 5 seconds
+	protected final long DELAY_BETWEEN_REFRESH = 1000 * 60 * 60; // 1 hour
+	protected final long DELAY_BETWEEN_TWO_GET = 1000 * 5; // 5 seconds
 	
-	protected WeatherService weatherService;
-	protected HttpService http;
-	protected WeatherService weather;
+	protected final WeatherService weatherService;
+	protected final HttpService http;
+	protected final WeatherService weather;
+	protected final ConfigurationService config;
+	protected final PoolEngine poolEngine;
 
-	protected TimerTask timerTask;
-	protected Timer timer;
-	
-	protected String apiKey = "<NOT_LOADED>";
-	protected Map<String, WeatherDayConditions> conditionsMap;
+	protected final String apiKey;
+	protected final Map<String, WeatherDayConditions> conditionsMap;
 	
 	/**
 	 * Constructor
 	 * @param http http service
-	 * @param cypher cypher service
+	 * @param weather weather service
+	 * @param poolEngine poolEngine service
 	 */
 	@Inject
-	public WeatherFetcherEngineImpl(WeatherService weatherService, HttpService http, WeatherService weather) {
+	public WeatherFetcherEngineImpl(WeatherService weatherService, HttpService http, 
+			WeatherService weather, ConfigurationService config, PoolEngine poolEngine) {
 		this.weatherService = weatherService;
 		this.http = http;
 		this.weather = weather;
-		this.apiKey = System.getenv().get("WWO_API_KEY");
+		this.config = config;
+		this.poolEngine = poolEngine;
+		this.apiKey = config.getEnvVariable(API_KEY, "API_KEY_NOT_LOADED");
 		this.conditionsMap = new HashMap<>();
 	}
 
@@ -64,10 +67,11 @@ public class WeatherFetcherEngineImpl implements WeatherFetcherEngine {
 	 */
 	@Override
 	public void start() {
-		this.timerTask = new FetchTask();
-		this.timer = new Timer(true);
-		this.timer.scheduleAtFixedRate(timerTask, 0, DELAY_BETWEEN_REFRESH);
+		
 		fillConditionMap();
+		
+		// Schedule this task
+		this.poolEngine.scheduleTask(()->run(), 0, DELAY_BETWEEN_REFRESH);
 	}
 
 	/**
@@ -75,7 +79,7 @@ public class WeatherFetcherEngineImpl implements WeatherFetcherEngine {
 	 */
 	@Override
 	public void stop() {
-		this.timer.cancel();
+
 	}
 
 	/**
@@ -171,64 +175,58 @@ public class WeatherFetcherEngineImpl implements WeatherFetcherEngine {
 		}).collect(Collectors.toList());
 	}
 
-	/**
-	 * The actual task
-	 * @author Jerome Baudoux
-	 */
-	protected class FetchTask extends TimerTask {
-		@Override
-		public void run() {
-			try {
-				// Need a key
-				if(WeatherFetcherEngineImpl.this.apiKey==null) {
-					Logger.error("No API Key configured");
-				}
-				
-				// For every city, do a query
-				for(City cityObject: WeatherFetcherEngineImpl.this.weather.getCities()) {
-					
-					final String city = cityObject.getNameAndCountry();
 
-					// URL for the query
-					final String url = API_URL
-							.replace("{C}", URLEncoder.encode(city, "UTF-8"))
-							.replace("{K}", URLEncoder.encode(WeatherFetcherEngineImpl.this.apiKey, "UTF-8"));
-					
-					// Fetch forecast
-					WeatherFetcherEngineImpl.this.http.get(url, (String body, int status) -> {
-						
-						// Everything went fine
-						try {
-							// Parse into JSON
-							WorldWeatherOnlineResponse response = Json.fromJson(Json.parse(body), WorldWeatherOnlineResponse.class);
-							Logger.trace("Forecast for " + city + " fetched for the next: " + response.getData().getWeather().length + " days");
-							
-							// Transform into an API object
-							List<WeatherDay> apiObjects = makeWeatherDays(cityObject, response);
-							Logger.trace("Forecast for " + city + " transformed for the next: " + apiObjects.size() + " days");
-							
-							// Send to History Database and Forecast cache
-							WeatherFetcherEngineImpl.this.weatherService.addForecast(apiObjects);
-							
-						} catch (Throwable t) {
-							Logger.error("Error while parsing forecast for the city: " + city, t);
-						}
-						
-					}, (String body, int status, Throwable t) -> {
-						// An error occurred
-						Logger.error("Error while fetching forecast for the city: " + city);
-					});
-
-					// Wait a little
-					try {
-						Thread.sleep(DELAY_BETWEEN_TWO_GET);
-					} catch (InterruptedException e) {
-						// Silent
-					}
-				}
-			} catch (Throwable t) {
-				Logger.error("Fatal error, cannot fetch forecast", t);
+	private void run() {
+		try {
+			// Need a key
+			if(this.apiKey==null) {
+				Logger.error("No API Key configured");
 			}
+			
+			// For every city, do a query
+			for(City cityObject: this.weather.getCities()) {
+				
+				final String city = cityObject.getNameAndCountry();
+
+				// URL for the query
+				final String url = API_URL
+						.replace("{C}", URLEncoder.encode(city, "UTF-8"))
+						.replace("{K}", URLEncoder.encode(this.apiKey, "UTF-8"));
+				
+				// Fetch forecast
+				this.http.get(url, (String body, int status) -> {
+					
+					// Everything went fine
+					try {
+						// Parse into JSON
+						WorldWeatherOnlineResponse response = Json.fromJson(Json.parse(body), WorldWeatherOnlineResponse.class);
+						Logger.trace("Forecast for " + city + " fetched for the next: " + response.getData().getWeather().length + " days");
+						
+						// Transform into an API object
+						List<WeatherDay> apiObjects = makeWeatherDays(cityObject, response);
+						Logger.trace("Forecast for " + city + " transformed for the next: " + apiObjects.size() + " days");
+						
+						// Send to History Database and Forecast cache
+						this.weatherService.addForecast(apiObjects);
+						
+					} catch (Throwable t) {
+						Logger.error("Error while parsing forecast for the city: " + city, t);
+					}
+					
+				}, (String body, int status, Throwable t) -> {
+					// An error occurred
+					Logger.error("Error while fetching forecast for the city: " + city);
+				});
+
+				// Wait a little
+				try {
+					Thread.sleep(DELAY_BETWEEN_TWO_GET);
+				} catch (InterruptedException e) {
+					// Silent
+				}
+			}
+		} catch (Throwable t) {
+			Logger.error("Fatal error, cannot fetch forecast", t);
 		}
 	}
 }

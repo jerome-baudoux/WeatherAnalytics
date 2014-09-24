@@ -3,9 +3,8 @@ package api.objects;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * CIty representation
+ * City representation
  * @author Jerome Baudoux
- *
  */
 public class City implements Comparable<City> {
 

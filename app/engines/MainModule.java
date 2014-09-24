@@ -2,6 +2,8 @@ package engines;
 
 import services.chipher.CipherService;
 import services.chipher.CipherServiceImpl;
+import services.conf.ConfigurationService;
+import services.conf.ConfigurationServiceImpl;
 import services.http.HttpService;
 import services.http.HttpServiceImpl;
 import services.weather.WeatherService;
@@ -14,6 +16,8 @@ import controllers.*;
 import engines.forecastholder.ForecastHolderEngine;
 import engines.forecastholder.ForecastHolderEngineImpl;
 import engines.ping.*;
+import engines.pool.PoolEngine;
+import engines.pool.PoolEngineImpl;
 import engines.weatherfetcher.WeatherFetcherEngine;
 import engines.weatherfetcher.WeatherFetcherEngineImpl;
 
@@ -33,6 +37,7 @@ public class MainModule extends AbstractModule {
 		bind(Errors.class);
 
 		// Engines
+		bind(PoolEngine.class).to(PoolEngineImpl.class);
 		bind(PingEngine.class).to(PingEngineImpl.class);
 		bind(WeatherFetcherEngine.class).to(WeatherFetcherEngineImpl.class);
 		bind(ForecastHolderEngine.class).to(ForecastHolderEngineImpl.class);
@@ -41,5 +46,7 @@ public class MainModule extends AbstractModule {
 		bind(HttpService.class).to(HttpServiceImpl.class);
 		bind(WeatherService.class).to(WeatherServiceImpl.class);
 		bind(CipherService.class).to(CipherServiceImpl.class);
+		bind(ConfigurationService.class).to(ConfigurationServiceImpl.class);
+		bind(ConfigurationService.class).to(ConfigurationServiceImpl.class);
 	}
 }

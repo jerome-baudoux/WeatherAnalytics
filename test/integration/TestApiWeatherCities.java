@@ -19,7 +19,7 @@ public class TestApiWeatherCities extends AbstractIntegrationTest {
 	 */
     @Test
     public void testCitiesOk() {
-    	runTest("api/cities", (TestBrowser browser) -> {
+    	runTestBrowser("api/cities", (TestBrowser browser) -> {
     		CitiesResponse response = getJson(browser, CitiesResponse.class);
             assertThat(response.getResult()).isEqualTo(ApiResultCode.SUCCESS.getCode());
             assertThat(response.getCities()).hasSize(10);

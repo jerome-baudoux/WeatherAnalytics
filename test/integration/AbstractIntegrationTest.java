@@ -18,20 +18,17 @@ import static org.fest.assertions.Assertions.*;
  * A base class for test Integration
  * @author Jerome Baudoux
  */
-public class AbstractIntegrationTest extends AbstractTest {
+public abstract class AbstractIntegrationTest extends AbstractTest {
 	
 	private static final int PORT = 3333;
 	private static final String HOSTNAME = "http://localhost";
 	
 	/**
-	 * Method to override in each tests if you want different bindings
-	 * @return specific module for the test
+	 * Global rules for tests
+	 * @return global module for the test
 	 */
-	public AbstractModule getSpecificModules() {
-		return new AbstractModule() {
-			@Override
-			protected void configure() {}
-		};
+	public AbstractModule getTestModules() {
+		return new IntegrationTestModule();
 	}
 	
 	/**
@@ -52,9 +49,12 @@ public class AbstractIntegrationTest extends AbstractTest {
 		return Json.fromJson(Json.parse(browser.pageSource()), expected);
 	}
 	
+	public void runTest(final TestInit initializer) {
+		runTestBrowser(null, initializer, null);
+	}
 
-	public void runTest(final String route, final BrowserCallback callback) {
-		runTest(route, ()->{}, callback);
+	public void runTestBrowser(final String route, final BrowserCallback callback) {
+		runTestBrowser(route, ()->{}, callback);
 	}
 	
 	/**
@@ -62,11 +62,17 @@ public class AbstractIntegrationTest extends AbstractTest {
 	 * @param route route to test
 	 * @param callback function to call
 	 */
-	public void runTest(final String route, final TestInit initializer, final BrowserCallback callback) {
+	public void runTestBrowser(final String route, final TestInit initializer, final BrowserCallback callback) {
         running(testServer(PORT, fakeApplication(inMemoryDatabase(), new MainEngine(getInjector()))), HTMLUNIT, (TestBrowser browser) -> {
+        	
+        	// Call init
         	initializer.init();
-			browser.goTo(HOSTNAME+":"+PORT+"/"+route);
-			callback.test(browser);
+        	
+        	// Call browser
+        	if(route!=null && callback!=null) {
+				browser.goTo(HOSTNAME+":"+PORT+"/"+route);
+				callback.test(browser);
+        	}
         });
 	}
 	

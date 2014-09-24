@@ -1,4 +1,8 @@
-package utils;
+package application;
+
+import services.conf.ConfigurationService;
+import utils.MockEngine;
+import application.AbstractApplicationTest.MockConfigurationService;
 
 import com.google.inject.AbstractModule;
 
@@ -9,7 +13,7 @@ import engines.weatherfetcher.WeatherFetcherEngine;
  * Configure all binding for the test application
  * @author Jerome Baudoux
  */
-public class TestModule extends AbstractModule {
+public class ApplicationTestModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
@@ -17,5 +21,8 @@ public class TestModule extends AbstractModule {
 		// Engines
 		bind(PingEngine.class).to(MockEngine.class);
 		bind(WeatherFetcherEngine.class).to(MockEngine.class);
+		
+		// Services
+		bind(ConfigurationService.class).to(MockConfigurationService.class);
 	}
 }

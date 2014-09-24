@@ -32,7 +32,7 @@ public class TestApiWeatherForecast extends AbstractIntegrationTest {
 	 */
     @Test
     public void testForecastNoData() {
-    	runTest("api/forecast/not/existing", (TestBrowser browser) -> {
+    	runTestBrowser("api/forecast/not/existing", (TestBrowser browser) -> {
     		ForecastResponse response = getJson(browser, ForecastResponse.class);
             assertThat(response.getResult()).isEqualTo(ApiResultCode.SUCCESS.getCode());
             assertThat(response.getForecast()).hasSize(5);
@@ -90,7 +90,7 @@ public class TestApiWeatherForecast extends AbstractIntegrationTest {
 
     	
     	// End to end test
-    	runTest("api/forecast/name/country", () -> {
+    	runTestBrowser("api/forecast/name/country", () -> {
     		
         	// Fills service
         	getInjector().getInstance(WeatherService.class).addForecast(forecast);

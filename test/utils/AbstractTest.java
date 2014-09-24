@@ -12,7 +12,7 @@ import engines.MainModule;
  * A base class for tests
  * @author Jerome Baudoux
  */
-public class AbstractTest {
+public abstract class AbstractTest {
 	
 	/**
 	 * Injector
@@ -30,9 +30,7 @@ public class AbstractTest {
 	 * Global rules for tests
 	 * @return global module for the test
 	 */
-	public AbstractModule getTestModules() {
-		return new TestModule();
-	}
+	public abstract AbstractModule getTestModules();
 	
 	/**
 	 * Method to override in each tests if you want different bindings

@@ -1,13 +1,11 @@
 package engines.ping;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import engines.pool.PoolEngine;
 import play.Logger;
-import play.Play;
+import services.conf.ConfigurationService;
 import services.http.HttpService;
 
 /**
@@ -18,22 +16,25 @@ import services.http.HttpService;
 @Singleton
 public class PingEngineImpl implements PingEngine {
 	
-	protected static final long DELAY = 1000 * 60 * 5; // 5 minutes
+	protected static final long DELAY_DEFAULT_MINUTES = 5; // 5 minutes
 	
-	protected HttpService http;
+	protected final HttpService http;
+	protected final ConfigurationService configuration;
+	
+	protected final PoolEngine poolEngine;
 
-	protected TimerTask timerTask;
-	protected Timer timer;
-	
 	protected String url;
+	protected long delay;
 	
 	/**
 	 * Constructor
 	 * @param http http service
 	 */
 	@Inject
-	public PingEngineImpl(HttpService http) {
+	public PingEngineImpl(HttpService http, PoolEngine poolEngine, ConfigurationService configuration) {
 		this.http = http;
+		this.configuration = configuration;
+		this.poolEngine = poolEngine;
 	}
 
 	/**
@@ -41,10 +42,19 @@ public class PingEngineImpl implements PingEngine {
 	 */
 	@Override
 	public void start() {
-		this.url = Play.application().configuration().getString("heroku.http.url");
-		this.timerTask = new PingTask();
-		this.timer = new Timer(true);
-		this.timer.scheduleAtFixedRate(timerTask, 0, DELAY);
+		
+		// Fetch configuration
+		this.url = this.configuration.getString(ConfigurationService.PING_URL, "NO_URL");
+		this.delay = this.configuration.getLong(ConfigurationService.PING_FREQUENCY, DELAY_DEFAULT_MINUTES) * 1000 * 60;
+
+		// Schedule tasks
+		this.poolEngine.scheduleTask(() -> {
+			this.http.get(this.url, (String body, int status) -> {
+				Logger.trace("Application can be reached");
+			}, (String body, int status, Throwable t) -> {
+				Logger.error("Error, cannot reach application");
+			});
+		}, 0, this.delay);
 	}
 
 	/**
@@ -52,21 +62,6 @@ public class PingEngineImpl implements PingEngine {
 	 */
 	@Override
 	public void stop() {
-		this.timer.cancel();
-	}
-	
-	/**
-	 * The actual task
-	 * @author Jerome Baudoux
-	 */
-	public class PingTask extends TimerTask {
-		@Override
-		public void run() {
-			PingEngineImpl.this.http.get(PingEngineImpl.this.url, (String body, int status) -> {
-				Logger.trace("Application can be reached");
-			}, (String body, int status, Throwable t) -> {
-				Logger.error("Error, cannot reach application");
-			});
-		}
+		//this.timer.cancel();
 	}
 }

@@ -19,7 +19,7 @@ public class TestApiPing extends AbstractIntegrationTest {
 	 */
     @Test
     public void testPingOk() {
-    	runTest("api/ping", (TestBrowser browser) -> {
+    	runTestBrowser("api/ping", (TestBrowser browser) -> {
             SimpleApiResponse response = getJson(browser, SimpleApiResponse.class);
             assertThat(response.getResult()).isEqualTo(ApiResultCode.SUCCESS.getCode());
     	});
@@ -31,7 +31,7 @@ public class TestApiPing extends AbstractIntegrationTest {
      */
     @Test
     public void testPingErrorInName() {
-    	runTest("api/ping/wrong/name", (TestBrowser browser) -> {
+    	runTestBrowser("api/ping/wrong/name", (TestBrowser browser) -> {
             SimpleApiResponse response = getJson(browser, SimpleApiResponse.class);
             assertThat(response.getResult()).isEqualTo(ApiResultCode.ERROR_API_NOT_FOUND.getCode());
     	});
