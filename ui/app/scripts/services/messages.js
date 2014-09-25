@@ -19,6 +19,7 @@ angular.module('weatherAnalytics').service('messagesService', [function Messages
 		TITLE_PAGE_LOGS: 'Logs',
 		TITLE_PAGE_HISTORY: 'History',
 		TITLE_PAGE_FORECAST: 'Forecast',
+		TITLE_PAGE_APIS: 'APIs',
 		
 		// Index
 		MESSAGE_SOCIAL_GITHUB: 'Visit my Github',

@@ -22,6 +22,7 @@ angular.module('weatherAnalytics').service('notificationsService', ['$timeout', 
     
     // Loading
     this.loading = false;
+    this.stopLoadingPending = false;
 
     this.isLoading = function() {
     	return this.loading;
@@ -29,15 +30,19 @@ angular.module('weatherAnalytics').service('notificationsService', ['$timeout', 
 
     this.startLoading = function() {
     	this.loading = true;
+    	this.stopLoadingPending = false;
     	this.message = undefined;
     	this.type = this.MESAGE_TYPE.NONE;
     };
 
     this.stopLoading = function() {
+    	this.stopLoadingPending = true;
     	if(this.loading) {
 	    	var that = this;
 	    	$timeout(function(){
-	    		that.loading = false;
+	    		if(that.stopLoadingPending) {
+	    			that.loading = false;
+	    		}
 	    	}, 100);
     	}
     };

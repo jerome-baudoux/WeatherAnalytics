@@ -44,6 +44,10 @@ angular
           templateUrl: 'views/about.html',
           controller: 'AboutCtrl'
       })
+      .when('/apis', {
+          templateUrl: 'views/apis.html',
+          controller: 'ApisCtrl'
+      })
       .when('/contact', {
           templateUrl: 'views/contact.html',
           controller: 'ContactCtrl'

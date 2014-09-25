@@ -30,6 +30,99 @@ body {
 	line-height: 30px;
 }
 
+.forecast {
+	height: auto;
+}
+
+.forecast .text-conditions {
+	font-size: 20px;
+	height: 26px;
+	margin-top: 0px;
+}
+
+.forecast .image-conditions {
+	display: block;
+	height: 64px;
+	vertical-align: middle;
+	text-align: center;
+}
+
+.forecast .text-precipitation, .forecast .text-wind {
+	height: 16px;
+	line-height: 16px;
+	vertical-align: bottom;
+}
+
+.forecast .day {
+	margin-top: 0px;
+	font-size: 20px;
+	text-align: center;
+}
+
+.forecast .max {
+	color: #C22;
+}
+
+.forecast .min {
+	color: #22C;
+}
+
+.forecast .rotate-0 {
+	-ms-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+}
+
+.forecast .rotate-1 {
+	-ms-transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.forecast .rotate-2 {
+	-ms-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+
+.forecast .rotate-3 {
+	-ms-transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+    transform: rotate(135deg);
+}
+
+.forecast .rotate-4 {
+	-ms-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.forecast .rotate-5 {
+	-ms-transform: rotate(225deg);
+    -webkit-transform: rotate(225deg);
+    transform: rotate(255deg);
+}
+
+.forecast .rotate-6 {
+	-ms-transform: rotate(270deg);
+    -webkit-transform: rotate(225deg);
+    transform: rotate(255deg);
+}
+
+.forecast .rotate-7 {
+	-ms-transform: rotate(315deg);
+    -webkit-transform: rotate(225deg);
+    transform: rotate(255deg);
+}
+
+.forecast h4 {
+	text-align: center;
+}
+
+.forecast h3 {
+
+}
+
 #notificationLoading {
 	position: absolute;
 	top: 0;
