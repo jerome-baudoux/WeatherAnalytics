@@ -31,7 +31,7 @@ body {
 }
 
 .forecast {
-	height: auto;
+	padding-bottom: 0;
 }
 
 .forecast .text-conditions {
@@ -119,8 +119,8 @@ body {
 	text-align: center;
 }
 
-.forecast h3 {
-
+.other-links {
+	font-size: 20px;
 }
 
 #notificationLoading {

@@ -35,6 +35,10 @@ angular.module('weatherAnalytics').service('messagesService', [function Messages
 		MESSAGE_API_UNKNOWN_ERROR: 'An unknown error occurred during the current operation',
 		MESSAGE_API_UNKNOWN_ERROR_LOG: 'An unknown error occurred during an API request',
 		MESSAGE_API_SPECIFIC_ERROR: 'The following error occurred during the current operation: ',
+		
+		// Forecast
+		MESSAGE_FORECAST_UNIT_METRIC: 'Metric',
+		MESSAGE_FORECAST_UNIT_IMPERIAL: 'Imperial',
 	};
 	
 	/**

@@ -1,1 +1,144 @@
-<h1>APIs</h1> <h2><i class="fa fa-cog"></i> Work in progress</h2>
+<h1>APIs</h1> <h2>API structure</h2> The response of all the following API fit the following structure. <pre>
+{
+  "result" : int,
+  "message" : optional string,
+  "error" : optional array  
+}
+</pre> <p>The result field is always present for all API.</p> <h2>Ping</h2> A query to test that the server is started <h3>Route</h3> <pre>/api/ping</pre> <h3>Output example</h3> <pre>
+{
+  "result" : 1
+}
+</pre> <h2>Get All cities</h2> A query to fetch all handled cities <h3>Route</h3> <pre>/api/cities</pre> <h3>Output example</h3> <pre>
+{
+  "result" : 1,
+  "cities" : [ {
+    "name" : "Bangkok",
+    "country" : "Thailand"
+  }]]
+}
+</pre> <h2>Get forecast</h2> <p>A query to fetch the forecast for the 5 following days.</p> <p>If one of the day is not available the entry will still be present in the response. However, all the metrics will be null</p> <h3>Route</h3> <pre>/api/forecast/:city/:country</pre> <h3>Output example</h3> <pre>
+{
+  "result" : 1,
+  "forecast" : [ {
+    "city" : {
+      "name" : "Paris",
+      "country" : "France"
+    },
+    "date" : "2014-09-26",
+    "precipitation" : 0.0,
+    "temperatureMax" : {
+      "celsius" : 22,
+      "fahrenheit" : 72
+    },
+    "temperatureMin" : {
+      "celsius" : 12,
+      "fahrenheit" : 53
+    },
+    "windSpeed" : {
+      "kmph" : 8,
+      "mph" : 5
+    },
+    "windDirection" : 277,
+    "conditions" : {
+      "code" : 1,
+      "description" : "Sunny"
+    }
+  }, {
+    "city" : {
+      "name" : "Paris",
+      "country" : "France"
+    },
+    "date" : "2014-09-27",
+    "precipitation" : 0.0,
+    "temperatureMax" : {
+      "celsius" : 24,
+      "fahrenheit" : 76
+    },
+    "temperatureMin" : {
+      "celsius" : 13,
+      "fahrenheit" : 55
+    },
+    "windSpeed" : {
+      "kmph" : 11,
+      "mph" : 7
+    },
+    "windDirection" : 85,
+    "conditions" : {
+      "code" : 1,
+      "description" : "Sunny"
+    }
+  }, {
+    "city" : {
+      "name" : "Paris",
+      "country" : "France"
+    },
+    "date" : "2014-09-28",
+    "precipitation" : 0.0,
+    "temperatureMax" : {
+      "celsius" : 25,
+      "fahrenheit" : 77
+    },
+    "temperatureMin" : {
+      "celsius" : 13,
+      "fahrenheit" : 55
+    },
+    "windSpeed" : {
+      "kmph" : 10,
+      "mph" : 6
+    },
+    "windDirection" : 189,
+    "conditions" : {
+      "code" : 1,
+      "description" : "Sunny"
+    }
+  }, {
+    "city" : {
+      "name" : "Paris",
+      "country" : "France"
+    },
+    "date" : "2014-09-29",
+    "precipitation" : 0.1,
+    "temperatureMax" : {
+      "celsius" : 26,
+      "fahrenheit" : 79
+    },
+    "temperatureMin" : {
+      "celsius" : 14,
+      "fahrenheit" : 57
+    },
+    "windSpeed" : {
+      "kmph" : 9,
+      "mph" : 5
+    },
+    "windDirection" : 188,
+    "conditions" : {
+      "code" : 2,
+      "description" : "Cloudy"
+    }
+  }, {
+    "city" : {
+      "name" : "Paris",
+      "country" : "France"
+    },
+    "date" : "2014-09-30",
+    "precipitation" : 0.1,
+    "temperatureMax" : {
+      "celsius" : 25,
+      "fahrenheit" : 77
+    },
+    "temperatureMin" : {
+      "celsius" : 12,
+      "fahrenheit" : 54
+    },
+    "windSpeed" : {
+      "kmph" : 10,
+      "mph" : 6
+    },
+    "windDirection" : 261,
+    "conditions" : {
+      "code" : 2,
+      "description" : "Cloudy"
+    }
+  } ]
+}
+</pre>

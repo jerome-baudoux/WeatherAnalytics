@@ -11,6 +11,7 @@ describe('Controller: LogsCtrl', function () {
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
+    window.ErrorLogger.getInstance().clearLogs();
     AboutCtrl = $controller('LogsCtrl', {
       $scope: scope
     });

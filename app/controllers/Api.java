@@ -94,26 +94,6 @@ public class Api extends Controller {
 	 */
 	
 	/**
-	 * For debug only
-	 * @return sends a message
-	 */
-	public Promise<Result> longOperation(int time) {
-		
-		// Request
-		return Promise.promise(() -> {
-			Thread.sleep(time);
-			return "Current time: " + System.currentTimeMillis();
-			
-		// Result
-		}).map((String message) -> (Result) okJson(new SimpleApiResponse()
-				.setResult(ApiResultCode.SUCCESS.getCode())
-				.setMessage(message))
-			
-		// Error
-		).recoverWith(Api::getError);
-	}
-	
-	/**
 	 * Return an error message as a promise
 	 * @param t throwable
 	 * @return error message

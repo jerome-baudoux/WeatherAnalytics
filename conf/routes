@@ -6,7 +6,6 @@ GET     /*file/                        @controllers.Application.redirectToResour
 GET     /api/ping                      @controllers.Api.ping
 GET     /api/cities                    @controllers.Api.cities
 GET     /api/forecast/:city/:country   @controllers.Api.forecast(city, country)
-GET     /api/wait/:time                @controllers.Api.longOperation(time : Integer)
 GET     /api/*name                     @controllers.Api.apiNotFound(name)
 
 # Errors
