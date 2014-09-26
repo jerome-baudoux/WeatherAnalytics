@@ -42,9 +42,9 @@ angular.module('weatherAnalytics')
 		 */
 		var onCitySelected = function() {
 			// Make an API call
-			if($scope.selectedCity 
-					&& $scope.selectedCity.name 
-					&& $scope.selectedCity.country) {
+			if($scope.selectedCity && 
+					$scope.selectedCity.name && 
+					$scope.selectedCity.country) {
 				apiCallerService.get($scope, '/api/forecast/'+$scope.selectedCity.name+'/'+$scope.selectedCity.country, 
 					apiCallerService.API_CONSTANTS.SUCCESS, onForecastRefreshed);
 			}
