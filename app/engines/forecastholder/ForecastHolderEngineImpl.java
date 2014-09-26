@@ -137,7 +137,7 @@ public class ForecastHolderEngineImpl implements ForecastHolderEngine {
 			if(days!=null) {
 				// Check if the day is known
 				WeatherDay day = days.get(date);
-				if(days!=null) {
+				if(day!=null) {
 					return day;
 				}
 			}

@@ -15,7 +15,7 @@ angular.module('weatherAnalytics')
 
 	  	// Content
 		$scope.cities = [];
-		$scope.selectedCity = {};
+		$scope.selectedCity = undefined;
 		
 		$scope.forecast = {};
 		
