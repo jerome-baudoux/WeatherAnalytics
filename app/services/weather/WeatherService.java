@@ -1,9 +1,11 @@
 package services.weather;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 import api.objects.City;
+import api.objects.ConsolidatedDays;
 import api.objects.WeatherDay;
 
 /**
@@ -36,7 +38,41 @@ public interface WeatherService {
 	 * @param end until this date
 	 * @return all known forecast
 	 */
-	public List<WeatherDay> getHistory(City city, Date begin, Date end) throws NoSuchCityException;
+	public HistoryData getHistory(City city, String begin, String end) throws NoSuchCityException;
+	
+	/**
+	 * Result of a history request
+	 * @author Jerome Baudoux
+	 */
+	public static class HistoryData implements Serializable {
+		private static final long serialVersionUID = 1L;
+		protected final List<WeatherDay> history;
+		protected final ConsolidatedDays consolidation;
+		
+		/**
+		 * Constructor
+		 * @param history history
+		 * @param consolidation consolidation
+		 */
+		public HistoryData(List<WeatherDay> history, ConsolidatedDays consolidation) {
+			this.history = history;
+			this.consolidation = consolidation;
+		}
+
+		/**
+		 * @return the history
+		 */
+		public List<WeatherDay> getHistory() {
+			return history;
+		}
+
+		/**
+		 * @return the consolidation
+		 */
+		public ConsolidatedDays getConsolidation() {
+			return consolidation;
+		}
+	}
 	
 	/**
 	 * 

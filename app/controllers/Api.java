@@ -12,10 +12,12 @@ import api.response.ApiResultCode;
 import api.response.SimpleApiResponse;
 import api.response.weather.CitiesResponse;
 import api.response.weather.ForecastResponse;
+import api.response.weather.HistoryResponse;
 import play.libs.F.Promise;
 import play.mvc.Controller;
 import play.mvc.Result;
 import services.weather.WeatherService;
+import services.weather.WeatherService.HistoryData;
 import services.weather.WeatherService.NoSuchCityException;
 
 /**
@@ -56,6 +58,18 @@ public class Api extends Controller {
 			.setResult(ApiResultCode.ERROR_API_NOT_FOUND.getCode())
 			.setMessage("No API found for the name: " + name));
 	}
+
+	/**
+	 * When an api with wrong parameters was called
+	 * @param name name of the api
+	 * @return 500 error
+	 */
+	public Result apiMissingParameters(String name, String parameters) {
+		return internalServerErrorJson(new SimpleApiResponse()
+			.setResult(ApiResultCode.ERROR_PARAMETER_MISSING.getCode())
+			.setMessage("The "+name+" API was called with wrong parameters" 
+							+ ((parameters!=null) ? (": "+parameters) : "")));
+	}
 	
 	/**
 	 * Fetch the list of supported cities
@@ -84,6 +98,25 @@ public class Api extends Controller {
 		).map((List<WeatherDay> days) -> (Result) okJson(new ForecastResponse()
 				.setResult(ApiResultCode.SUCCESS.getCode())
 				.setForecast(days))
+				
+		// Error
+		).recoverWith(Api::getError);
+	}
+	
+	/**
+	 * Gets the forecast for the specified city
+	 * @return
+	 */
+	public Promise<Result> history(String city, String country, String from, String to) {
+
+		// Request
+		return Promise.promise(() -> this.weatherService.getHistory(new City(city, country), from, to)
+				
+		// Result
+		).map((HistoryData data) -> (Result) okJson(new HistoryResponse()
+				.setResult(ApiResultCode.SUCCESS.getCode())
+				.setHistory(data.getHistory())
+				.setConsolidation(data.getConsolidation()))
 				
 		// Error
 		).recoverWith(Api::getError);

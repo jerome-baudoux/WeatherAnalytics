@@ -1,12 +1,20 @@
 # redirect every query that ends with / to the same without the /
 # for example /ping/ will redirect to /ping
-GET     /*file/                        @controllers.Application.redirectToResource(file: String)
+GET     /*file/                                             @controllers.Application.redirectToResource(file: String)
 
 # API
-GET     /api/ping                      @controllers.Api.ping
-GET     /api/cities                    @controllers.Api.cities
-GET     /api/forecast/:city/:country   @controllers.Api.forecast(city, country)
-GET     /api/*name                     @controllers.Api.apiNotFound(name)
+GET     /api/ping                                           @controllers.Api.ping
+GET     /api/cities                                         @controllers.Api.cities
+
+GET     /api/forecast/:city/:country                        @controllers.Api.forecast(city, country)
+GET     /api/forecast/*params                               @controllers.Api.apiMissingParameters(name="forecast", params)
+GET     /api/forecast                                       @controllers.Api.apiMissingParameters(name="forecast", params="")
+
+GET     /api/history/:city/:country/from/:from/to/:to       @controllers.Api.history(city, country, from, to)
+GET     /api/history/*params                                @controllers.Api.apiMissingParameters(name="history", params)
+GET     /api/history                                        @controllers.Api.apiMissingParameters(name="history", params="")
+
+GET     /api/*name                                          @controllers.Api.apiNotFound(name)
 
 # Errors
 GET     /error                         @controllers.Errors.unknown

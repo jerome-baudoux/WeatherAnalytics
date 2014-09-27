@@ -2,6 +2,7 @@ package api.objects;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -61,6 +62,21 @@ public class WeatherDayConditions {
 
 	public String getDescription() {
 		return description;
+	}
+
+	@JsonIgnore
+	public boolean isSunny() {
+		return this.code == SUNNY.getCode();
+	}
+
+	@JsonIgnore
+	public boolean isRainy() {
+		return this.code >= 10 && this.code % 10 == 0;
+	}
+
+	@JsonIgnore
+	public boolean isSnowy() {
+		return this.code >= 10 && this.code % 10 == 1;
 	}
 
 	@Override

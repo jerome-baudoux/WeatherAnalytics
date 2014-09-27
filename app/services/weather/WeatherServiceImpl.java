@@ -6,6 +6,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import api.objects.City;
+import api.objects.ConsolidatedDays;
+import api.objects.Speed;
+import api.objects.Temperature;
 import api.objects.WeatherDay;
 
 import com.google.inject.Inject;
@@ -98,10 +101,126 @@ public class WeatherServiceImpl implements WeatherService {
 	 * @return all known forecast
 	 */
 	@Override
-	public List<WeatherDay> getHistory(City city, Date begin, Date end) throws NoSuchCityException {
+	public HistoryData getHistory(City city, String begin, String end) throws NoSuchCityException {
 		if(!this.cities.contains(city)) {
 			throw new NoSuchCityException(city);
 		}
-		return new LinkedList<>();
+
+		// TODO -- Use real history data
+		List<WeatherDay> days = getForecast(city);
+		
+		// Build consolidation using map/reduce
+		ConsolidatedDays consolidation = days.stream()
+			.map(WeatherServiceImpl::createHistory)
+			.reduce(WeatherServiceImpl::mergeHistory)
+			.orElse(new ConsolidatedDays());
+		
+		return new HistoryData(days, consolidation);
+	}
+	
+	/**
+	 * Build a consolidation for the current day
+	 * @param day current day
+	 * @return consolidation
+	 */
+	private static ConsolidatedDays createHistory(WeatherDay day) {
+		return new ConsolidatedDays()
+			// Wind
+			.setMaxWindSpeed(day.getWindSpeed())
+			.setMinWindSpeed(day.getWindSpeed())
+			.setSumWindSpeed(day.getWindSpeed())
+			.setNbWindSpeed(day.getWindSpeed()!=null ? 1 : 0)
+			// Temperature
+			.setMaxTemperature(day.getTemperatureMax())
+			.setMinTemperature(day.getTemperatureMin())
+			.setSumMaxTemperature(day.getTemperatureMax())
+			.setNbMaxTemperature(day.getTemperatureMax()!=null ? 1 : 0)
+			// Precipitation
+			.setMaxPrecipitation(day.getPrecipitation())
+			.setMinPrecipitation(day.getPrecipitation())
+			.setSumPrecipitation(day.getPrecipitation())
+			.setNbPrecipitation(day.getPrecipitation()!=null ? 1 : 0)
+			// Conditions
+			.setNbSunnyDays((day.getConditions()!= null && day.getConditions().isSunny()) ? 1 : 0)
+			.setNbRainyDays((day.getConditions()!= null && day.getConditions().isRainy()) ? 1 : 0)
+			.setNbSnowyDays((day.getConditions()!= null && day.getConditions().isSnowy()) ? 1 : 0);
+	}
+	
+	/**
+	 * Merge two ConsolidatedDays
+	 * @param first first ConsolidatedDays
+	 * @param second second ConsolidatedDays
+	 * @return merged ConsolidatedDays
+	 */
+	private static ConsolidatedDays mergeHistory(ConsolidatedDays first, ConsolidatedDays second) {
+		return new ConsolidatedDays()
+		// Min
+		.setMinWindSpeed(getMin(first.getMinWindSpeed(), second.getMinWindSpeed()))
+		.setMinTemperature(getMin(first.getMinTemperature(), second.getMinTemperature()))
+		.setMinPrecipitation(getMin(first.getMinPrecipitation(), second.getMinPrecipitation()))
+		// Max
+		.setMaxWindSpeed(getMax(first.getMaxWindSpeed(), second.getMaxWindSpeed()))
+		.setMaxTemperature(getMax(first.getMaxTemperature(), second.getMaxTemperature()))
+		.setMaxPrecipitation(getMax(first.getMaxPrecipitation(), second.getMaxPrecipitation()))
+		// Sum
+		.setSumWindSpeed(Speed.add(first.getSumWindSpeed(), second.getSumWindSpeed()))
+		.setSumMaxTemperature(Temperature.add(first.getSumMaxTemperature(), second.getSumMaxTemperature()))
+		.setSumPrecipitation(add(first.getSumPrecipitation(), second.getSumPrecipitation()))
+		// Nb
+		.setNbWindSpeed(first.getNbWindSpeed() + second.getNbWindSpeed())
+		.setNbMaxTemperature(first.getNbMaxTemperature() + second.getNbMaxTemperature())
+		.setNbPrecipitation(first.getNbPrecipitation() + second.getNbPrecipitation())
+		// Conditions
+		.setNbSunnyDays(first.getNbSunnyDays() + second.getNbSunnyDays())
+		.setNbRainyDays(first.getNbRainyDays() + second.getNbRainyDays())
+		.setNbSnowyDays(first.getNbSnowyDays() + second.getNbSnowyDays());
+	}
+
+	/**
+	 * Get min value of a comparable
+	 * @param first first
+	 * @param second second
+	 * @return min
+	 */
+	private static <T extends Comparable<T>> T getMin(T first, T second) {
+		if(first == null) {
+			return second;
+		}
+		if(first.compareTo(second) < 0 ) {
+			return first;
+		}
+		return second;
+	}
+	
+	/**
+	 * Get max value of a comparable
+	 * @param first first
+	 * @param second second
+	 * @return max
+	 */
+	private static <T extends Comparable<T>> T getMax(T first, T second) {
+		if(first == null) {
+			return second;
+		}
+		if(first.compareTo(second) > 0 ) {
+			return first;
+		}
+		return second;
+	}
+	
+	/**
+	 * Adds up two double
+	 * @param first first
+	 * @param second second
+	 * @return sum
+	 */
+	private static Double add(Double first, Double second) {
+		if(first == null) {
+			return second;
+		}
+		if(second == null) {
+			return first;
+		}
+		return first + second;
 	}
 }
