@@ -128,6 +128,59 @@ body {
 	text-align: center;
 }
 
+.datepicker .caret {
+	margin-left: -20px;
+	margin-top: 20px;
+	position: absolute;
+	color: #fff;
+}
+
+.datepicker input {
+	width: 200px;
+}
+
+.datepicker ::-webkit-input-placeholder {
+	color: #fff;
+	opacity:  1;
+}
+
+.datepicker ::-moz-input-placeholder {
+	color: #fff;
+	opacity:  1;
+}
+
+.datepicker ::-ms-input-placeholder {
+	color: #fff;
+	opacity:  1;
+}
+
+.datepicker ::input-placeholder {
+	color: #fff;
+	opacity:  1;
+}
+
+.historyfilter > button , .historyfilter > .datepicker {
+	width: 200px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.historyfilter > button {
+	margin-bottom: 4px;
+	margin-right: 4px;
+	height: 42px;
+}
+
+.historyfilter > .datepicker input {
+	margin-bottom: 4px;
+	height: 42px;
+}
+
+.historyfilter > .datepicker {
+	margin-right: 4px;
+}
+
 .other-links {
 	font-size: 20px;
 }
