@@ -7,12 +7,8 @@
  * Controller of the Forecast page
  */
 angular.module('weatherAnalytics')
-  .controller('ForecastCtrl', ['$scope', '$filter', '$location', '$route', 'pageService', 'messagesService', 'apiCallerService',
-    function ($scope, $filter, $location, $route, pageService, messagesService, apiCallerService) {
-	  
-	    // Constants
-	    var UNIT_METRIC = 'Metric';
-	    var UNIT_IMPERIAL = 'Imperial';
+  .controller('ForecastCtrl', ['$scope', '$filter', '$location', '$route', 'pageService', 'messagesService', 'apiCallerService', 'unitsService',
+    function ($scope, $filter, $location, $route, pageService, messagesService, apiCallerService, unitsService) {
 
 	    // Internal variables
 		var defaultCity;
@@ -23,13 +19,7 @@ angular.module('weatherAnalytics')
 		$scope.selectedCity = undefined;
 		
 		// Units
-		$scope.units = [{
-			type: UNIT_METRIC, 
-			name: messagesService.get('MESSAGE_FORECAST_UNIT_METRIC')
-		},{
-			type: UNIT_IMPERIAL, 
-			name: messagesService.get('MESSAGE_FORECAST_UNIT_IMPERIAL')
-		}];
+		$scope.units = unitsService.getUnits();
 		$scope.selectedUnit = undefined;
 		
 		// Forecast
@@ -132,16 +122,6 @@ angular.module('weatherAnalytics')
 				updateUrl();
 			}
 		};
-
-		/**
-		 * Get the numeric value of '?'
-		 */
-		var getNumericValue = function(value) {
-			if(!value && value!==0) {
-				return '?';
-			}
-			return value;
-		};
 		
 		/**
 		 * Get the day of the week
@@ -154,49 +134,28 @@ angular.module('weatherAnalytics')
 		 * Get the temperature max
 		 */
 		$scope.getTemperatureMax = function(day) {
-			if(!day.temperatureMax) {
-				return '?';
-			}
-			if($scope.selectedUnit && $scope.selectedUnit.type === UNIT_IMPERIAL) {
-				return getNumericValue(day.temperatureMax.fahrenheit) + '°F';
-			} else {
-				return getNumericValue(day.temperatureMax.celsius) + '°C';
-			}
+			return unitsService.getTemperature(day.temperatureMax, $scope.selectedUnit);
 		};
 		
 		/**
 		 * Get the temperature max
 		 */
 		$scope.getTemperatureMin = function(day) {
-			if(!day.temperatureMax) {
-				return '?';
-			}
-			if($scope.selectedUnit && $scope.selectedUnit.type === UNIT_IMPERIAL) {
-				return getNumericValue(day.temperatureMin.fahrenheit) + '°F';
-			} else {
-				return getNumericValue(day.temperatureMin.celsius) + '°C';
-			}
+			return unitsService.getTemperature(day.temperatureMin, $scope.selectedUnit);
 		};
 		
 		/**
 		 * Get the temperature max
 		 */
 		$scope.getPrecipitation = function(day) {
-			return getNumericValue(day.precipitation);
+			return unitsService.getNumericValue(day.precipitation);
 		};
 		
 		/**
 		 * Get the temperature max
 		 */
 		$scope.getWindSpeed = function(day) {
-			if(!day.windSpeed) {
-				return '?';
-			}
-			if($scope.selectedUnit && $scope.selectedUnit.type === UNIT_IMPERIAL) {
-				return getNumericValue(day.windSpeed.mph) + ' mph';
-			} else {
-				return getNumericValue(day.windSpeed.kmph) + ' km/h';
-			}
+			return unitsService.getSpeed(day.windSpeed, $scope.selectedUnit);
 		};
 		
 		/**

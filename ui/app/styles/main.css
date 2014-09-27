@@ -34,10 +34,19 @@ body {
 	padding-bottom: 0;
 }
 
+.forecast .day {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
 .forecast .text-conditions {
 	font-size: 20px;
 	height: 26px;
 	margin-top: 0px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .forecast .image-conditions {
