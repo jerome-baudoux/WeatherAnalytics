@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc function
- * @name weatherAnalytics.service:apiCallerService
+ * @name weatherAnalytics.service:unitsService
  * @description
- * A service to call APIs
+ * A service to handle units
  */
 angular.module('weatherAnalytics').service('unitsService', ['messagesService', 
-    function CallerService(messagesService) {
+    function UnitService(messagesService) {
 	
 	    // Constants
 	    var UNIT_METRIC = 'Metric';

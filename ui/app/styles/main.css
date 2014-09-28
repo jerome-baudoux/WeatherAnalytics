@@ -189,6 +189,10 @@ body {
 	font-size: 20px;
 }
 
+.consolidation {
+	border: 1px solid #ddd;
+}
+
 #notificationLoading {
 	position: absolute;
 	top: 0;
