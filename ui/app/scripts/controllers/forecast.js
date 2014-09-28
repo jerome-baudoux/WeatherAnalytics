@@ -138,21 +138,21 @@ angular.module('weatherAnalytics')
 		};
 		
 		/**
-		 * Get the temperature max
+		 * Get the temperature min
 		 */
 		$scope.getTemperatureMin = function(day) {
 			return unitsService.getTemperature(day.temperatureMin, $scope.selectedUnit);
 		};
 		
 		/**
-		 * Get the temperature max
+		 * Get the precipitation
 		 */
 		$scope.getPrecipitation = function(day) {
-			return unitsService.getNumericValue(day.precipitation);
+			return unitsService.getNumericValue(day.precipitation, true);
 		};
 		
 		/**
-		 * Get the temperature max
+		 * Get the wind speed
 		 */
 		$scope.getWindSpeed = function(day) {
 			return unitsService.getSpeed(day.windSpeed, $scope.selectedUnit);

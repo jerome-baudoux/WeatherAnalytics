@@ -220,6 +220,6 @@ public class WeatherServiceImpl implements WeatherService {
 		if(second == null) {
 			return first;
 		}
-		return first + second;
+		return new Double(first.doubleValue() + second.doubleValue());
 	}
 }

@@ -33,30 +33,31 @@
 	</span>
 </div>
 
-
-<table class="table table-striped consolidation" ng-show="history">
-<tr>
-	<th>Consolidated Metrics</th>
-	<th>Min</th>
-	<th>Max</th>
-	<th>Average</th>
-</tr>
-<tr>
-	<td>Temperature</td>
-	<td></td>
-	<td></td>
-	<td></td>
-</tr>
-<tr>
-	<td>Precipitation</td>
-	<td></td>
-	<td></td>
-	<td></td>
-</tr>
-<tr>
-	<td>Wind speed</td>
-	<td></td>
-	<td></td>
-	<td></td>
-</tr>
-</table>
+<div class="table-responsive">
+	<table class="table table-striped consolidation" ng-show="consolidation">
+	<tr>
+		<th>Consolidated Metrics</th>
+		<th>Min</th>
+		<th>Max</th>
+		<th>Average</th>
+	</tr>
+	<tr>
+		<td>Temperature</td>
+		<td ng-bind="getTemperatureMin()"></td>
+		<td ng-bind="getTemperatureMax()"></td>
+		<td ng-bind="getTemperatureAvg()"></td>
+	</tr>
+	<tr>
+		<td>Wind speed</td>
+		<td ng-bind="getWindSpeedMin()"></td>
+		<td ng-bind="getWindSpeedMax()"></td>
+		<td ng-bind="getWindSpeedAvg()"></td>
+	</tr>
+	<tr>
+		<td>Precipitation</td>
+		<td ng-bind="getPrecipitationMin()"></td>
+		<td ng-bind="getPrecipitationMax()"></td>
+		<td ng-bind="getPrecipitationAvg()"></td>
+	</tr>
+	</table>
+</div>

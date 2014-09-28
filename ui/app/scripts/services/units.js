@@ -30,11 +30,21 @@ angular.module('weatherAnalytics').service('unitsService', ['messagesService',
 		};
 		
 		/**
+		 * Checks whether the value is defined
+		 */
+		this.isDefined = function(value) {
+			return value || value===0;
+		};
+		
+		/**
 		 * Get the numeric value of '?'
 		 */
-		this.getNumericValue = function(value) {
-			if(!value && value!==0) {
+		this.getNumericValue = function(value, fixed) {
+			if(!this.isDefined(value)) {
 				return '?';
+			}
+			if(fixed || Math.floor(value)!==value) {
+				return value.toFixed(1);
 			}
 			return value;
 		};

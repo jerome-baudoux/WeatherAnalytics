@@ -9,10 +9,6 @@
 angular.module('weatherAnalytics')
   .controller('HistoryCtrl', ['$scope', '$timeout', '$location', '$route', 'pageService', 'messagesService', 'apiCallerService', 'unitsService', 'notificationsService', 'datesService',
     function ($scope, $timeout, $location, $route, pageService, messagesService, apiCallerService, unitsService, notificationsService, datesService) {
-
-	    // Internal variables
-		var defaultCity;
-		var defaultCountry;
 	  
 	  	// Cities
 		$scope.cities = [];
@@ -53,12 +49,15 @@ angular.module('weatherAnalytics')
 			
 			// Get parameters
 			var params = $location.search();
-			
-			// Store city, to apply it later on
+
+			// Select the city from the URL
 			$scope.selectedCity = undefined;
-			defaultCity = params.city;
-			defaultCountry = params.country;
-			
+			$scope.cities.forEach(function(city) {
+				if(city.name === params.city && city.country === params.country) {
+					$scope.selectedCity = city;
+				}
+			});
+
 			// Select the right unit
 			$scope.selectedUnit = undefined;
 			for(var i=0; i<$scope.units.length; i++) {
@@ -70,26 +69,12 @@ angular.module('weatherAnalytics')
 			// Select date
 			$scope.fromDate = datesService.getDate(params.from);
 			$scope.untilDate = datesService.getDate(params.until);
-		};
-
-
-		/**
-		 * Refresh city list
-		 */
-		var onCityRefreshed = function(data) {
 			
-			// Apply cities
-			if(data) {
-				$scope.cities = data.cities;
-			}
-		
-			// Select the city from the URL
-			$scope.cities.forEach(function(city) {
-				if(city.name === defaultCity && city.country === defaultCountry) {
-					$scope.selectedCity = city;
-				}
-			});
+			// True if at least one is fine, in that case we'll try to fetch the result
+			return $scope.selectedCity || $scope.selectedUnit || $scope.fromDate || $scope.untilDate;
 		};
+
+
 		
 		/**
 		 * Checks that input is correct
@@ -119,6 +104,7 @@ angular.module('weatherAnalytics')
 		var onHistoryRefreshed = function(data) {
 			$scope.history = data.history;
 			$scope.consolidation = data.consolidation;
+			updateUrl();
 		};
 		
 		/**
@@ -126,30 +112,151 @@ angular.module('weatherAnalytics')
 		 */
 		$scope.fetchHistory = function() {
 			if(validateParameters()) {
-				updateUrl();
 				apiCallerService.get($scope, '/api/history/'+$scope.selectedCity.name+'/'+$scope.selectedCity.country+
 						'/from/'+$scope.fromDate+'/until/'+$scope.untilDate, 
 						apiCallerService.API_CONSTANTS.SUCCESS, onHistoryRefreshed);
 			}
 		};
 
+		/**
+		 * Get the temperature max
+		 */
+		$scope.getTemperatureMax = function() {
+			if(!this.consolidation) {
+				return '?';
+			}
+			return unitsService.getTemperature(this.consolidation.maxTemperature, $scope.selectedUnit);
+		};
+		
+		/**
+		 * Get the temperature min
+		 */
+		$scope.getTemperatureMin = function() {
+			if(!this.consolidation) {
+				return '?';
+			}
+			return unitsService.getTemperature(this.consolidation.minTemperature, $scope.selectedUnit);
+		};
+		
+		/**
+		 * Get the average temperature
+		 */
+		$scope.getTemperatureAvg = function() {
+			var temp;
+			if(this.consolidation && this.consolidation.sumMaxTemperature) {	
+				temp = {
+					celsius: 0,
+					fahrenheit: 0
+				};
+				if(this.consolidation.sumMaxTemperature.celsius && this.consolidation.nbMaxTemperature) {
+					temp.celsius = this.consolidation.sumMaxTemperature.celsius/this.consolidation.nbMaxTemperature;
+				}
+				if(this.consolidation.sumMaxTemperature.fahrenheit && this.consolidation.nbMaxTemperature) {
+					temp.fahrenheit = this.consolidation.sumMaxTemperature.fahrenheit/this.consolidation.nbMaxTemperature;
+				}
+			}
+			return unitsService.getTemperature(temp, $scope.selectedUnit);
+		};
+
+		/**
+		 * Get the max wind speed
+		 */
+		$scope.getWindSpeedMax = function() {
+			if(!this.consolidation) {
+				return '?';
+			}
+			return unitsService.getSpeed(this.consolidation.maxWindSpeed, $scope.selectedUnit);
+		};
+		
+		/**
+		 * Get the min wind speed
+		 */
+		$scope.getWindSpeedMin = function() {
+			if(!this.consolidation) {
+				return '?';
+			}
+			return unitsService.getSpeed(this.consolidation.minWindSpeed, $scope.selectedUnit);
+		};
+		
+		/**
+		 * Get the average wind speed
+		 */
+		$scope.getWindSpeedAvg = function() {
+			var temp;
+			if(this.consolidation && this.consolidation.sumWindSpeed) {	
+				temp = {
+					kmph: 0,
+					mph: 0
+				};
+				if(this.consolidation.sumWindSpeed.kmph && this.consolidation.nbWindSpeed) {
+					temp.kmph = this.consolidation.sumWindSpeed.kmph/this.consolidation.nbWindSpeed;
+				}
+				if(this.consolidation.sumWindSpeed.mph && this.consolidation.nbMaxTemperature) {
+					temp.mph = this.consolidation.sumWindSpeed.mph/this.consolidation.nbWindSpeed;
+				}
+			}
+			return unitsService.getSpeed(temp, $scope.selectedUnit);
+		};
+
+		/**
+		 * Get the max Precipitation
+		 */
+		$scope.getPrecipitationMax = function() {
+			if(!this.consolidation || !unitsService.isDefined(this.consolidation.maxPrecipitation)) {
+				return '?';
+			}
+			return unitsService.getNumericValue(this.consolidation.maxPrecipitation, true) + ' mm';
+		};
+		
+		/**
+		 * Get the min Precipitation
+		 */
+		$scope.getPrecipitationMin = function() {
+			if(!this.consolidation || !unitsService.isDefined(this.consolidation.minPrecipitation)) {
+				return '?';
+			}
+			return unitsService.getNumericValue(this.consolidation.minPrecipitation, true) + ' mm';
+		};
+		
+		/**
+		 * Get the average Precipitation
+		 */
+		$scope.getPrecipitationAvg = function() {
+			if(!this.consolidation || !unitsService.isDefined(this.consolidation.sumPrecipitation)) {
+				return '?';
+			}
+			var temp = 0;
+			if(this.consolidation.nbPrecipitation) {
+				temp = this.consolidation.sumPrecipitation/this.consolidation.nbPrecipitation;
+			}
+			return unitsService.getNumericValue(temp, true) + ' mm';
+		};
+
+		/**
+		 * Reload data if needed
+		 */
+		var reload = function() {
+			
+			// Clear previous data
+			$scope.history = undefined;
+			$scope.consolidation = undefined;
+			
+        	if(readFromUrl()) {
+            	$scope.fetchHistory();
+        	}
+		};
+
 		// Page setup
 		pageService.setPageName(messagesService.get('TITLE_PAGE_HISTORY'));
-
-		// Read parameters
-		readFromUrl();
 		
 		// Prevent reloading route when changing parameters
         var lastRoute = $route.current;
         $scope.$on('$locationChangeSuccess', function () {
             if ($route.current.$$route && $route.current.$$route.controller === 'HistoryCtrl') {
-            	
             	// Prevent refresh
             	$route.current = lastRoute;
-            	
             	// Reload content
-            	readFromUrl();
-            	onCityRefreshed();
+            	reload();
             }
         });
 
@@ -157,6 +264,11 @@ angular.module('weatherAnalytics')
 		apiCallerService.watchDestroyed($scope);
 	
 		// load the city list from the API
-		apiCallerService.get($scope, '/api/cities', apiCallerService.API_CONSTANTS.SUCCESS, onCityRefreshed);
+		apiCallerService.get($scope, '/api/cities', apiCallerService.API_CONSTANTS.SUCCESS, function(data) {
+			if(data && data.cities) {
+				$scope.cities = data.cities;
+	        	reload();
+			}
+		});
 
   }]);
