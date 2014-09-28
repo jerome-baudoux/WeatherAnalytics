@@ -222,6 +222,10 @@ footer {
 	border-top: 0;
 }
 
+.history-tabs a:hover {
+	cursor: pointer;
+}
+
 .consolidation-conditions {
 	text-align: center;
 }

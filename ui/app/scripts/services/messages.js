@@ -43,7 +43,10 @@ angular.module('weatherAnalytics').service('messagesService', [function Messages
 		// History
 		MESSAGE_HISTORY_ERROR_CITY: 'You must select a valid city',
 		MESSAGE_HISTORY_ERROR_UNIT: 'You must select a valid unit',
-		MESSAGE_HISTORY_ERROR_RANGE: 'You must select a valid range'
+		MESSAGE_HISTORY_ERROR_RANGE: 'You must select a valid range',
+		MESSAGE_HISTORY_TABS_TEMPERATURE: 'Temperatures',
+		MESSAGE_HISTORY_TABS_WIND_SPEED: 'Wind speed',
+		MESSAGE_HISTORY_TABS_PRECIPITATION: 'Precipirations'
 	};
 	
 	/**
