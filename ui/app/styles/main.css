@@ -136,7 +136,7 @@ body {
 }
 
 .datepicker input {
-	width: 200px;
+	width: 185px;
 }
 
 .datepicker ::-webkit-input-placeholder {
@@ -159,8 +159,12 @@ body {
 	opacity:  1;
 }
 
+.historyfilter {
+	margin-right: -5px;
+}
+
 .historyfilter > button , .historyfilter > .datepicker {
-	width: 200px;
+	width: 185px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -169,18 +173,18 @@ body {
 .historyfilter > button {
 	display: block;
 	float: left;
-	margin-bottom: 4px;
-	margin-right: 4px;
+	margin-bottom: 3px;
+	margin-right: 3px;
 	height: 42px;
 }
 
 .historyfilter > .datepicker input {
-	margin-bottom: 4px;
+	margin-bottom: 3px;
 	height: 42px;
 }
 
 .historyfilter > .datepicker {
-	margin-right: 4px;
+	margin-right: 3px;
 	display: block;
 	float: left;
 }
