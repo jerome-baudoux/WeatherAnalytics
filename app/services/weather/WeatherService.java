@@ -1,7 +1,6 @@
 package services.weather;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 import api.objects.City;

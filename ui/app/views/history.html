@@ -4,24 +4,24 @@
 	<button placeholder="Select a city" type="button" class="btn btn-default" 
 		ng-model="selectedCity" data-html="1" ng-options="city as city.name+', '+city.country for city in cities" bs-select>
 	  <span class="caret"></span>
-	</button><!--  
-	
-	--><button placeholder="Select a unit" type="button" class="btn btn-default" 
+	</button>
+
+	<button placeholder="Select a unit" type="button" class="btn btn-default" 
 		ng-model="selectedUnit" data-html="1" ng-options="unit as unit.name for unit in units" bs-select>
 	  <span class="caret"></span>
-	</button><!--  
+	</button>
 
-	--><span class="datepicker"><!--  
-	    --><input type="text" class="btn btn-default" ng-model="fromDate" data-autoclose="true" data-max-date="{{untilDate}}" placeholder="From" bs-datepicker><!--  
-	    --><span class="caret"></span>
-	</span><!--  
-	
-	--><span class="datepicker"><!--  
-	    --><input type="text" class="btn btn-default" ng-model="untilDate" data-autoclose="true" data-min-date="{{fromDate}}" placeholder="Until" bs-datepicker><!--  
-	    --><span class="caret"></span>
-	</span><!--  
-	
-	--><button type="button" class="btn btn-info">Fetch History</button>
+	<span class="datepicker"> 
+		<input type="text" class="btn btn-default" data-date-format="yyyy-MM-dd" ng-model="fromDate" data-autoclose="true" data-max-date="{{untilDate}}" placeholder="From" bs-datepicker>
+		<span class="caret"></span>
+	</span>
+
+	<span class="datepicker">
+		<input type="text" class="btn btn-default" data-date-format="yyyy-MM-dd" ng-model="untilDate" data-autoclose="true" data-min-date="{{fromDate}}" data-max-date="today" placeholder="Until" bs-datepicker>
+		<span class="caret"></span>
+	</span>
+
+	<button type="button" class="btn btn-info" ng-click="fetchHistory()">Fetch History</button>
 </div>
 
 <div class="well">

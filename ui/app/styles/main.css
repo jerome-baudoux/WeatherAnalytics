@@ -167,6 +167,8 @@ body {
 }
 
 .historyfilter > button {
+	display: block;
+	float: left;
 	margin-bottom: 4px;
 	margin-right: 4px;
 	height: 42px;
@@ -179,6 +181,8 @@ body {
 
 .historyfilter > .datepicker {
 	margin-right: 4px;
+	display: block;
+	float: left;
 }
 
 .other-links {
@@ -207,7 +211,6 @@ body {
 	width: 100%;
 	bottom: 0;
 	margin-bottom: 0;
-	text-align: right;
 }
 
 footer {

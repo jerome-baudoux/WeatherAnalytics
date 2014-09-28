@@ -39,6 +39,11 @@ angular.module('weatherAnalytics').service('messagesService', [function Messages
 		// Forecast
 		MESSAGE_FORECAST_UNIT_METRIC: 'Metric',
 		MESSAGE_FORECAST_UNIT_IMPERIAL: 'Imperial',
+		
+		// History
+		MESSAGE_HISTORY_ERROR_CITY: 'You must select a valid city',
+		MESSAGE_HISTORY_ERROR_UNIT: 'You must select a valid unit',
+		MESSAGE_HISTORY_ERROR_RANGE: 'You must select a valid range'
 	};
 	
 	/**

@@ -15,9 +15,17 @@ public class PoolEngineActor extends AbstractActor {
 	 * Builds rules
 	 */
 	public PoolEngineActor() {
-		receive(ReceiveBuilder.match(Task.class, (Task t) -> {
-			Logger.trace("A task is launched from actor: " + this);
-			t.run();
-		}).matchAny(o -> Logger.error("Unknown message recieved")).build());
+		try {
+			receive(ReceiveBuilder.match(Task.class, (Task t) -> {
+				Logger.trace("A task is launched from actor: " + this);
+				try {
+					t.run();
+				} catch(Throwable e) {
+					Logger.error(e.getMessage(), t);
+				}
+			}).matchAny(o -> Logger.error("Unknown message recieved")).build());
+		} catch(Throwable t) {
+			Logger.error(t.getMessage(), t);
+		}
 	}
 }
