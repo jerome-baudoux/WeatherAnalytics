@@ -10,7 +10,7 @@ GET     /api/forecast/:city/:country                        @controllers.Api.for
 GET     /api/forecast/*params                               @controllers.Api.apiMissingParameters(name="forecast", params)
 GET     /api/forecast                                       @controllers.Api.apiMissingParameters(name="forecast", params="")
 
-GET     /api/history/:city/:country/from/:from/to/:to       @controllers.Api.history(city, country, from, to)
+GET     /api/history/:city/:country/from/:from/until/:to    @controllers.Api.history(city, country, from, to)
 GET     /api/history/*params                                @controllers.Api.apiMissingParameters(name="history", params)
 GET     /api/history                                        @controllers.Api.apiMissingParameters(name="history", params="")
 

@@ -24,11 +24,20 @@
 	<button type="button" class="btn btn-info" ng-click="fetchHistory()">Fetch History</button>
 </div>
 
-<div class="well">
+<div class="well" ng-hide="history">
 	<p>
-		This page will be used to analyze the past weather of a city.
-	</p>
+		To consult the weather history, please select a city, a unit and a date range and then click on 'Fetch History'. 
+	</p>	
 	<span>
-		You will be able to know the average temperature during a selected period, the amount of sunny days, ... and more.
+		This section is still in development, but in a near future you'll be able to see a graphical view of the evolution of the weather.
 	</span>
+</div>
+
+<div class="panel panel-default" ng-show="consolidation">
+	<div class="panel-heading">
+		<h3 class="panel-title">Consolidated data</h3>
+	</div>
+	<div class="panel-body">
+
+	</div>
 </div>

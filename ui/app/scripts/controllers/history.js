@@ -22,6 +22,10 @@ angular.module('weatherAnalytics')
 		$scope.fromDate = undefined;
 		$scope.untilDate = undefined;
 		
+		// History
+		$scope.history = undefined;
+		$scope.consolidation = undefined;
+		
 		/**
 		 * Checks that input is correct
 		 */
@@ -42,8 +46,22 @@ angular.module('weatherAnalytics')
 			}
 		};
 		
+		/**
+		 * When history is refreshed
+		 */
+		var onHistoryRefreshed = function(data) {
+			$scope.history = data.history;
+			$scope.consolidation = data.consolidation;
+		};
+		
+		/**
+		 * When the user wants to refresh the history
+		 */
 		$scope.fetchHistory = function() {
 			validateParameters();
+			apiCallerService.get($scope, '/api/history/'+$scope.selectedCity.name+'/'+$scope.selectedCity.country+
+					'/from/'+$scope.fromDate+'/until/'+$scope.untilDate, 
+					apiCallerService.API_CONSTANTS.SUCCESS, onHistoryRefreshed);
 		};
 
 		// Page setup
