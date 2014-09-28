@@ -26,6 +26,14 @@ angular.module('weatherAnalytics')
 		$scope.history = undefined;
 		$scope.consolidation = undefined;
 		
+		// Graphics stuff
+		$scope.tabs = [{title: 'Temperatures'},
+			           {title: 'Wind speed'},
+			           {title: 'Precipirations'}];
+		$scope.tabs.activeTab = 0;
+		
+		
+		
 		/**
 		 * Modify the URL to store variables
 		 */
@@ -113,7 +121,7 @@ angular.module('weatherAnalytics')
 		$scope.fetchHistory = function() {
 			if(validateParameters()) {
 				apiCallerService.get($scope, '/api/history/'+$scope.selectedCity.name+'/'+$scope.selectedCity.country+
-						'/from/'+$scope.fromDate+'/until/'+$scope.untilDate, 
+						'/from/'+datesService.getString($scope.fromDate)+'/until/'+datesService.getString($scope.untilDate), 
 						apiCallerService.API_CONSTANTS.SUCCESS, onHistoryRefreshed);
 			}
 		};
@@ -230,6 +238,36 @@ angular.module('weatherAnalytics')
 				temp = this.consolidation.sumPrecipitation/this.consolidation.nbPrecipitation;
 			}
 			return unitsService.getNumericValue(temp, true) + ' mm';
+		};
+		
+		/**
+		 * Get the amount of sunny days
+		 */
+		$scope.getSunnyDays = function() {
+			if(!this.consolidation || !unitsService.isDefined(this.consolidation.nbSunnyDays)) {
+				return '?';
+			}
+			return unitsService.getNumericValue(this.consolidation.nbSunnyDays);
+		};
+		
+		/**
+		 * Get the amount of rainy days
+		 */
+		$scope.getRainyDays = function() {
+			if(!this.consolidation || !unitsService.isDefined(this.consolidation.nbRainyDays)) {
+				return '?';
+			}
+			return unitsService.getNumericValue(this.consolidation.nbRainyDays);
+		};
+		
+		/**
+		 * Get the amount of snowy days
+		 */
+		$scope.getSnowyDays = function() {
+			if(!this.consolidation || !unitsService.isDefined(this.consolidation.nbSnowyDays)) {
+				return '?';
+			}
+			return unitsService.getNumericValue(this.consolidation.nbSnowyDays);
 		};
 
 		/**

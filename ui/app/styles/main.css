@@ -30,6 +30,39 @@ body {
 	line-height: 30px;
 }
 
+
+#notificationLoading {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+#notificationLoadingContent {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 300px;
+	margin-left: -150px;
+	text-align: center;
+}
+
+#notificationMessageInfo, #notificationMessageError {
+	position: fixed;
+	width: 100%;
+	bottom: 0;
+	margin-bottom: 0;
+}
+
+footer {
+    padding: 30px 0;
+}
+
+/*
+ * Forecast
+ */
+
 .forecast {
 	padding-bottom: 0;
 }
@@ -128,15 +161,15 @@ body {
 	text-align: center;
 }
 
+/*
+ * History
+ */
+
 .datepicker .caret {
 	margin-left: -20px;
 	margin-top: 20px;
 	position: absolute;
 	color: #fff;
-}
-
-.datepicker input {
-	width: 185px;
 }
 
 .datepicker ::-webkit-input-placeholder {
@@ -160,92 +193,94 @@ body {
 }
 
 .historyfilter {
-	margin-right: -5px;
+	margin-left: 0px;
+	margin-right: 0px;
 }
 
 .historyfilter > button , .historyfilter > .datepicker {
-	width: 185px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
 
-.historyfilter > button {
-	display: block;
-	float: left;
-	margin-bottom: 3px;
-	margin-right: 3px;
-	height: 42px;
-}
-
 .historyfilter > .datepicker input {
-	margin-bottom: 3px;
-	height: 42px;
+	padding-right: 0;
+	padding-left: 0;
+	width: 100%;
 }
 
 .historyfilter > .datepicker {
-	margin-right: 3px;
-	display: block;
-	float: left;
+	margin: 0;
+	padding: 0;
+}
+
+.history-tabs {
+	margin-bottom: 21px;
+}
+
+.history-tabs .panel {
+	border-top: 0;
+}
+
+.consolidation-conditions {
+	text-align: center;
+}
+
+.consolidation-conditions .image-conditions {
+	display: inline-block;
+	margin-right: 10px;
+	color: #fff;
+	font-size: 20px;
+	height: 64px;
+	width: 64px;
+	line-height: 64px;
+	vertical-align: middle;
+	text-align: center;
+	background-repeat: no-repeat;
+	background-position: center bottom;
+}
+
+.history-consolidation .conditon-sunny {
+	background-image: url('../images/weather/1.png');
+}
+
+.history-consolidation .conditon-rainy {
+	background-image: url('../images/weather/50.png');
+}
+
+.history-consolidation .conditon-snowy {
+	background-image: url('../images/weather/51.png');
+}
+
+.consolidation-metrics {
+	border: 1px solid #ddd;
+}
+
+.consolidation-metrics, .consolidation-conditions {
+	height: 160px;
+}
+
+.consolidation-conditions-content {
+	padding: 25px 0 0 0;
 }
 
 .other-links {
 	font-size: 20px;
 }
 
-.consolidation {
-	border: 1px solid #ddd;
-}
-
-#notificationLoading {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-}
-
-#notificationLoadingContent {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 300px;
-	margin-left: -150px;
-	text-align: center;
-}
-
-#notificationMessageInfo, #notificationMessageError {
-	position: fixed;
-	width: 100%;
-	bottom: 0;
-	margin-bottom: 0;
-}
-
-footer {
-    padding: 30px 0;
-}
-
-
 
 /* Smaller versions */
-
-@media(max-width:1199px) {
-	
-	.social-icons {
-		font-size: 15px;
-		line-height: 15px;
-	}
-	
-	.social-icons > li > a{
-		padding: 15px 10px;
-	}
-}
 
 @media(max-width:991px) {
     
 	.social-icons > li > a {
 		padding-left: 5px;
 		padding-right: 5px;
+	}
+	
+	.social-icons {
+		font-size: 15px;
+		line-height: 15px;
 	}
 }
 
@@ -276,5 +311,15 @@ footer {
     
 	.navbar-fixed-top .nav {
 		padding: 0 10px;
+	}
+	
+	.historyfilter, .history-tabs {
+		margin-left: -15px;
+		margin-right: -15px;
+	}
+	
+	.history-consolidation div {
+		padding-left: 0;
+		padding-right: 0;
 	}
 }

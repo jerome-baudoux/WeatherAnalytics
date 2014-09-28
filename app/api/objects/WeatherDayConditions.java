@@ -71,12 +71,13 @@ public class WeatherDayConditions {
 
 	@JsonIgnore
 	public boolean isRainy() {
-		return this.code >= 10 && this.code % 10 == 0;
+		return  (this.code > SUNNY.getCode() && this.code <= DRIZZLE.getCode()) 
+					|| (this.code >= 10 && (this.code % 10 == 0 || this.code % 10 == 2 || this.code % 10 == 4));
 	}
 
 	@JsonIgnore
 	public boolean isSnowy() {
-		return this.code >= 10 && this.code % 10 == 1;
+		return this.code >= 10 && (this.code % 10 == 1 || this.code % 10 == 3);
 	}
 
 	@Override
