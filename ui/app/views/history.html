@@ -12,7 +12,7 @@
 	</button>
 
 	<span class="datepicker"> 
-		<input type="text" class="btn btn-default" data-date-format="yyyy-MM-dd" ng-model="fromDate" data-autoclose="true" data-max-date="{{untilDate}}" placeholder="From" bs-datepicker>
+		<input type="text" class="btn btn-default" data-date-format="yyyy-MM-dd" ng-model="fromDate" data-autoclose="true" data-max-date="{{(untilDate)?untilDate:'today'}}" placeholder="From" bs-datepicker>
 		<span class="caret"></span>
 	</span>
 

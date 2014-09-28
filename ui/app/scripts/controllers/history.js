@@ -38,7 +38,7 @@ angular.module('weatherAnalytics')
 				notificationsService.addError(errorMessage);
 				$timeout(function(){
 					notificationsService.removeMessage();
-				}, 5000);
+				}, 3000);
 			}
 		};
 		
