@@ -41,8 +41,8 @@ angular.module('weatherAnalytics')
     		function createHistory() {
     			return {
 	    			data: [],
-	    			min: 0,
-	    			max: 1
+	    			min: 100,
+	    			max: -100
 	    		};
     		}
         	
@@ -53,20 +53,30 @@ angular.module('weatherAnalytics')
  
         		// Reset history
         		var history = createHistory();
-        		
+
         		// Add values
             	if($scope.history) {
-            		$scope.history.forEach(function(datum) {
+            		
+            		var previous;
+            		
+            		for(var i=0; i<$scope.history.length; i++) {
+            			var datum = $scope.history[i];
             			
-            			var value = datum.temperatureMax.celsius;
-            			history.max = Math.max(history.max, value);
-            			history.min = Math.min(history.min, value);
-            			
+            			var value;
+            			if(datum.temperatureMax) {
+            				value = datum.temperatureMax.celsius;
+                			history.max = Math.max(history.max, value);
+                			history.min = Math.min(history.min, value);
+            			}
+
             			history.data.push({
             				date: datum.date,
-            				value: value
+            				value: value,
+            				previous: previous
             			});
-            		});
+
+            			previous = value;
+            		}
             	}
             	
             	return history;
@@ -76,7 +86,7 @@ angular.module('weatherAnalytics')
         	 * Draw the graph
         	 */
         	function redraw(history) {
-            	
+
         		/**
         		 * Margine size
         		 */
@@ -88,17 +98,27 @@ angular.module('weatherAnalytics')
             	 * Size of a dot
             	 */
             	function getDotSize() {
-            		return 3;
+            		return 5;
             	}
         		
             	/**
             	 * Get the X position based on the SVG width and the number of elements
             	 */
         		function getX(d, i) {
-	        		if(history.length===0) {
-	        			return 0;
+	        		if(history.length<1) {
+	        			return $scope.width/2;
 	        		}
-	        		return i * ( ( $scope.width - 2*getMargin() ) / history.data.length ) + getMargin();
+	        		return i * ( ( $scope.width - 2*getMargin() ) / (history.data.length-1) ) + getMargin();
+        		}
+        		
+        		/**
+            	 * Get the X position based on the value
+        		 */
+        		function getYValue(value) {
+	            	if(value === undefined || history.max - history.min === 0) {
+	            		return $scope.height + 100; // Out of bounds
+	            	}
+	            	return $scope.height - getMargin()*2 - (value - history.min) * (($scope.height-getMargin()*4)/(history.max-history.min));
         		}
 
         		/**
@@ -113,13 +133,11 @@ angular.module('weatherAnalytics')
     		            .attr('opacity', 0);
     	        	
     	        	// Update text
-    	        	groups.select('text').transition().duration(500)
+    	        	groups.select('text').transition().duration(1000)
     	        		.attr('x', getX)
-    		            .attr('y', 280)
-    		            .attr('opacity', 1)
-    		        	.text(function(d) {
-    			        	return d.date;
-    			        });
+    		            .attr('font-size', '10px')
+    		        	.text(function(d) {return d.date;})
+    		            .attr('opacity', 1);
         		}
         		
         		/**
@@ -132,18 +150,54 @@ angular.module('weatherAnalytics')
     		        	.attr('cx', getX)
     		            .attr('cy', $scope.height)
     		            .attr('r', getDotSize)
+						.attr('fill', '#1967be')
     		            .attr('opacity', 0);
     	        	
     	        	// Update DOT
-    	        	groups.select('circle').transition().duration(500)
+    	        	groups.select('circle').transition().duration(1000)
     		        	.attr('cx', getX)
-    		            .attr('cy', function(d){
-    		            	if(d.max - d.min === 0) {
-    		            		return 0;
-    		            	}
-    		            	return $scope.height + getMargin() - (d.value + history.min) * ($scope.height - 2*getMargin()) / history.max;
-    		            })
+    		            .attr('cy', function(d){return getYValue(d.value);})
     		            .attr('opacity', 1);
+        		}
+        		
+        		/**
+        		 * Draw lines for the current metric
+        		 */
+        		function drawLine(groups, enterGroups) {
+
+            		var lineFunction = d3.svg.line()
+                         .x(function(d){return d.x;})
+                         .y(function(d){return d.y;})
+                         .interpolate('linear');
+
+    	        	// Create a Line
+        			enterGroups.append('path')
+						.attr('stroke', '#1967be')
+						.attr('stroke-width', 4)
+						.attr('fill', 'none')
+			            .attr('opacity', 0)
+    			        .attr('d', function(d, i){
+							if(i===0 || d.value===undefined || d.previous===undefined){
+							    return lineFunction([]);
+							}
+							return lineFunction([
+							    {x: getX(d, i-1), y: $scope.height},
+							    {x: getX(d, i), y: $scope.height}
+							]);
+    			        });
+    	        	
+    	        	// Update Line
+    	        	groups.select('path').transition().duration(1000)
+    	        		.attr('opacity', 1)
+    			        .attr('d', function(d, i){
+							if(i===0 || d.value===undefined || d.previous===undefined){
+							    return lineFunction([]);
+							}
+							return lineFunction([
+							    {x: getX(d, i-1), y: getYValue(d.previous)},
+							    {x: getX(d, i), y: getYValue(d.value)}
+							]);
+        			     });
         		}
         		
 
@@ -158,6 +212,7 @@ angular.module('weatherAnalytics')
 	        	// Update elements
 	        	drawDate(groups, enterGroups);
 	        	drawDots(groups, enterGroups);
+	        	drawLine(groups, enterGroups);
 
 		        // Delete old elements
 		        groups.exit().remove();
