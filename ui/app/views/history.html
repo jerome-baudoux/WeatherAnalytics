@@ -37,7 +37,10 @@
 <div ng-model="tabs.activeTab" class="history-tabs" ng-show="history" bs-tabs>
 	<div ng-repeat="tab in tabs" title="{{tab.title}}" bs-pane></div>
 	<div class="panel panel-default">
-		<div class="panel-body">Graphic currently in development</div>
+		<div class="panel-body">
+			This Graphic is currently being developed.
+			<graphmetrics history="history" metric="tabs.activeTab"></graphmetrics>
+		</div>
 	</div>
 </div>
 
