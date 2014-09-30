@@ -18,12 +18,16 @@ angular.module('weatherAnalytics')
         },
         link: function ($scope, element) {
         	
-        	// Create the SVG element
-        	$scope.svgRaw = d3.select(element[0]).insert('svg')
-        		.attr('class', 'metric-graph');
-        	
-        	$scope.svgElement = element.find('svg');
+        	// No data
         	$scope.savedHitory = undefined;
+        	
+        	// Create the SVG element
+        	$scope.svgRaw = d3.select(element[0]).insert('svg').attr('class', 'metric-graph');
+        	$scope.axisGroup = $scope.svgRaw.append('svg:g').attr('class', 'metric-graph-axis');
+        	$scope.dataGroup = $scope.svgRaw.append('svg:g').attr('class', 'metric-graph-data');
+        	
+        	// For height/width
+        	$scope.svgElement = element.find('svg');
 		},
         controller: function ($scope) {
         	
@@ -32,7 +36,7 @@ angular.module('weatherAnalytics')
         	 * 
         	 * 
         	 * THIS DIRECTIVE IS JUST A TEST
-        	 * THIS NEEDS TO BE MAJORLY REFACTORED !!!!!!
+        	 * IT NEEDS TO BE MAJORLY REFACTORED !!!!!!
         	 * 
         	 * 
         	 * 
@@ -45,7 +49,8 @@ angular.module('weatherAnalytics')
     			return {
 	    			data: [],
 	    			min: 100,
-	    			max: -100
+	    			max: -100,
+	    			axis: []
 	    		};
     		}
     		
@@ -101,10 +106,12 @@ angular.module('weatherAnalytics')
 
         		// Add values
             	if($scope.history) {
-            		
+
+            		var i;
             		var previous;
-            		
-            		for(var i=0; i<$scope.history.length; i++) {
+
+            		// Fetch data
+            		for(i=0; i<$scope.history.length; i++) {
             			
             			var value = getValue($scope.history, i);
             			if(value!==undefined) {
@@ -120,6 +127,21 @@ angular.module('weatherAnalytics')
 
             			previous = value;
             		}
+            		
+            		// Axis
+            		
+            		// If there is only one value
+            		if(history.max===history.min) {
+            			history.axis.push(history.min);
+            			
+            		// Otherwise create a range
+            		} else if(history.max>history.min) {
+	            		var nbAxis = 5;
+	            		var step = (history.max-history.min) / nbAxis;
+	            		for(i=0; i<=nbAxis; i++) {
+	            			history.axis.push(history.min+(i*step));
+	            		}
+            		}
             	}
             	
             	return history;
@@ -129,6 +151,13 @@ angular.module('weatherAnalytics')
         	 * Draw the graph
         	 */
         	function redraw() {
+
+        		/**
+        		 * Margine size
+        		 */
+            	function getAxisSize() {
+            		return 40;
+            	}
 
         		/**
         		 * Margine size
@@ -151,7 +180,7 @@ angular.module('weatherAnalytics')
 	        		if($scope.savedHitory.length<1) {
 	        			return $scope.width/2;
 	        		}
-	        		return i * ( ( $scope.width - 2*getMargin() ) / ($scope.savedHitory.data.length-1) ) + getMargin();
+	        		return i * ( ( $scope.width - 2*getMargin() - getAxisSize() ) / ($scope.savedHitory.data.length-1) ) + getMargin() + getAxisSize();
         		}
         		
         		/**
@@ -165,6 +194,49 @@ angular.module('weatherAnalytics')
 	            		return $scope.height / 2; // Middle of the screen
 	            	}
 	            	return $scope.height - getMargin()*2 - (value - $scope.savedHitory.min) * (($scope.height-getMargin()*4)/($scope.savedHitory.max-$scope.savedHitory.min));
+        		}
+        		
+        		function drawAxisLine(groups, enterGroups) {
+        			
+	            	var lineFunction = d3.svg.line()
+	                    .x(function(d){return d.x;})
+	                    .y(function(d){return d.y;})
+	                    .interpolate('linear');
+	
+		        	// Create a Line
+	            	enterGroups.append('path')
+						.attr('stroke', '#ddd')
+						.attr('stroke-width', 1)
+						.attr('fill', 'none')
+				        .attr('d', function(d){
+							return lineFunction([
+							    {x: getAxisSize(), y: getYValue(d)},
+							    {x: $scope.width, y: getYValue(d)}
+							]);
+				        });
+		        	
+		        	// Update Line
+		        	groups.select('path')
+				        .attr('d', function(d){
+							return lineFunction([
+							    {x: getAxisSize(), y: getYValue(d)},
+							    {x: $scope.width, y: getYValue(d)}
+							]);
+	   			     });
+        		}
+        		
+        		function drawAxis(groups, enterGroups) {
+        			
+       	        	// Create a Text
+        			enterGroups.append('text')
+    		        	.attr('x', 0)
+    		            .attr('y', function(d){return getYValue(d) + 5;})
+						.text(function (d){return d.toFixed(1);});
+    	        	
+    	        	// Update Text
+    	        	groups.select('text')
+    		            .attr('y', function(d){return getYValue(d) + 5;})
+						.text(function (d){return d.toFixed(1);});
         		}
 
         		/**
@@ -258,17 +330,26 @@ angular.module('weatherAnalytics')
             		$scope.height = 300;
             	}
             	
+            	// Check the new axis
+	        	var axisGroups = $scope.axisGroup.selectAll('.metric-graph-axis-y').data($scope.savedHitory.axis);
+	        	var axisEnterGroups = axisGroups.enter().append('svg:g').attr('class', 'metric-graph-axis-y');
+            	
             	// Check the new data
-	        	var groups = $scope.svgRaw.selectAll('.history-day-group').data($scope.savedHitory.data);
-	        	var enterGroups = groups.enter().append('svg:g').attr('class', 'history-day-group');
+	        	var dataGroups = $scope.dataGroup.selectAll('.metric-graph-data-day-group').data($scope.savedHitory.data);
+	        	var dataEnterGroups = dataGroups.enter().append('svg:g').attr('class', 'metric-graph-data-day-group');
+
+	        	// Udpate axis
+	        	drawAxisLine(axisGroups, axisEnterGroups);
+	        	drawAxis(axisGroups, axisEnterGroups);
 	        	
 	        	// Update elements
-	        	drawDate(groups, enterGroups);
-	        	drawDots(groups, enterGroups);
-	        	drawLine(groups, enterGroups);
+	        	drawDate(dataGroups, dataEnterGroups);
+	        	drawDots(dataGroups, dataEnterGroups);
+	        	drawLine(dataGroups, dataEnterGroups);
 
 		        // Delete old elements
-		        groups.exit().remove();
+	        	axisGroups.exit().remove();
+	        	dataGroups.exit().remove();
         	}
         	
         	/**
