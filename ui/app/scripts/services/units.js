@@ -10,15 +10,15 @@ angular.module('weatherAnalytics').service('unitsService', ['messagesService',
     function UnitService(messagesService) {
 	
 	    // Constants
-	    var UNIT_METRIC = 'Metric';
-	    var UNIT_IMPERIAL = 'Imperial';
+	    this.UNIT_METRIC = 'Metric';
+	    this.UNIT_IMPERIAL = 'Imperial';
 
 		// Units
 		this.units = [{
-			type: UNIT_METRIC, 
+			type: this.UNIT_METRIC, 
 			name: messagesService.get('MESSAGE_FORECAST_UNIT_METRIC')
 		},{
-			type: UNIT_IMPERIAL, 
+			type: this.UNIT_IMPERIAL, 
 			name: messagesService.get('MESSAGE_FORECAST_UNIT_IMPERIAL')
 		}];
 		
@@ -56,7 +56,7 @@ angular.module('weatherAnalytics').service('unitsService', ['messagesService',
 			if(!speed) {
 				return '?';
 			}
-			if(unit.type === UNIT_IMPERIAL) {
+			if(unit.type === this.UNIT_IMPERIAL) {
 				return this.getNumericValue(speed.mph) + ' mph';
 			} else {
 				return this.getNumericValue(speed.kmph) + ' km/h';
@@ -70,7 +70,7 @@ angular.module('weatherAnalytics').service('unitsService', ['messagesService',
 			if(!temperature) {
 				return '?';
 			}
-			if(unit.type === UNIT_IMPERIAL) {
+			if(unit.type === this.UNIT_IMPERIAL) {
 				return this.getNumericValue(temperature.fahrenheit) + '°F';
 			} else {
 				return this.getNumericValue(temperature.celsius) + '°C';

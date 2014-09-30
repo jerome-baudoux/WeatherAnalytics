@@ -27,7 +27,8 @@ angular.module('weatherAnalytics')
 		$scope.consolidation = undefined;
 
 		// Graphics
-		$scope.tabs = [{title: messagesService.get('MESSAGE_HISTORY_TABS_TEMPERATURE')},
+		$scope.tabs = [{title: messagesService.get('MESSAGE_HISTORY_TABS_TEMPERATURE_MIN')},
+		               {title: messagesService.get('MESSAGE_HISTORY_TABS_TEMPERATURE_MAX')},
 			           {title: messagesService.get('MESSAGE_HISTORY_TABS_WIND_SPEED')},
 			           {title: messagesService.get('MESSAGE_HISTORY_TABS_PRECIPITATION')}];
 		$scope.tabs.activeTab = 0;
