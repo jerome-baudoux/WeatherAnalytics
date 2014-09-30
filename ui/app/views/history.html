@@ -2,22 +2,22 @@
 
 <div class="navbar historyfilter row" role="navigation">
 
-	<button placeholder="Select a city" type="button" class="btn btn-default col-xs-12 col-sm-6 col-md-2" 
+	<button placeholder="Select a city" type="button" class="btn btn-default col-xs-6 col-sm-3 col-md-2" 
 		ng-model="selectedCity" data-html="1" ng-options="city as city.name+', '+city.country for city in cities" bs-select>
 		<span class="caret"></span>
 	</button>
 
-	<button placeholder="Select a unit" type="button" class="btn btn-default col-xs-12 col-sm-6 col-md-2" 
+	<button placeholder="Select a unit" type="button" class="btn btn-default col-xs-6 col-sm-3 col-md-2" 
 		ng-model="selectedUnit" data-html="1" ng-options="unit as unit.name for unit in units" bs-select>
 		<span class="caret"></span>
 	</button>
 
-	<div class="datepicker col-xs-12 col-sm-6 col-md-2"> 
+	<div class="datepicker col-xs-6 col-sm-3 col-md-2"> 
 		<input type="text" class="btn btn-default" data-container="body" data-date-format="yyyy-MM-dd" ng-model="fromDate" data-autoclose="true" data-max-date="{{(untilDate)?untilDate:'today'}}" placeholder="From" bs-datepicker>
 		<span class="caret"></span>
 	</div>
 		
-	<div class="datepicker col-xs-12 col-sm-6 col-md-2">
+	<div class="datepicker col-xs-6 col-sm-3 col-md-2">
 		<input type="text" class="btn btn-default" data-container="body" data-date-format="yyyy-MM-dd" ng-model="untilDate" data-autoclose="true" data-min-date="{{fromDate}}" data-max-date="today" placeholder="Until" bs-datepicker>
 		<span class="caret"></span>
 	</div>
@@ -38,13 +38,16 @@
 	<div ng-repeat="tab in tabs" title="{{tab.title}}" bs-pane></div>
 	<div class="panel panel-default">
 		<div class="panel-body">
-			This Graphic is currently being developed.
-			<graphmetrics history="history" metric="tabs.activeTab" unit="selectedUnit"></graphmetrics>
+			<graphmetrics history="history" metric="tabs.activeTab" unit="currentSearchUnit"></graphmetrics>
 		</div>
 	</div>
 </div>
 
-<div class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> This page currently uses forecast data instead of real history. Come back in a few days to see the real stuff</div>
+<div class="alert alert-info" role="alert" ng-show="consolidation">
+	<i class="fa fa-info-circle"></i> 
+	This page is currently in development and uses forecast data instead of real history. 
+	Come back in a few days to see the real stuff.
+</div>
 
 <div class="row history-consolidation" ng-show="consolidation">
 	<div class="col-md-8">

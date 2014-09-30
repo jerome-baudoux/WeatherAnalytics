@@ -50,6 +50,17 @@ angular.module('weatherAnalytics').service('unitsService', ['messagesService',
 		};
 		
 		/**
+		 * Get the representation of a speed
+		 */
+		this.getSpeedUnit = function(unit) {
+			if(unit.type === this.UNIT_IMPERIAL) {
+				return 'mph';
+			} else {
+				return 'km/h';
+			}
+		};
+		
+		/**
 		 * Get a speed in the selected unit or ?
 		 */
 		this.getSpeed = function(speed, unit) {
@@ -57,9 +68,20 @@ angular.module('weatherAnalytics').service('unitsService', ['messagesService',
 				return '?';
 			}
 			if(unit.type === this.UNIT_IMPERIAL) {
-				return this.getNumericValue(speed.mph) + ' mph';
+				return this.getNumericValue(speed.mph) + ' ' + this.getSpeedUnit(unit);
 			} else {
-				return this.getNumericValue(speed.kmph) + ' km/h';
+				return this.getNumericValue(speed.kmph) + ' ' + this.getSpeedUnit(unit);
+			}
+		};
+		
+		/**
+		 * Get the representation of a temperature
+		 */
+		this.getTemperatureUnit = function(unit) {
+			if(unit.type === this.UNIT_IMPERIAL) {
+				return '°F';
+			} else {
+				return '°C';
 			}
 		};
 		
@@ -71,9 +93,17 @@ angular.module('weatherAnalytics').service('unitsService', ['messagesService',
 				return '?';
 			}
 			if(unit.type === this.UNIT_IMPERIAL) {
-				return this.getNumericValue(temperature.fahrenheit) + '°F';
+				return this.getNumericValue(temperature.fahrenheit) + '' + this.getTemperatureUnit(unit);
 			} else {
-				return this.getNumericValue(temperature.celsius) + '°C';
+				return this.getNumericValue(temperature.celsius) + '' + this.getTemperatureUnit(unit);
 			}
+		};
+
+		/**
+		 * Get the representation of a length
+		 */
+		this.getLengthUnit = function(unit) {
+			void(unit);
+			return 'mm';
 		};
 }]);

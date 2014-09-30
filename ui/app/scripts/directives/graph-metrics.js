@@ -1,4 +1,4 @@
-/*global d3:false*/
+/*global $: false, d3:false*/
 'use strict';
 
 /**
@@ -8,7 +8,7 @@
  * Controller of the History page
  */
 angular.module('weatherAnalytics')
-  .directive('graphmetrics', ['$timeout', 'unitsService', function($timeout, unitsService) {
+  .directive('graphmetrics', ['$timeout', 'unitsService', 'messagesService', function($timeout, unitsService, messagesService) {
 	return {
 		restrict: 'E',
         scope: {
@@ -16,18 +16,19 @@ angular.module('weatherAnalytics')
             metric: '=',
             unit: '='
         },
+        template: '<svg class="metric-graph"></svg>',
         link: function ($scope, element) {
         	
         	// No data
         	$scope.savedHitory = undefined;
         	
         	// Create the SVG element
-        	$scope.svgRaw = d3.select(element[0]).insert('svg').attr('class', 'metric-graph');
+        	$scope.svgRaw = d3.select(element[0]).select('.metric-graph').attr('class', 'metric-graph');
         	$scope.axisGroup = $scope.svgRaw.append('svg:g').attr('class', 'metric-graph-axis');
         	$scope.dataGroup = $scope.svgRaw.append('svg:g').attr('class', 'metric-graph-data');
         	
         	// For height/width
-        	$scope.svgElement = element.find('svg');
+        	$scope.svgElement = $('.metric-graph');
 		},
         controller: function ($scope) {
         	
@@ -50,7 +51,8 @@ angular.module('weatherAnalytics')
 	    			data: [],
 	    			min: 100,
 	    			max: -100,
-	    			axis: []
+	    			axis: [],
+	    			title: ''
 	    		};
     		}
     		
@@ -95,6 +97,26 @@ angular.module('weatherAnalytics')
 	    				return data[i].precipitation;
     			}
     		}
+    		
+    		/**
+    		 * Get the value for the current metric
+    		 */
+    		function getTitle() {
+    			switch($scope.metric) {
+	    			case 0:
+	    				return messagesService.get('MESSAGE_HISTORY_TABS_TEMPERATURE_MIN') + 
+	    					messagesService.get('MESSAGE_HISTORY_TABS_UNIT', [unitsService.getTemperatureUnit($scope.unit)]);
+	    			case 1:
+	    				return messagesService.get('MESSAGE_HISTORY_TABS_TEMPERATURE_MAX') + 
+	    					messagesService.get('MESSAGE_HISTORY_TABS_UNIT', [unitsService.getTemperatureUnit($scope.unit)]);
+	    			case 2:
+	    				return messagesService.get('MESSAGE_HISTORY_TABS_WIND_SPEED') + 
+	    					messagesService.get('MESSAGE_HISTORY_TABS_UNIT', [unitsService.getSpeedUnit($scope.unit)]);
+	    			case 3:
+	    				return messagesService.get('MESSAGE_HISTORY_TABS_PRECIPITATION') + 
+	    					messagesService.get('MESSAGE_HISTORY_TABS_UNIT', [unitsService.getLengthUnit($scope.unit)]);
+    			}
+    		}
         	
         	/**
         	 * Compute data depending on the unit and metric
@@ -128,6 +150,9 @@ angular.module('weatherAnalytics')
             			previous = value;
             		}
             		
+            		// Title
+            		history.title = getTitle();
+            		
             		// Axis
             		
             		// If there is only one value
@@ -137,7 +162,15 @@ angular.module('weatherAnalytics')
             		// Otherwise create a range
             		} else if(history.max>history.min) {
 	            		var nbAxis = 5;
+	            		
+	            		// for most metric, we use a step of 1
 	            		var step = (history.max-history.min) / nbAxis;
+	            		
+	            		// If precipitation, we allow non rounded value
+	            		if($scope.metric !== 3) {
+	            			step = Math.ceil(step);
+	            		}
+	            		
 	            		for(i=0; i<=nbAxis; i++) {
 	            			history.axis.push(history.min+(i*step));
 	            		}
@@ -156,7 +189,7 @@ angular.module('weatherAnalytics')
         		 * Margine size
         		 */
             	function getAxisSize() {
-            		return 40;
+            		return 35;
             	}
 
         		/**
@@ -171,6 +204,13 @@ angular.module('weatherAnalytics')
             	 */
             	function getDotSize() {
             		return 5;
+            	}
+            	
+            	/**
+            	 * Font size
+            	 */
+            	function getFontSize() {
+            		return 13;
             	}
         		
             	/**
@@ -196,6 +236,9 @@ angular.module('weatherAnalytics')
 	            	return $scope.height - getMargin()*2 - (value - $scope.savedHitory.min) * (($scope.height-getMargin()*4)/($scope.savedHitory.max-$scope.savedHitory.min));
         		}
         		
+        		/**
+        		 * Draw the lines
+        		 */
         		function drawAxisLine(groups, enterGroups) {
         			
 	            	var lineFunction = d3.svg.line()
@@ -210,7 +253,7 @@ angular.module('weatherAnalytics')
 						.attr('fill', 'none')
 				        .attr('d', function(d){
 							return lineFunction([
-							    {x: getAxisSize(), y: getYValue(d)},
+							    {x: getAxisSize() + getMargin()/2, y: getYValue(d)},
 							    {x: $scope.width, y: getYValue(d)}
 							]);
 				        });
@@ -219,7 +262,7 @@ angular.module('weatherAnalytics')
 		        	groups.select('path')
 				        .attr('d', function(d){
 							return lineFunction([
-							    {x: getAxisSize(), y: getYValue(d)},
+							    {x: getAxisSize() + getMargin()/2, y: getYValue(d)},
 							    {x: $scope.width, y: getYValue(d)}
 							]);
 	   			     });
@@ -229,14 +272,26 @@ angular.module('weatherAnalytics')
         			
        	        	// Create a Text
         			enterGroups.append('text')
-    		        	.attr('x', 0)
-    		            .attr('y', function(d){return getYValue(d) + 5;})
-						.text(function (d){return d.toFixed(1);});
+        				.attr('text-anchor', 'end')
+        				.attr('font-size', getFontSize)
+    		        	.attr('x', getAxisSize)
+    		            .attr('y', function(d){return getYValue(d) + getFontSize()/3;})
+						.text(function (d){
+							if($scope.metric === 3) {
+								return d.toFixed(1);
+							}
+							return d;
+						});
     	        	
     	        	// Update Text
     	        	groups.select('text')
-    		            .attr('y', function(d){return getYValue(d) + 5;})
-						.text(function (d){return d.toFixed(1);});
+    		            .attr('y', function(d){return getYValue(d) + getFontSize()/3;})
+						.text(function (d){
+							if($scope.metric === 3) {
+								return d.toFixed(1);
+							}
+							return d;
+						});
         		}
 
         		/**
@@ -246,6 +301,8 @@ angular.module('weatherAnalytics')
         			
     		        // Create a text
         			enterGroups.append('text')
+    					.attr('text-anchor', 'middle')
+        				.attr('font-size', getFontSize)
     		        	.attr('x', getX)
     		            .attr('y', $scope.height)
     		            .attr('opacity', 0);
@@ -253,9 +310,8 @@ angular.module('weatherAnalytics')
     	        	// Update text
     	        	groups.select('text').transition().duration(1000)
     	        		.attr('x', getX)
-    		            .attr('font-size', '10px')
-    		        	.text(function(d) {return d.date;})
-    		            .attr('opacity', 1);
+    		            .attr('opacity', 1)
+    		        	.text(function(d) {return d.date;});
         		}
         		
         		/**
@@ -318,15 +374,37 @@ angular.module('weatherAnalytics')
         			     });
         		}
         		
+        		/**
+        		 * Draw the title of the graph
+        		 */
+        		function drawTitle() {
+        			
+                	// Check the new axis
+    	        	var titleGroups = $scope.svgRaw.selectAll('.title').data([$scope.savedHitory.title]);
+        			
+    		        // Create a text
+    	        	titleGroups.enter().append('text')
+    	        		.attr('class', 'title')
+    					.attr('text-anchor', 'middle')
+    		            .attr('y', getMargin() - getFontSize()/2);
+    	        	
+    	        	// Update text
+    	        	titleGroups
+		            	.attr('opacity', 1)
+    		        	.attr('x', $scope.width/2)
+						.text(function (d){return d;});
+
+    	        	titleGroups.exit().remove();
+        		}
+        		
 
         		// Calculate the new size
-            	$scope.width = $scope.svgElement.prop('offsetWidth');
-            	$scope.height = $scope.svgElement.prop('offsetHeight');
+            	$scope.width = $scope.svgElement.width();
+            	$scope.height = $scope.svgElement.height();
             	
-            	// TODO -- FIXME
-            	// For now ...
+            	// Just in case, but should not happen
             	if(!$scope.width || !$scope.height) {
-            		$scope.width = 500;
+            		$scope.width = 800;
             		$scope.height = 300;
             	}
             	
@@ -346,6 +424,9 @@ angular.module('weatherAnalytics')
 	        	drawDate(dataGroups, dataEnterGroups);
 	        	drawDots(dataGroups, dataEnterGroups);
 	        	drawLine(dataGroups, dataEnterGroups);
+	        	
+	        	// Draw the title
+	        	drawTitle();
 
 		        // Delete old elements
 	        	axisGroups.exit().remove();

@@ -148,7 +148,7 @@ angular.module('weatherAnalytics')
 		 * Get the precipitation
 		 */
 		$scope.getPrecipitation = function(day) {
-			return unitsService.getNumericValue(day.precipitation, true);
+			return unitsService.getNumericValue(day.precipitation, true) + ' ' + unitsService.getLengthUnit();
 		};
 		
 		/**

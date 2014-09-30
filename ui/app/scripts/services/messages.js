@@ -47,16 +47,22 @@ angular.module('weatherAnalytics').service('messagesService', [function Messages
 		MESSAGE_HISTORY_TABS_TEMPERATURE_MIN: 'Max Temperatures',
 		MESSAGE_HISTORY_TABS_TEMPERATURE_MAX: 'Min Temperatures',
 		MESSAGE_HISTORY_TABS_WIND_SPEED: 'Wind speed',
-		MESSAGE_HISTORY_TABS_PRECIPITATION: 'Precipirations'
+		MESSAGE_HISTORY_TABS_PRECIPITATION: 'Precipirations',
+		MESSAGE_HISTORY_TABS_UNIT: ' in {0}'
 	};
 	
 	/**
 	 * Fetch message for key
 	 */
-	this.get = function(key) {
+	this.get = function(key, args) {
 		var message = binding[key];
 		if(!message) {
 			return key;
+		}
+		if(args) {
+			for(var i=0; i<args.length; i++) {
+				message = message.replace('{'+i+'}', args[i]);
+			}
 		}
 		return message;
 	};

@@ -16,7 +16,8 @@ angular.module('weatherAnalytics')
 		
 		// Units
 		$scope.units = unitsService.getUnits();
-		$scope.selectedUnit = undefined;
+		$scope.selectedUnit = undefined; // Selected in the combo
+		$scope.currentSearchUnit = undefined; // Selected in the current search
 		
 		// Dates
 		$scope.fromDate = undefined;
@@ -49,6 +50,9 @@ angular.module('weatherAnalytics')
 					until: datesService.getString($scope.untilDate)
 				});
 			}
+			
+			// Update the current unit
+			$scope.currentSearchUnit = $scope.selectedUnit;
 		};
 		
 		/**
@@ -71,7 +75,8 @@ angular.module('weatherAnalytics')
 			$scope.selectedUnit = undefined;
 			for(var i=0; i<$scope.units.length; i++) {
 				if(params.unit === $scope.units[i].type) {
-					$scope.selectedUnit = $scope.units[i];
+					 $scope.selectedUnit = $scope.units[i];
+					 $scope.currentSearchUnit = $scope.units[i];
 				}
 			}
 			
@@ -134,7 +139,7 @@ angular.module('weatherAnalytics')
 			if(!this.consolidation) {
 				return '?';
 			}
-			return unitsService.getTemperature(this.consolidation.maxTemperature, $scope.selectedUnit);
+			return unitsService.getTemperature(this.consolidation.maxTemperature, $scope.currentSearchUnit);
 		};
 		
 		/**
@@ -144,7 +149,7 @@ angular.module('weatherAnalytics')
 			if(!this.consolidation) {
 				return '?';
 			}
-			return unitsService.getTemperature(this.consolidation.minTemperature, $scope.selectedUnit);
+			return unitsService.getTemperature(this.consolidation.minTemperature, $scope.currentSearchUnit);
 		};
 		
 		/**
@@ -164,7 +169,7 @@ angular.module('weatherAnalytics')
 					temp.fahrenheit = this.consolidation.sumMaxTemperature.fahrenheit/this.consolidation.nbMaxTemperature;
 				}
 			}
-			return unitsService.getTemperature(temp, $scope.selectedUnit);
+			return unitsService.getTemperature(temp, $scope.currentSearchUnit);
 		};
 
 		/**
@@ -174,7 +179,7 @@ angular.module('weatherAnalytics')
 			if(!this.consolidation) {
 				return '?';
 			}
-			return unitsService.getSpeed(this.consolidation.maxWindSpeed, $scope.selectedUnit);
+			return unitsService.getSpeed(this.consolidation.maxWindSpeed, $scope.currentSearchUnit);
 		};
 		
 		/**
@@ -184,7 +189,7 @@ angular.module('weatherAnalytics')
 			if(!this.consolidation) {
 				return '?';
 			}
-			return unitsService.getSpeed(this.consolidation.minWindSpeed, $scope.selectedUnit);
+			return unitsService.getSpeed(this.consolidation.minWindSpeed, $scope.currentSearchUnit);
 		};
 		
 		/**
@@ -204,7 +209,7 @@ angular.module('weatherAnalytics')
 					temp.mph = this.consolidation.sumWindSpeed.mph/this.consolidation.nbWindSpeed;
 				}
 			}
-			return unitsService.getSpeed(temp, $scope.selectedUnit);
+			return unitsService.getSpeed(temp, $scope.currentSearchUnit);
 		};
 
 		/**
@@ -214,7 +219,7 @@ angular.module('weatherAnalytics')
 			if(!this.consolidation || !unitsService.isDefined(this.consolidation.maxPrecipitation)) {
 				return '?';
 			}
-			return unitsService.getNumericValue(this.consolidation.maxPrecipitation, true) + ' mm';
+			return unitsService.getNumericValue(this.consolidation.maxPrecipitation, true) + ' ' + unitsService.getLengthUnit();
 		};
 		
 		/**
@@ -224,7 +229,7 @@ angular.module('weatherAnalytics')
 			if(!this.consolidation || !unitsService.isDefined(this.consolidation.minPrecipitation)) {
 				return '?';
 			}
-			return unitsService.getNumericValue(this.consolidation.minPrecipitation, true) + ' mm';
+			return unitsService.getNumericValue(this.consolidation.minPrecipitation, true) + ' ' + unitsService.getLengthUnit();
 		};
 		
 		/**
