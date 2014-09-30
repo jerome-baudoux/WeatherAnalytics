@@ -228,7 +228,7 @@ angular.module('weatherAnalytics')
         		 */
         		function getYValue(value) {
 	            	if(value === undefined) {
-	            		return $scope.height + 100; // Out of bounds
+	            		return $scope.height + 10; // Out of bounds
 	            	}
 	            	if($scope.savedHitory.max - $scope.savedHitory.min === 0) {
 	            		return $scope.height / 2; // Middle of the screen
@@ -322,7 +322,7 @@ angular.module('weatherAnalytics')
     	        	// Create a DOT
         			enterGroups.append('circle')
     		        	.attr('cx', getX)
-    		            .attr('cy', $scope.height)
+    		            .attr('cy', $scope.height + 10) // Out of bounds
     		            .attr('r', getDotSize)
 						.attr('fill', '#1967be')
     		            .attr('opacity', 0);
@@ -351,21 +351,21 @@ angular.module('weatherAnalytics')
 						.attr('fill', 'none')
 			            .attr('opacity', 0)
     			        .attr('d', function(d, i){
-							if(i===0 || d.value===undefined || d.previous===undefined){
-							    return lineFunction([]);
-							}
 							return lineFunction([
-							    {x: getX(d, i-1), y: $scope.height},
-							    {x: getX(d, i), y: $scope.height}
+							    {x: getX(d, i-1), y: $scope.height + 10}, // Out of bounds
+							    {x: getX(d, i), y: $scope.height + 10}  // Out of bounds
 							]);
     			        });
-    	        	
+
     	        	// Update Line
     	        	groups.select('path').transition().duration(1000)
-    	        		.attr('opacity', 1)
+	        			.attr('opacity', 1)
     			        .attr('d', function(d, i){
 							if(i===0 || d.value===undefined || d.previous===undefined){
-							    return lineFunction([]);
+								return lineFunction([
+								    {x: getX(d, i-1), y: $scope.height + 10}, // Out of bounds
+								    {x: getX(d, i-1), y: $scope.height + 10}  // Out of bounds
+								]);
 							}
 							return lineFunction([
 							    {x: getX(d, i-1), y: getYValue(d.previous)},
@@ -411,10 +411,12 @@ angular.module('weatherAnalytics')
             	// Check the new axis
 	        	var axisGroups = $scope.axisGroup.selectAll('.metric-graph-axis-y').data($scope.savedHitory.axis);
 	        	var axisEnterGroups = axisGroups.enter().append('svg:g').attr('class', 'metric-graph-axis-y');
+	        	var exitExitGroups = axisGroups.exit();
             	
             	// Check the new data
 	        	var dataGroups = $scope.dataGroup.selectAll('.metric-graph-data-day-group').data($scope.savedHitory.data);
 	        	var dataEnterGroups = dataGroups.enter().append('svg:g').attr('class', 'metric-graph-data-day-group');
+	        	var dataExitGroups = dataGroups.exit();
 
 	        	// Udpate axis
 	        	drawAxisLine(axisGroups, axisEnterGroups);
@@ -429,8 +431,8 @@ angular.module('weatherAnalytics')
 	        	drawTitle();
 
 		        // Delete old elements
-	        	axisGroups.exit().remove();
-	        	dataGroups.exit().remove();
+	        	exitExitGroups.remove();
+	        	dataExitGroups.remove();
         	}
         	
         	/**
