@@ -284,6 +284,26 @@ footer {
   min-height: 250px;
 }
 
+.metric-graph-tooltip {
+	position: absolute;
+}
+
+.metric-graph-tooltip dt {
+	width: 50px;
+}
+
+.metric-graph-tooltip dd {
+	margin-left: 70px;
+}
+
+.metric-graph-tooltip dl {
+	margin-bottom: 0px;
+}
+
+.metric-graph-tooltip {
+	padding: 0px;
+}
+
 
 /* Smaller versions */
 

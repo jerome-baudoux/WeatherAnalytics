@@ -16,16 +16,28 @@ angular.module('weatherAnalytics')
             metric: '=',
             unit: '='
         },
-        template: '<svg class="metric-graph"></svg>',
+        template: 	'<div class="well metric-graph-tooltip" ng-show="hoverData">' + 
+			        '  <div class="panel-body">' + 
+					'	<dl class="dl-horizontal">' +
+					'		<dt>Date:</dt>' +
+					'		<dd>{{hoverData.date}}</dd>' +
+					'		<dt>Value:</dt>' +
+					'		<dd>{{hoverData.value}} {{getCurrentUnit()}}</dd>' +
+					'	</dl>' +
+			        '  </div>' + 
+			        '</div>' + 
+			        '<svg class="metric-graph"></svg>',
         link: function ($scope, element) {
         	
         	// No data
         	$scope.savedHitory = undefined;
+        	$scope.hoverData = undefined;
         	
         	// Create the SVG element
         	$scope.svgRaw = d3.select(element[0]).select('.metric-graph').attr('class', 'metric-graph');
         	$scope.axisGroup = $scope.svgRaw.append('svg:g').attr('class', 'metric-graph-axis');
         	$scope.dataGroup = $scope.svgRaw.append('svg:g').attr('class', 'metric-graph-data');
+        	$scope.selectionGroup = $scope.svgRaw.append('svg:g').attr('class', 'metric-graph-selection');
         	
         	// For height/width
         	$scope.svgElement = $('.metric-graph');
@@ -42,6 +54,20 @@ angular.module('weatherAnalytics')
         	 * 
         	 * 
         	 */
+
+    		/**
+    		 * Get the name of the current unit
+    		 */
+    		$scope.getCurrentUnit = function() {
+    			switch($scope.metric) {
+	    			case 0: case 1:
+	    				return unitsService.getTemperatureUnit($scope.unit);
+	    			case 2:
+	    				return unitsService.getSpeedUnit($scope.unit);
+	    			case 3:
+	    				return unitsService.getLengthUnit($scope.unit);
+    			}
+    		};
     		
         	/**
         	 * Create an empty history
@@ -107,16 +133,16 @@ angular.module('weatherAnalytics')
     			switch($scope.metric) {
 	    			case 0:
 	    				return messagesService.get('MESSAGE_HISTORY_TABS_TEMPERATURE_MIN') + 
-	    					messagesService.get('MESSAGE_HISTORY_TABS_UNIT', [unitsService.getTemperatureUnit($scope.unit)]);
+	    					messagesService.get('MESSAGE_HISTORY_TABS_UNIT', [$scope.getCurrentUnit()]);
 	    			case 1:
 	    				return messagesService.get('MESSAGE_HISTORY_TABS_TEMPERATURE_MAX') + 
-	    					messagesService.get('MESSAGE_HISTORY_TABS_UNIT', [unitsService.getTemperatureUnit($scope.unit)]);
+	    					messagesService.get('MESSAGE_HISTORY_TABS_UNIT', [$scope.getCurrentUnit()]);
 	    			case 2:
 	    				return messagesService.get('MESSAGE_HISTORY_TABS_WIND_SPEED') + 
-	    					messagesService.get('MESSAGE_HISTORY_TABS_UNIT', [unitsService.getSpeedUnit($scope.unit)]);
+	    					messagesService.get('MESSAGE_HISTORY_TABS_UNIT', [$scope.getCurrentUnit()]);
 	    			case 3:
 	    				return messagesService.get('MESSAGE_HISTORY_TABS_PRECIPITATION') + 
-	    					messagesService.get('MESSAGE_HISTORY_TABS_UNIT', [unitsService.getLengthUnit($scope.unit)]);
+	    					messagesService.get('MESSAGE_HISTORY_TABS_UNIT', [$scope.getCurrentUnit()]);
     			}
     		}
         	
@@ -174,7 +200,10 @@ angular.module('weatherAnalytics')
 	            		}
 	            		
 	            		for(i=0; i<=nbAxis; i++) {
-	            			history.axis.push(history.min+(i*step));
+	            			var current = history.min+(i*step);
+	            			if(current<=history.max) {
+	            				history.axis.push(current);
+	            			}
 	            		}
             		}
             	}
@@ -351,11 +380,49 @@ angular.module('weatherAnalytics')
 						.attr('fill', '#1967be')
     		            .attr('opacity', 0);
     	        	
-    	        	// Update DOT
+    	        	// Update DOT slowly
     	        	groups.select('circle').transition().duration(1000)
     		        	.attr('cx', getX)
-    		            .attr('cy', function(d){return getYValue(d.value);})
+    		            .attr('cy', function(d){
+    		            	return getYValue(d.value);
+    		            })
     		            .attr('opacity', 1);
+    	        	
+    	        	// Update DOT rapidly
+    	        	groups.select('circle')
+    		            .attr('r', function(d){
+    		            	if($scope.hoverData === d) {
+    		            		return getDotSize() * 2;
+    		            	}
+    		            	return getDotSize();
+    		            });
+        		}
+        		
+        		/**
+        		 * Draw dots for the current metric
+        		 */
+        		function drawSelection(groups, enterGroups) {
+
+    	        	// Create DOT
+        			enterGroups.append('circle')
+    		            .attr('r', getDotSize() * 2)
+						.attr('fill', '#000')
+    		            .attr('opacity', 0)
+    		            .on('mouseover', function(d) {
+    		            	$scope.hoverData = d;
+    		            	redraw();
+    		            	$scope.$apply();
+    		            })
+    		            .on('mouseout', function() {
+    		            	$scope.hoverData = undefined;
+    		            	redraw();
+    		            	$scope.$apply();
+    		            });
+    	        	
+    	        	// Update DOT
+    	        	groups.select('circle')
+    		        	.attr('cx', getX)
+    		            .attr('cy', function(d){return getYValue(d.value);});
         		}
         		
         		/**
@@ -453,6 +520,11 @@ angular.module('weatherAnalytics')
 	        	var dataGroups = $scope.dataGroup.selectAll('.metric-graph-data-day-group').data($scope.savedHitory.data);
 	        	var dataEnterGroups = dataGroups.enter().append('svg:g').attr('class', 'metric-graph-data-day-group');
 	        	var dataExitGroups = dataGroups.exit();
+            	
+            	// Check the new data
+	        	var selectionGroups = $scope.selectionGroup.selectAll('.metric-graph-data-day-group').data($scope.savedHitory.data);
+	        	var selectionEnterGroups = selectionGroups.enter().append('svg:g').attr('class', 'metric-graph-data-day-group');
+	        	var selectionExitGroups = selectionGroups.exit();
 
 	        	// Update axis
 	        	drawAxisLine(axisGroups, axisEnterGroups);
@@ -460,8 +532,11 @@ angular.module('weatherAnalytics')
 	        	
 	        	// Update elements
 	        	drawDate(dataGroups, dataEnterGroups);
-	        	drawDots(dataGroups, dataEnterGroups);
 	        	drawLine(dataGroups, dataEnterGroups);
+	        	drawDots(dataGroups, dataGroups);
+	        	
+	        	// Selection
+	        	drawSelection(selectionGroups, selectionEnterGroups);
 	        	
 	        	// Draw the title
 	        	drawTitle();
@@ -469,6 +544,7 @@ angular.module('weatherAnalytics')
 		        // Delete old elements
 	        	exitExitGroups.remove();
 	        	dataExitGroups.remove();
+	        	selectionExitGroups.remove();
         	}
         	
         	/**
@@ -480,7 +556,6 @@ angular.module('weatherAnalytics')
         		// Draw the graph
         		redraw();
         	}
-
         	
         	/*
         	 * Main
