@@ -94,7 +94,9 @@ angular.module('weatherAnalytics')
 	    			case 2:
 	    				return getSpeed(data[i].windSpeed);
 	    			case 3:
-	    				return data[i].precipitation;
+	    				if(data[i].precipitation || data[i].precipitation === 0) {
+	    					return data[i].precipitation;
+	    				}
     			}
     		}
     		
@@ -163,10 +165,10 @@ angular.module('weatherAnalytics')
             		} else if(history.max>history.min) {
 	            		var nbAxis = 5;
 	            		
-	            		// for most metric, we use a step of 1
+	            		// Calculated step
 	            		var step = (history.max-history.min) / nbAxis;
 	            		
-	            		// If precipitation, we allow non rounded value
+	            		// If not precipitation, we don't allow non rounded value
 	            		if($scope.metric !== 3) {
 	            			step = Math.ceil(step);
 	            		}
@@ -386,7 +388,7 @@ angular.module('weatherAnalytics')
 							if(i===0 || d.value===undefined || d.previous===undefined){
 								return lineFunction([
 								    {x: getX(d, i-1), y: $scope.height + 10}, // Out of bounds
-								    {x: getX(d, i-1), y: $scope.height + 10}  // Out of bounds
+								    {x: getX(d, i), y: $scope.height + 10}  // Out of bounds
 								]);
 							}
 							return lineFunction([
@@ -407,14 +409,26 @@ angular.module('weatherAnalytics')
     		        // Create a text
     	        	titleGroups.enter().append('text')
     	        		.attr('class', 'title')
-    					.attr('text-anchor', 'middle')
-    		            .attr('y', getMargin() - getFontSize()/2);
+    					.attr('text-anchor', 'middle');
     	        	
     	        	// Update text
     	        	titleGroups
 		            	.attr('opacity', 1)
     		        	.attr('x', $scope.width/2)
-						.text(function (d){return d;});
+						.text(function (d){
+							// If no data, show that in the title
+							if($scope.savedHitory.min > $scope.savedHitory.max) {
+								return messagesService.get('MESSAGE_HISTORY_NO_DATA');
+							}
+							return d;
+						})
+    		            .attr('y', function() {
+							// If no data, show the message in the center
+							if($scope.savedHitory.min > $scope.savedHitory.max) {
+								return $scope.height / 2;
+							}
+    		            	return getMargin() - getFontSize()/2;
+    		            });
 
     	        	titleGroups.exit().remove();
         		}
