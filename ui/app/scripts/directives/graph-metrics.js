@@ -184,11 +184,15 @@ angular.module('weatherAnalytics')
         	 * Draw the graph
         	 */
         	function redraw() {
+        		
+        		function getAxisXTextSize() {
+        			return 120;
+        		}
 
         		/**
         		 * Margine size
         		 */
-            	function getAxisSize() {
+            	function getAxisYSize() {
             		return 35;
             	}
 
@@ -220,7 +224,7 @@ angular.module('weatherAnalytics')
 	        		if($scope.savedHitory.length<1) {
 	        			return $scope.width/2;
 	        		}
-	        		return i * ( ( $scope.width - 2*getMargin() - getAxisSize() ) / ($scope.savedHitory.data.length-1) ) + getMargin() + getAxisSize();
+	        		return i * ( ( $scope.width - 2*getMargin() - getAxisYSize() ) / ($scope.savedHitory.data.length-1) ) + getMargin() + getAxisYSize();
         		}
         		
         		/**
@@ -253,7 +257,7 @@ angular.module('weatherAnalytics')
 						.attr('fill', 'none')
 				        .attr('d', function(d){
 							return lineFunction([
-							    {x: getAxisSize() + getMargin()/2, y: getYValue(d)},
+							    {x: getAxisYSize() + getMargin()/2, y: getYValue(d)},
 							    {x: $scope.width, y: getYValue(d)}
 							]);
 				        });
@@ -262,7 +266,7 @@ angular.module('weatherAnalytics')
 		        	groups.select('path')
 				        .attr('d', function(d){
 							return lineFunction([
-							    {x: getAxisSize() + getMargin()/2, y: getYValue(d)},
+							    {x: getAxisYSize() + getMargin()/2, y: getYValue(d)},
 							    {x: $scope.width, y: getYValue(d)}
 							]);
 	   			     });
@@ -274,7 +278,7 @@ angular.module('weatherAnalytics')
         			enterGroups.append('text')
         				.attr('text-anchor', 'end')
         				.attr('font-size', getFontSize)
-    		        	.attr('x', getAxisSize)
+    		        	.attr('x', getAxisYSize)
     		            .attr('y', function(d){return getYValue(d) + getFontSize()/3;})
 						.text(function (d){
 							if($scope.metric === 3) {
@@ -301,7 +305,14 @@ angular.module('weatherAnalytics')
         			
     		        // Create a text
         			enterGroups.append('text')
-    					.attr('text-anchor', 'middle')
+    					.attr('text-anchor', function(d, i) {
+    						if(i===0) {
+    							return 'start';
+    						} else if(i===$scope.savedHitory.data.length-1) {
+    							return 'end';
+    						}
+    						return 'middle';
+    					})
         				.attr('font-size', getFontSize)
     		        	.attr('x', getX)
     		            .attr('y', $scope.height)
@@ -311,7 +322,18 @@ angular.module('weatherAnalytics')
     	        	groups.select('text').transition().duration(1000)
     	        		.attr('x', getX)
     		            .attr('opacity', 1)
-    		        	.text(function(d) {return d.date;});
+    		        	.text(function(d, i) {
+    		        		// Safe guard
+    		        		if($scope.width===0) {
+    		        			return '';
+    		        		}
+    		        		// If text is overlapping another text, don't show it
+    		        		if( i % Math.ceil((getAxisXTextSize() / ($scope.width/$scope.savedHitory.data.length))) !== 0 ) {
+    		        			return '';
+    		        		}
+    		        		// Ok, show the date
+    		        		return d.date;
+    		        	});
         		}
         		
         		/**
@@ -418,7 +440,7 @@ angular.module('weatherAnalytics')
 	        	var dataEnterGroups = dataGroups.enter().append('svg:g').attr('class', 'metric-graph-data-day-group');
 	        	var dataExitGroups = dataGroups.exit();
 
-	        	// Udpate axis
+	        	// Update axis
 	        	drawAxisLine(axisGroups, axisEnterGroups);
 	        	drawAxis(axisGroups, axisEnterGroups);
 	        	
