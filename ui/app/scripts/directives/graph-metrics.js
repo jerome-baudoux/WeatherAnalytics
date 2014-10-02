@@ -16,7 +16,7 @@ angular.module('weatherAnalytics')
             metric: '=',
             unit: '='
         },
-        template: 	'<div class="alert alert-info metric-graph-tooltip" ng-show="hover.data" style="left: {{hover.x}}px; top: {{hover.y}}px">' + 
+        template: 	'<svg class="metric-graph"><div class="alert alert-info metric-graph-tooltip" ng-show="hover.data" ng-style="getTooltipStyle()">' + 
 			        '  <div class="panel-body">' + 
 					'	<dib class="metric-graph-tooltip-content">' +
 					'		<div class="metric-graph-tooltip-label">Date:</div>' +
@@ -26,7 +26,7 @@ angular.module('weatherAnalytics')
 					'	</dl>' +
 			        '  </div>' + 
 			        '</div>' + 
-			        '<svg class="metric-graph"></svg>',
+			        '</svg>',
         link: function ($scope, element) {
         	
         	// No data
@@ -62,6 +62,16 @@ angular.module('weatherAnalytics')
 		    				return unitsService.getLengthUnit($scope.unit);
 	    			}
     			}
+    		};
+    		
+    		/**
+    		 * Get the style to apply to the tooltip
+    		 */
+    		$scope.getTooltipStyle = function() {
+    			return {
+    				left: $scope.hover.x+'px', 
+    				top: $scope.hover.y+'px'
+    			};
     		};
     		
         	/**
@@ -432,17 +442,20 @@ angular.module('weatherAnalytics')
     		            	// Select the current data
     		            	$scope.hover.data = d;
 
-    		            	$scope.hover.x = d3.event.pageX;
-    		            	$scope.hover.y = d3.event.pageY;
+    		            	$scope.hover.x = getX(d, i) ;
+    		            	$scope.hover.y = getYValue(d.value) ;
     		            	
     		            	// If selection if after the middle, align left
     		            	if(i > $scope.savedHitory.data.length/2) {
-    		            		$scope.hover.x -= 180;
-    		            	}
-    		            	if(getYValue(d.value) > $scope.height/2) {
-    		            		$scope.hover.y -= 80;
+    		            		$scope.hover.x -= 185;
     		            	} else {
-    		            		$scope.hover.y -= 10;
+    		            		$scope.hover.x += 10;
+    		            	}
+    		            	
+    		            	if(getYValue(d.value) > $scope.height/2) {
+    		            		$scope.hover.y -= 85;
+    		            	} else {
+    		            		$scope.hover.y += 10;
     		            	}
     		            	
     		            	// Refresh

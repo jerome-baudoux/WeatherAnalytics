@@ -18,3 +18,4 @@ unienv.bat
 .cache
 setenv.bat
 bineclipse/
+sh.exe.stackdump
