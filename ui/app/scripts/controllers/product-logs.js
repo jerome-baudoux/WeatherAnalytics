@@ -34,5 +34,4 @@ angular.module('weatherAnalytics')
 	
 	    // First load
 	    $scope.reload();
-		
   }]);

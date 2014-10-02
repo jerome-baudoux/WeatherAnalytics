@@ -13,5 +13,4 @@ angular.module('weatherAnalytics')
 
 		// Page setup
 		pageService.setPageName(messagesService.get('TITLE_PAGE_MAIN'));
-	  
   }]);

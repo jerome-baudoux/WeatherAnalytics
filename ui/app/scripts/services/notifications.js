@@ -43,7 +43,7 @@ angular.module('weatherAnalytics').service('notificationsService', ['$timeout', 
 	    		if(that.stopLoadingPending) {
 	    			that.loading = false;
 	    		}
-	    	}, 100);
+	    	}, 200);
     	}
     };
     

@@ -23,7 +23,7 @@ angular.module('weatherAnalytics')
 		$scope.selectedUnit = undefined;
 		
 		// Forecast
-		$scope.forecast = {};
+		$scope.forecast = [];
 		
 		// Methods
 		
@@ -127,7 +127,20 @@ angular.module('weatherAnalytics')
 		 * Get the day of the week
 		 */
 		$scope.getDayofWeek = function(day) {
+			if(!day || !day.date) {
+				return '?';
+			}
 			return $filter('date')(new Date(day.date), 'EEEE, dd');
+		};
+
+		/**
+		 * Image code
+		 */
+		$scope.getImageForDay = function(day) {
+			if(!day || !day.conditions) {
+				return '0';
+			}
+			return day.conditions.code;
 		};
 		
 		/**
@@ -201,5 +214,4 @@ angular.module('weatherAnalytics')
 	
 		// Make an API call
 		apiCallerService.get($scope, '/api/cities', apiCallerService.API_CONSTANTS.SUCCESS, onCityRefreshed);
-
   }]);

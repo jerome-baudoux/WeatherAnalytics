@@ -314,5 +314,4 @@ angular.module('weatherAnalytics')
 	        	reload();
 			}
 		});
-
   }]);

@@ -412,7 +412,7 @@ angular.module('weatherAnalytics')
     	        	// Update DOT rapidly
     	        	groups.select('circle')
     		            .attr('r', function(d){
-    		            	if($scope.hoverData === d) {
+    		            	if($scope.hover.data === d) {
     		            		return getDotSize() * 2;
     		            	}
     		            	return getDotSize();
@@ -431,15 +431,20 @@ angular.module('weatherAnalytics')
     		            .on('mouseover', function(d, i) {
     		            	// Select the current data
     		            	$scope.hover.data = d;
+
     		            	$scope.hover.x = d3.event.pageX;
-    		            	$scope.hover.y = d3.event.pageY + 10;
+    		            	$scope.hover.y = d3.event.pageY;
+    		            	
     		            	// If selection if after the middle, align left
     		            	if(i > $scope.savedHitory.data.length/2) {
     		            		$scope.hover.x -= 180;
     		            	}
     		            	if(getYValue(d.value) > $scope.height/2) {
-    		            		$scope.hover.y -= 90;
+    		            		$scope.hover.y -= 80;
+    		            	} else {
+    		            		$scope.hover.y -= 10;
     		            	}
+    		            	
     		            	// Refresh
     		            	redraw();
     		            	$scope.$apply();

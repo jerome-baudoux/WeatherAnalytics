@@ -7,7 +7,7 @@
  * A service to control the page configuration
  */
 angular.module('weatherAnalytics').service('pageService', function PageService() {
-
+	
 	// Names
 	this.applicationName  = undefined;
     this.pageName = undefined;
