@@ -16,13 +16,13 @@ angular.module('weatherAnalytics')
             metric: '=',
             unit: '='
         },
-        template: 	'<div class="well metric-graph-tooltip" ng-show="hoverData">' + 
+        template: 	'<div class="alert alert-info metric-graph-tooltip" ng-show="hover.data" style="left: {{hover.x}}px; top: {{hover.y}}px">' + 
 			        '  <div class="panel-body">' + 
-					'	<dl class="dl-horizontal">' +
-					'		<dt>Date:</dt>' +
-					'		<dd>{{hoverData.date}}</dd>' +
-					'		<dt>Value:</dt>' +
-					'		<dd>{{hoverData.value}} {{getCurrentUnit()}}</dd>' +
+					'	<dib class="metric-graph-tooltip-content">' +
+					'		<div class="metric-graph-tooltip-label">Date:</div>' +
+					'		<div class="metric-graph-tooltip-value">{{hover.data.date}}</div>' +
+					'		<div class="metric-graph-tooltip-label">Value:</div>' +
+					'		<div class="metric-graph-tooltip-value">{{hover.data.value}} {{getCurrentUnit()}}</div>' +
 					'	</dl>' +
 			        '  </div>' + 
 			        '</div>' + 
@@ -31,7 +31,11 @@ angular.module('weatherAnalytics')
         	
         	// No data
         	$scope.savedHitory = undefined;
-        	$scope.hoverData = undefined;
+        	$scope.hover = {
+        		data: undefined,
+    			x: 0,
+    			y: 0
+        	};
         	
         	// Create the SVG element
         	$scope.svgRaw = d3.select(element[0]).select('.metric-graph').attr('class', 'metric-graph');
@@ -43,29 +47,20 @@ angular.module('weatherAnalytics')
         	$scope.svgElement = $('.metric-graph');
 		},
         controller: function ($scope) {
-        	
-        	/*
-        	 * 
-        	 * 
-        	 * 
-        	 * THIS DIRECTIVE IS JUST A TEST
-        	 * IT NEEDS TO BE MAJORLY REFACTORED !!!!!!
-        	 * 
-        	 * 
-        	 * 
-        	 */
 
     		/**
     		 * Get the name of the current unit
     		 */
     		$scope.getCurrentUnit = function() {
-    			switch($scope.metric) {
-	    			case 0: case 1:
-	    				return unitsService.getTemperatureUnit($scope.unit);
-	    			case 2:
-	    				return unitsService.getSpeedUnit($scope.unit);
-	    			case 3:
-	    				return unitsService.getLengthUnit($scope.unit);
+    			if($scope.unit) {
+	    			switch($scope.metric) {
+		    			case 0: case 1:
+		    				return unitsService.getTemperatureUnit($scope.unit);
+		    			case 2:
+		    				return unitsService.getSpeedUnit($scope.unit);
+		    			case 3:
+		    				return unitsService.getLengthUnit($scope.unit);
+	    			}
     			}
     		};
     		
@@ -216,19 +211,50 @@ angular.module('weatherAnalytics')
         	 */
         	function redraw() {
         		
+    			// Values
+            	var lineFunction = d3.svg.line()
+                    .x(function(d){return d.x;})
+                    .y(function(d){return d.y;})
+                    .interpolate('linear');
+            	
+            	// Methods
+        		
+            	/**
+            	 * Size of the X axis
+            	 */
         		function getAxisXTextSize() {
         			return 120;
         		}
+        		
+        		/**
+        		 * Get the line to draw for the axis
+        		 */
+        		function getAxisYLine(d) {
+					return lineFunction([
+					    {x: getAxisYSize() + getMargin()/2, y: getYValue(d)},
+					    {x: $scope.width, y: getYValue(d)}
+					]);
+        		}
+        		
+        		/**
+        		 * Get the text to draw in the axis
+        		 */
+        		function getAxisYText(d){
+					if($scope.metric === 3) {
+						return d.toFixed(1);
+					}
+					return d;
+				}
 
         		/**
-        		 * Margine size
+        		 * Margin size of Y axis
         		 */
             	function getAxisYSize() {
             		return 35;
             	}
 
         		/**
-        		 * Margine size
+        		 * Margin size
         		 */
             	function getMargin() {
             		return 20;
@@ -246,6 +272,20 @@ angular.module('weatherAnalytics')
             	 */
             	function getFontSize() {
             		return 13;
+            	}
+            	
+            	/**
+            	 * Get the color for data line and dots
+            	 */
+            	function getDataColor() {
+            		return '#1967be';
+            	}
+            	
+            	/**
+            	 * Get the color for axis lines
+            	 */
+            	function getAxisColor() {
+            		return '#ddd';
             	}
         		
             	/**
@@ -275,34 +315,22 @@ angular.module('weatherAnalytics')
         		 * Draw the lines
         		 */
         		function drawAxisLine(groups, enterGroups) {
-        			
-	            	var lineFunction = d3.svg.line()
-	                    .x(function(d){return d.x;})
-	                    .y(function(d){return d.y;})
-	                    .interpolate('linear');
 	
 		        	// Create a Line
 	            	enterGroups.append('path')
-						.attr('stroke', '#ddd')
+						.attr('stroke', getAxisColor)
 						.attr('stroke-width', 1)
 						.attr('fill', 'none')
-				        .attr('d', function(d){
-							return lineFunction([
-							    {x: getAxisYSize() + getMargin()/2, y: getYValue(d)},
-							    {x: $scope.width, y: getYValue(d)}
-							]);
-				        });
+				        .attr('d', getAxisYLine);
 		        	
 		        	// Update Line
 		        	groups.select('path')
-				        .attr('d', function(d){
-							return lineFunction([
-							    {x: getAxisYSize() + getMargin()/2, y: getYValue(d)},
-							    {x: $scope.width, y: getYValue(d)}
-							]);
-	   			     });
+				        .attr('d', getAxisYLine);
         		}
         		
+        		/**
+        		 * Draw the text axis
+        		 */
         		function drawAxis(groups, enterGroups) {
         			
        	        	// Create a Text
@@ -311,22 +339,12 @@ angular.module('weatherAnalytics')
         				.attr('font-size', getFontSize)
     		        	.attr('x', getAxisYSize)
     		            .attr('y', function(d){return getYValue(d) + getFontSize()/3;})
-						.text(function (d){
-							if($scope.metric === 3) {
-								return d.toFixed(1);
-							}
-							return d;
-						});
+						.text(getAxisYText);
     	        	
     	        	// Update Text
     	        	groups.select('text')
     		            .attr('y', function(d){return getYValue(d) + getFontSize()/3;})
-						.text(function (d){
-							if($scope.metric === 3) {
-								return d.toFixed(1);
-							}
-							return d;
-						});
+						.text(getAxisYText);
         		}
 
         		/**
@@ -377,7 +395,7 @@ angular.module('weatherAnalytics')
     		        	.attr('cx', getX)
     		            .attr('cy', $scope.height + 10) // Out of bounds
     		            .attr('r', getDotSize)
-						.attr('fill', '#1967be')
+						.attr('fill', getDataColor)
     		            .attr('opacity', 0);
     	        	
     	        	// Update DOT slowly
@@ -399,22 +417,32 @@ angular.module('weatherAnalytics')
         		}
         		
         		/**
-        		 * Draw dots for the current metric
+        		 * Draw selection (invisible objects)
         		 */
         		function drawSelection(groups, enterGroups) {
 
     	        	// Create DOT
         			enterGroups.append('circle')
     		            .attr('r', getDotSize() * 2)
-						.attr('fill', '#000')
     		            .attr('opacity', 0)
-    		            .on('mouseover', function(d) {
-    		            	$scope.hoverData = d;
+    		            .on('mouseover', function(d, i) {
+    		            	// Select the current data
+    		            	$scope.hover.data = d;
+    		            	$scope.hover.x = d3.event.pageX;
+    		            	$scope.hover.y = d3.event.pageY + 10;
+    		            	// If selection if after the middle, align left
+    		            	if(i > $scope.savedHitory.data.length/2) {
+    		            		$scope.hover.x -= 180;
+    		            	}
+    		            	if(getYValue(d.value) > $scope.height/2) {
+    		            		$scope.hover.y -= 90;
+    		            	}
+    		            	// Refresh
     		            	redraw();
     		            	$scope.$apply();
     		            })
     		            .on('mouseout', function() {
-    		            	$scope.hoverData = undefined;
+    		            	$scope.hover.data = undefined;
     		            	redraw();
     		            	$scope.$apply();
     		            });
@@ -437,7 +465,7 @@ angular.module('weatherAnalytics')
 
     	        	// Create a Line
         			enterGroups.append('path')
-						.attr('stroke', '#1967be')
+						.attr('stroke', getDataColor)
 						.attr('stroke-width', 4)
 						.attr('fill', 'none')
 			            .attr('opacity', 0)
@@ -500,8 +528,9 @@ angular.module('weatherAnalytics')
     	        	titleGroups.exit().remove();
         		}
         		
-
         		// Calculate the new size
+        		// This is quite bad because it's the only pace in the hole application
+        		// that we're using JQuery. This needs to be changed if possible
             	$scope.width = $scope.svgElement.width();
             	$scope.height = $scope.svgElement.height();
             	

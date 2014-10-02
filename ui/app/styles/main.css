@@ -288,16 +288,22 @@ footer {
 	position: absolute;
 }
 
-.metric-graph-tooltip dt {
+.metric-graph-tooltip .metric-graph-tooltip-label {
 	width: 50px;
+	float: left;
+	clear: left;
+	text-align: right;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
-.metric-graph-tooltip dd {
+.metric-graph-tooltip .metric-graph-tooltip-value {
 	margin-left: 70px;
 }
 
-.metric-graph-tooltip dl {
-	margin-bottom: 0px;
+.metric-graph-tooltip .metric-graph-tooltip-content {
+
 }
 
 .metric-graph-tooltip {
