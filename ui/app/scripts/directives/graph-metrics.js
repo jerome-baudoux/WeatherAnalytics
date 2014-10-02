@@ -196,8 +196,11 @@ angular.module('weatherAnalytics')
 	            		
 	            		for(i=0; i<=nbAxis; i++) {
 	            			var current = history.min+(i*step);
-	            			if(current<=history.max) {
+	            			// We allow one unit after the max
+	            			// That's because we want to be sure there is a line on top
+	            			if(current<=history.max+1) {
 	            				history.axis.push(current);
+	            				history.max = Math.max(history.max, current);
 	            			}
 	            		}
             		}

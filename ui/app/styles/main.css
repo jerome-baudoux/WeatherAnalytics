@@ -65,9 +65,11 @@ footer {
 
 .forecast {
 	padding-bottom: 0;
+	margin-left: 0;
+	margin-right: 0;
 }
 
-.forecast .day {
+.forecast .day, .forecast .text-wind, .forecast .text-precipitation, .forecast .temperature {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -355,7 +357,7 @@ footer {
 		padding: 0 10px;
 	}
 	
-	.historyfilter, .history-tabs {
+	.historyfilter, .history-tabs, .forecast {
 		margin-left: -15px;
 		margin-right: -15px;
 	}
