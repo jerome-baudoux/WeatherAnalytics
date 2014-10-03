@@ -13,6 +13,7 @@ libraryDependencies ++= Seq(
   ws,
   javaWs,
   "com.google.guava" % "guava" % "18.0",
-  "com.google.inject" % "guice" % "3.0"
+  "com.google.inject" % "guice" % "3.0",
+  "org.hibernate" % "hibernate-core" % "4.3.6.Final"
 )
 

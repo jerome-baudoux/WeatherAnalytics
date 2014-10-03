@@ -2,7 +2,6 @@
 /* Table that holds the documents                               */
 /*==============================================================*/
 create table TEMPORAL_DATA (
-    ID                INTEGER          not null,
     NAME              VARCHAR(128)     not null,
     DATE              DATE,
     TYPE              VARCHAR(128)     not null,

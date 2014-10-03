@@ -13,6 +13,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.internal.Errors;
 
 import controllers.*;
+import dao.temporal.WeatherDayDocumentDao;
+import dao.temporal.WeatherDayDocumentDaoImpl;
 import engines.forecastholder.ForecastHolderEngine;
 import engines.forecastholder.ForecastHolderEngineImpl;
 import engines.ping.*;
@@ -48,5 +50,8 @@ public class MainModule extends AbstractModule {
 		bind(CipherService.class).to(CipherServiceImpl.class);
 		bind(ConfigurationService.class).to(ConfigurationServiceImpl.class);
 		bind(ConfigurationService.class).to(ConfigurationServiceImpl.class);
+
+		// DAOs
+		bind(WeatherDayDocumentDao.class).to(WeatherDayDocumentDaoImpl.class);
 	}
 }
