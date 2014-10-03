@@ -205,7 +205,7 @@ public class WeatherFetcherEngineImpl implements WeatherFetcherEngine {
 						// Transform into an API object
 						List<WeatherDay> apiObjects = makeWeatherDays(cityObject, response);
 						Logger.trace("Forecast for " + city + " transformed for the next: " + apiObjects.size() + " days");
-						
+
 						// Send to History Database and Forecast cache
 						this.weatherService.addForecast(apiObjects);
 						

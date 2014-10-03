@@ -308,7 +308,7 @@ angular.module('weatherAnalytics')
             	 * Get the X position based on the SVG width and the number of elements
             	 */
         		function getX(d, i) {
-	        		if($scope.savedHitory.length<1) {
+	        		if($scope.savedHitory.data.length<=1) {
 	        			return $scope.width/2;
 	        		}
 	        		return i * ( ( $scope.width - 2*getMargin() - getAxisYSize() ) / ($scope.savedHitory.data.length-1) ) + getMargin() + getAxisYSize();

@@ -37,7 +37,7 @@ public interface WeatherService {
 	 * @param end until this date
 	 * @return all known forecast
 	 */
-	public HistoryData getHistory(City city, String begin, String end) throws NoSuchCityException;
+	public HistoryData getHistory(City city, String begin, String end) throws NoSuchCityException, WrongDateFormat, InvalideDateRange;
 	
 	/**
 	 * Result of a history request
@@ -72,12 +72,7 @@ public interface WeatherService {
 			return consolidation;
 		}
 	}
-	
-	/**
-	 * 
-	 * @author Jerome Baudoux
-	 *
-	 */
+
 	public static class NoSuchCityException extends Exception {
 
 		private static final long serialVersionUID = 1L;
@@ -86,6 +81,24 @@ public interface WeatherService {
 		
 		public NoSuchCityException(City city) {
 			super("The city: " + city.getNameAndCountry() + " cannot be found");
+		}
+	}
+
+	public static class WrongDateFormat extends Exception {
+
+		private static final long serialVersionUID = 1L;
+		
+		public WrongDateFormat(Throwable t) {
+			super("The date is not in the correct format", t);
+		}
+	}
+
+	public static class InvalideDateRange extends Exception {
+
+		private static final long serialVersionUID = 1L;
+		
+		public InvalideDateRange() {
+			super("The date range is not valid. Make sure the end date is after the start date");
 		}
 	}
 }

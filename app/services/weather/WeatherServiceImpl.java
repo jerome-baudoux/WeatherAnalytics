@@ -1,9 +1,15 @@
 package services.weather;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
+import play.Logger;
 import api.objects.City;
 import api.objects.ConsolidatedDays;
 import api.objects.Speed;
@@ -13,6 +19,7 @@ import api.objects.WeatherDay;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import dao.WeatherDayDocumentDao;
 import engines.forecastholder.ForecastHolderEngine;
 
 /**
@@ -26,6 +33,7 @@ public class WeatherServiceImpl implements WeatherService {
 	 * Forecast Holder Engine
 	 */
 	protected final ForecastHolderEngine forecastHolderEngine;
+	protected final WeatherDayDocumentDao weatherDao;
 	
 	/**
 	 * Internal list of cities, sorted by alphabetical order
@@ -36,8 +44,9 @@ public class WeatherServiceImpl implements WeatherService {
 	 * Constructor
 	 */
 	@Inject
-	public WeatherServiceImpl(ForecastHolderEngine forecastHolderEngine) {
+	public WeatherServiceImpl(ForecastHolderEngine forecastHolderEngine, WeatherDayDocumentDao weatherDao) {
 		this.forecastHolderEngine = forecastHolderEngine;
+		this.weatherDao = weatherDao;
 		this.cities = buildCities();
 	}
 
@@ -76,7 +85,17 @@ public class WeatherServiceImpl implements WeatherService {
 	 */
 	@Override
 	public void addForecast(List<WeatherDay> forecast) {
+		if(forecast==null) {
+			return;
+		}
+		
+		// Save to forecast holder
 		this.forecastHolderEngine.addForecast(forecast);
+		
+		// Save to database
+		for(WeatherDay day: forecast) {
+			weatherDao.createOrUpdate(day);
+		}
 	}
 
 	/**
@@ -100,21 +119,82 @@ public class WeatherServiceImpl implements WeatherService {
 	 * @return all known forecast
 	 */
 	@Override
-	public HistoryData getHistory(City city, String begin, String end) throws NoSuchCityException {
+	public HistoryData getHistory(City city, String begin, String end) throws NoSuchCityException, WrongDateFormat, InvalideDateRange {
 		if(!this.cities.contains(city)) {
 			throw new NoSuchCityException(city);
 		}
+		
+		try {
+			// Fetch results
+			List<WeatherDay> days = this.weatherDao.getByPeriode(city.getNameAndCountry(), begin, end);
+			
+			// Transform into map
+			Map<String, WeatherDay> daysMap = new HashMap<>();
+			for(WeatherDay day: days) {
+				daysMap.put(day.getDate(), day);
+			}
+			
+			// Builds a list of sorted days with blank days if one is missing
+			List<WeatherDay> sortedDaysWithStubs = new LinkedList<>();
+			SimpleDateFormat sdf = new SimpleDateFormat(WeatherDay.DATE_PATTERN);
+			Date startDate;
+			Date endDate;
+			
+			// Make sure date is OK
+			try {
+				startDate = sdf.parse(begin);
+				endDate = sdf.parse(end);
+			} catch (Throwable t) {
+				throw new WrongDateFormat(t);
+			}
+			if(startDate.after(endDate)) {
+				throw new InvalideDateRange();
+			}
+			
+			// Do not show unnecessary empty day before one real data
+			boolean atLeastOneDateFound = false;
 
-		// TODO -- Use real history data
-		List<WeatherDay> days = getForecast(city);
-		
-		// Build consolidation using map/reduce
-		ConsolidatedDays consolidation = days.stream()
-			.map(WeatherServiceImpl::createHistory)
-			.reduce(WeatherServiceImpl::mergeHistory)
-			.orElse(new ConsolidatedDays());
-		
-		return new HistoryData(days, consolidation);
+			// Fetch day by day
+			while(!startDate.after(endDate)) {
+				
+				// Check is day is present
+				WeatherDay day = daysMap.get(sdf.format(startDate));
+				
+				// If present
+				if(day!=null) {
+					
+					// Adds the day
+					sortedDaysWithStubs.add(day);
+					
+					// If first present, allows empty days
+					if(!atLeastOneDateFound) {
+						atLeastOneDateFound = true;
+					}
+					
+				// If not present and there is at least one data, add the empty day
+				} else if(atLeastOneDateFound) {
+					sortedDaysWithStubs.add((new WeatherDay().setDate(sdf.format(startDate))));
+				}
+				
+				// Add one day
+				Calendar c = Calendar.getInstance();    
+				c.setTime(startDate);
+				c.add(Calendar.DATE, 1);
+				startDate = c.getTime();
+			}
+			
+			// Build consolidation using map/reduce
+			ConsolidatedDays consolidation = sortedDaysWithStubs.stream()
+				.map(WeatherServiceImpl::createHistory)
+				.reduce(WeatherServiceImpl::mergeHistory)
+				.orElse(new ConsolidatedDays());
+			
+			return new HistoryData(sortedDaysWithStubs, consolidation);
+			
+		} catch (Throwable t) {
+			Logger.error("Error while fetching history of city: " + city.getNameAndCountry(), t);
+			throw t;
+		}
 	}
 	
 	/**
@@ -185,6 +265,9 @@ public class WeatherServiceImpl implements WeatherService {
 		if(first == null) {
 			return second;
 		}
+		if(second == null) {
+			return first;
+		}
 		if(first.compareTo(second) < 0 ) {
 			return first;
 		}
@@ -200,6 +283,9 @@ public class WeatherServiceImpl implements WeatherService {
 	private static <T extends Comparable<T>> T getMax(T first, T second) {
 		if(first == null) {
 			return second;
+		}
+		if(second == null) {
+			return first;
 		}
 		if(first.compareTo(second) > 0 ) {
 			return first;

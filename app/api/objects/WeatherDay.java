@@ -6,6 +6,8 @@ package api.objects;
  *
  */
 public class WeatherDay {
+	
+	public static final String DATE_PATTERN = "yyyy-MM-dd";
 
 	/**
 	 * Current city

@@ -18,7 +18,9 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import services.weather.WeatherService;
 import services.weather.WeatherService.HistoryData;
+import services.weather.WeatherService.InvalideDateRange;
 import services.weather.WeatherService.NoSuchCityException;
+import services.weather.WeatherService.WrongDateFormat;
 
 /**
  * A controller for all public API
@@ -184,7 +186,9 @@ public class Api extends Controller {
 	 * @return code
 	 */
 	protected static int getCodeForException(Throwable t) {
-		if(t instanceof NoSuchCityException) {
+		if(t instanceof NoSuchCityException 
+				|| t instanceof WrongDateFormat
+				|| t instanceof InvalideDateRange ) {
 			return ApiResultCode.ERROR_PARAMETER_WRONG_VALUE.getCode();
 		}
 		return ApiResultCode.UNKNOWN.getCode();

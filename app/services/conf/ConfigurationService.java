@@ -11,6 +11,8 @@ public interface ConfigurationService {
 
 	public static String WORKER_POOL_SYSTEM_NAME = "worker.pool.system.name";
 	public static String WORKER_POOL_SIZE = "worker.pool.size";
+	
+	public static String DATABASE_URL = "DATABASE_URL";
 
 	/**
 	 * Fetch String from environment variable

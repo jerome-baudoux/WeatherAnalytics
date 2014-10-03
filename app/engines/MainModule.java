@@ -13,8 +13,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.internal.Errors;
 
 import controllers.*;
-import dao.temporal.WeatherDayDocumentDao;
-import dao.temporal.WeatherDayDocumentDaoImpl;
+import dao.WeatherDayDocumentDao;
+import dao.WeatherDayDocumentDaoImpl;
 import engines.forecastholder.ForecastHolderEngine;
 import engines.forecastholder.ForecastHolderEngineImpl;
 import engines.ping.*;
