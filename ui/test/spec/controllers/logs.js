@@ -5,14 +5,14 @@ describe('Controller: LogsCtrl', function () {
   // load the controller's module
   beforeEach(module('weatherAnalytics'));
 
-  var AboutCtrl,
+  var LogCtrl,
     scope;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
     window.ErrorLogger.getInstance().clearLogs();
-    AboutCtrl = $controller('LogsCtrl', {
+    LogCtrl = $controller('LogsCtrl', {
       $scope: scope
     });
   }));

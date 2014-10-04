@@ -9,7 +9,7 @@ describe('Controller: ForecastCtrl', function () {
   var cities = '[' + city + ']';
   var citiesResp = '{"result": 1, "cities": ' + cities + '}';
 
-  var AboutCtrl, scope, httpBackend;
+  var FcCtrl, scope, httpBackend;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope, _$httpBackend_, _$location_) {
@@ -27,7 +27,7 @@ describe('Controller: ForecastCtrl', function () {
     scope = $rootScope.$new();
     
     // create controller
-    AboutCtrl = $controller('ForecastCtrl', {
+    FcCtrl = $controller('ForecastCtrl', {
       $scope: scope
     });
     
