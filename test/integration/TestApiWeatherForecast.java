@@ -34,31 +34,7 @@ public class TestApiWeatherForecast extends AbstractIntegrationTest {
     public void testForecastNoData() {
     	runTestBrowser("api/forecast/not/existing", (TestBrowser browser) -> {
     		ForecastResponse response = getJson(browser, ForecastResponse.class);
-            assertThat(response.getResult()).isEqualTo(ApiResultCode.SUCCESS.getCode());
-            assertThat(response.getForecast()).hasSize(5);
-            
-            // Test forecast result
-            for(int i=0; i<5; i++) {
-            	
-            	// Forecast day
-            	WeatherDay day = response.getForecast().get(i);
-            	
-            	// City should be OK
-            	assertThat(day.getCity()).isEqualTo(new City("not","existing"));
-            	
-            	// Date should be OK
-            	assertThat(day.getDate()).isEqualTo(LocalDateTime.now().plusDays(i).format(dtf));
-            	
-            	// Conditions should be unknown
-            	assertThat(day.getConditions().getCode()).isEqualTo(WeatherDayConditions.UNKNOWN.getCode());
-            	
-            	// Other metrics should be empty
-            	assertThat(day.getPrecipitation()).isNull();
-            	assertThat(day.getTemperatureMax()).isNull();
-            	assertThat(day.getTemperatureMin()).isNull();
-            	assertThat(day.getWindSpeed()).isNull();
-            	assertThat(day.getWindDirection()).isNull();
-            }
+            assertThat(response.getResult()).isEqualTo(ApiResultCode.ERROR_PARAMETER_WRONG_VALUE.getCode());
     	});
     }
     
@@ -69,7 +45,7 @@ public class TestApiWeatherForecast extends AbstractIntegrationTest {
     @Test
     public void testForecastOK() {
     	
-    	final City city = new City("name", "country");
+    	final City city = new City("Paris", "France");
     	final List<WeatherDay> forecast = new LinkedList<WeatherDay>();
     	
     	final LocalDateTime startDate = LocalDateTime.now().minusDays(1);
@@ -90,7 +66,7 @@ public class TestApiWeatherForecast extends AbstractIntegrationTest {
 
     	
     	// End to end test
-    	runTestBrowser("api/forecast/name/country", () -> {
+    	runTestBrowser("api/forecast/Paris/France", () -> {
     		
         	// Fills service
         	getInjector().getInstance(WeatherService.class).addForecast(forecast);

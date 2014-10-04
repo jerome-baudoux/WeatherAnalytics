@@ -1,7 +1,13 @@
 package application;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import api.objects.WeatherDay;
+
 import com.google.inject.AbstractModule;
 
+import dao.WeatherDayDocumentDao;
 import services.conf.ConfigurationService;
 import utils.AbstractTest;
 
@@ -50,6 +56,19 @@ public abstract class AbstractApplicationTest extends AbstractTest {
 		@Override
 		public Long getLong(String var, long defaultValue) {
 			return defaultValue;
+		}
+	}
+	
+	public static class MockWeatherDayDocumentDao implements WeatherDayDocumentDao {
+
+		@Override
+		public void createOrUpdate(WeatherDay day) {
+			// Do nothing
+		}
+
+		@Override
+		public List<WeatherDay> getByPeriode(String city, String from, String to) {
+			return new LinkedList<>();
 		}
 	}
 }
