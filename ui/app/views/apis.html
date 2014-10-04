@@ -185,3 +185,80 @@ A query to fetch all handled cities
 }
 </pre>
 
+<h2>Get history</h2>
+
+<p>A query to fetch the forecast for the 5 following days.</p>
+<p>If one of the day is not available the entry will still be present in the response. However, all the metrics will be null</p>
+
+<h3>Route</h3>
+<pre>/api/history/:city/:country/from/:date/until/:date</pre>
+
+where <strong>:date</strong> is of format: yyyy-MM-dd
+
+<h3>Output example</h3>
+<pre>
+{
+  "result" : 1,
+  "history" : [ {
+    "city" : {
+      "name" : "Paris",
+      "country" : "France"
+    },
+    "date" : "2014-10-03",
+    "precipitation" : 2.1,
+    "temperatureMax" : {
+      "celsius" : 24,
+      "fahrenheit" : 75
+    },
+    "temperatureMin" : {
+      "celsius" : 12,
+      "fahrenheit" : 54
+    },
+    "windSpeed" : {
+      "kmph" : 15,
+      "mph" : 10
+    },
+    "windDirection" : 207,
+    "conditions" : {
+      "code" : 2,
+      "description" : "Cloudy"
+    }
+  } ],
+  "consolidation" : {
+    "minWindSpeed" : {
+      "kmph" : 15,
+      "mph" : 10
+    },
+    "maxWindSpeed" : {
+      "kmph" : 15,
+      "mph" : 10
+    },
+    "sumWindSpeed" : {
+      "kmph" : 15,
+      "mph" : 10
+    },
+    "nbWindSpeed" : 1,
+    "minTemperature" : {
+      "celsius" : 12,
+      "fahrenheit" : 54
+    },
+    "maxTemperature" : {
+      "celsius" : 24,
+      "fahrenheit" : 75
+    },
+    "sumMaxTemperature" : {
+      "celsius" : 24,
+      "fahrenheit" : 75
+    },
+    "nbMaxTemperature" : 1,
+    "minPrecipitation" : 2.1,
+    "maxPrecipitation" : 2.1,
+    "sumPrecipitation" : 2.1,
+    "nbPrecipitation" : 1,
+    "nbSunnyDays" : 0,
+    "nbRainyDays" : 1,
+    "nbSnowyDays" : 0
+  }
+}
+</pre>
+Where <strong>history</strong> is an array of history data and <strong>consolidation</strong> contains a consolidated view of all selected days
