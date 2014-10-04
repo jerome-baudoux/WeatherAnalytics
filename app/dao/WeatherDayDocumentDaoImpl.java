@@ -12,6 +12,7 @@ import play.api.db.DB;
 import play.libs.Json;
 import api.objects.WeatherDay;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Singleton;
 
@@ -23,6 +24,7 @@ import com.google.inject.Singleton;
 public class WeatherDayDocumentDaoImpl implements WeatherDayDocumentDao {
 
 	/**
+	 * @param day day to save
 	 * Saves the weather day
 	 */
 	@Override
@@ -30,10 +32,6 @@ public class WeatherDayDocumentDaoImpl implements WeatherDayDocumentDao {
 		
 		Connection connection = null;
 		try {
-
-			// Transform object into JSON
-			String json = new ObjectMapper().writer().writeValueAsString(day).replace("'", "\\'");
-			
 			// New connection
 			connection = getConnection();
 
@@ -41,37 +39,18 @@ public class WeatherDayDocumentDaoImpl implements WeatherDayDocumentDao {
 			String selectQuery = "SELECT count(*) as nb" + 
 									" FROM " + getTableName() + 
 									" WHERE NAME='" + day.getCity().getNameAndCountry() + "'" + 
-									"   and TYPE='" + getType() + "'" + 
-									"   and DATE = to_date('" + day.getDate() + "', '" + WeatherDay.DATE_PATTERN + "')";
+									"  and TYPE='" + getType() + "'" + 
+									"  and DATE = to_date('" + day.getDate() + "', '" + WeatherDay.DATE_PATTERN + "')";
 			Logger.trace("Select query: " + selectQuery);
 			ResultSet rs = connection.createStatement().executeQuery(selectQuery);
 
 			// If so Update
 			if(rs.next() && rs.getInt("nb")>0) {
-				
-				String updateQuery = "UPDATE " + getTableName() +
-						" SET CONTENT='" + json + "'" +
-						" WHERE NAME='" + day.getCity().getNameAndCountry() + "'" + 
-						"   and TYPE='" + getType() + "'" + 
-						"   and DATE = to_date('" + day.getDate() + "', '" + WeatherDay.DATE_PATTERN + "')";
-				Logger.trace("Update query: " + updateQuery);
-				
-				connection.createStatement().executeUpdate(updateQuery);
-				
-			// Otherwise Create
+				update(day, connection);
 			} else {
-
-				String insertQuery = "INSERT INTO " + getTableName() + "(NAME, DATE, TYPE, CONTENT)" +
-						"VALUES ("
-						+ "'" + day.getCity().getNameAndCountry() + "', "
-						+ "to_date('" + day.getDate() + "', "
-						+ "'" + WeatherDay.DATE_PATTERN + "') , "
-						+ "'" + getType() + "', '" + json + "')";
-				Logger.trace("Insert query: " + insertQuery);
-				
-				connection.createStatement().executeUpdate(insertQuery);
+				// Otherwise Create				
+				create(day, connection);
 			}
-			
 		} catch (Throwable t) {
 			Logger.error("Error while saving day for city: " + day.getCity().getNameAndCountry(), t);
 		} finally {
@@ -129,6 +108,69 @@ public class WeatherDayDocumentDaoImpl implements WeatherDayDocumentDao {
 		}
 		
 		return data;
+	}
+	
+	/*
+	 * Internal
+	 */
+	
+	/**
+	 * Create the day into the database
+	 * @param day date to create
+	 * @param connection opened connection (will not be closed)
+	 * @throws JsonProcessingException potential parsing error
+	 * @throws SQLException potential SQL error
+	 */
+	protected void create(WeatherDay day, Connection connection) throws JsonProcessingException, SQLException {
+		
+		// Transform object into JSON
+		String json = getJson(day);
+		
+		// Prepare query
+		String insertQuery = "INSERT INTO " + getTableName() + "(NAME, DATE, TYPE, CONTENT)" +
+				"VALUES ("
+				+ "'" + day.getCity().getNameAndCountry() + "', "
+				+ "to_date('" + day.getDate() + "', "
+				+ "'" + WeatherDay.DATE_PATTERN + "') , "
+				+ "'" + getType() + "', '" + json + "')";
+		Logger.trace("Insert query: " + insertQuery);
+		
+		// Create object
+		connection.createStatement().executeUpdate(insertQuery);
+	}
+	
+	/**
+	 * Update the day into the database
+	 * @param day date to update
+	 * @param connection opened connection (will not be closed)
+	 * @throws JsonProcessingException potential parsing error
+	 * @throws SQLException potential SQL error
+	 */
+	protected void update(WeatherDay day, Connection connection) throws JsonProcessingException, SQLException {
+		
+		// Transform object into JSON
+		String json = getJson(day);
+		
+		// Prepare query
+		String updateQuery = "UPDATE " + getTableName() +
+				" SET CONTENT='" + json + "'" +
+				" WHERE NAME='" + day.getCity().getNameAndCountry() + "'" + 
+				"   and TYPE='" + getType() + "'" + 
+				"   and DATE = to_date('" + day.getDate() + "', '" + WeatherDay.DATE_PATTERN + "')";
+		Logger.trace("Update query: " + updateQuery);
+		
+		// update object
+		connection.createStatement().executeUpdate(updateQuery);
+	}
+	
+	/**
+	 * Converts a day into a JSON string
+	 * @param day day
+	 * @return JSON string
+	 * @throws JsonProcessingException potential parsing error
+	 */
+	protected String getJson(WeatherDay day) throws JsonProcessingException {
+		return new ObjectMapper().writer().writeValueAsString(day).replace("'", "\\'");
 	}
 	
 	/**
