@@ -25,7 +25,7 @@
 	<button type="button" class="btn btn-info col-xs-12 col-md-4" ng-click="fetchHistory()">Fetch History</button>
 </div>
 
-<div class="well" ng-hide="history">
+<div class="well" ng-hide="consolidation">
 	<p>
 		To consult the weather history, please select a city, a unit and a date range and then click on 'Fetch History'. 
 	</p>	
@@ -34,7 +34,7 @@
 	</span>
 </div>
 
-<div ng-model="tabs.activeTab" class="history-tabs" ng-show="history" bs-tabs>
+<div ng-model="tabs.activeTab" class="history-tabs" ng-show="consolidation" bs-tabs>
 	<div ng-repeat="tab in tabs" title="{{tab.title}}" bs-pane></div>
 	<div class="panel panel-default">
 		<div class="panel-body">
