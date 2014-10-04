@@ -88,8 +88,6 @@ angular.module('weatherAnalytics')
 			return $scope.selectedCity || $scope.selectedUnit || $scope.fromDate || $scope.untilDate;
 		};
 
-
-		
 		/**
 		 * Checks that input is correct
 		 */

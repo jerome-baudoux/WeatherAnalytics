@@ -47,7 +47,7 @@ angular.module('weatherAnalytics').service('messagesService', [function Messages
 		MESSAGE_HISTORY_TABS_TEMPERATURE_MIN: 'Max Temperatures',
 		MESSAGE_HISTORY_TABS_TEMPERATURE_MAX: 'Min Temperatures',
 		MESSAGE_HISTORY_TABS_WIND_SPEED: 'Wind speed',
-		MESSAGE_HISTORY_TABS_PRECIPITATION: 'Precipirations',
+		MESSAGE_HISTORY_TABS_PRECIPITATION: 'Precipitations',
 		MESSAGE_HISTORY_TABS_UNIT: ' in {0}',
 		MESSAGE_HISTORY_NO_DATA: 'No data found for this period'
 	};

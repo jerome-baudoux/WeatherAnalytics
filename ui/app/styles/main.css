@@ -40,6 +40,10 @@ footer {
 .jumbotron {
 	text-align: center;
 }
+
+.alert-info a {
+	color:white;
+}
 	
 .social-icons > li > a {
 	padding-top: 11px;
@@ -50,7 +54,6 @@ footer {
 	font-size: 30px;
 	line-height: 30px;
 }
-
 
 #notificationLoading {
 	position: absolute;
