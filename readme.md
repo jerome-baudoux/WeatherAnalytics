@@ -21,6 +21,7 @@ Watch a live demo of this application at http://heroku.jerome-baudoux.com
 Environment Variables
 ---------------------
     WWO_API_KEY=<The API key for the Weather API>
+    DATABSE_URL=<URL of the Postgre SQL database>
 
 License
 -------
