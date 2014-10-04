@@ -40,7 +40,7 @@ public class WeatherDayDocumentDaoImpl implements WeatherDayDocumentDao {
 									" FROM " + getTableName() + 
 									" WHERE NAME='" + day.getCity().getNameAndCountry() + "'" + 
 									"  and TYPE='" + getType() + "'" + 
-									"  and DATE = to_date('" + day.getDate() + "', '" + WeatherDay.DATE_PATTERN + "')";
+									"  and DATE = " + getDate(day.getDate());
 			Logger.trace("Select query: " + selectQuery);
 			ResultSet rs = connection.createStatement().executeQuery(selectQuery);
 
@@ -85,9 +85,9 @@ public class WeatherDayDocumentDaoImpl implements WeatherDayDocumentDao {
 			String selectQuery = "SELECT CONTENT as json" + 
 					" FROM " + getTableName() + 
 					" WHERE NAME='" + city + "'" + 
-					"   and TYPE='" + getType() + "'" + 
-					"   and DATE >= to_date('" + from + "', '" + WeatherDay.DATE_PATTERN + "')" +
-					"   and DATE <= to_date('" + to + "', '" + WeatherDay.DATE_PATTERN + "')";
+					"  and TYPE='" + getType() + "'" + 
+					"  and DATE >= " +  getDate(from) +
+					"  and DATE <= " +  getDate(to);
 			Logger.trace("Select query: " + selectQuery);
 			ResultSet rs = connection.createStatement().executeQuery(selectQuery);
 			
@@ -130,8 +130,7 @@ public class WeatherDayDocumentDaoImpl implements WeatherDayDocumentDao {
 		String insertQuery = "INSERT INTO " + getTableName() + "(NAME, DATE, TYPE, CONTENT)" +
 				"VALUES ("
 				+ "'" + day.getCity().getNameAndCountry() + "', "
-				+ "to_date('" + day.getDate() + "', "
-				+ "'" + WeatherDay.DATE_PATTERN + "') , "
+				+ getDate(day.getDate()) + ", "
 				+ "'" + getType() + "', '" + json + "')";
 		Logger.trace("Insert query: " + insertQuery);
 		
@@ -155,8 +154,8 @@ public class WeatherDayDocumentDaoImpl implements WeatherDayDocumentDao {
 		String updateQuery = "UPDATE " + getTableName() +
 				" SET CONTENT='" + json + "'" +
 				" WHERE NAME='" + day.getCity().getNameAndCountry() + "'" + 
-				"   and TYPE='" + getType() + "'" + 
-				"   and DATE = to_date('" + day.getDate() + "', '" + WeatherDay.DATE_PATTERN + "')";
+				"  and TYPE='" + getType() + "'" + 
+				"  and DATE="  + getDate(day.getDate());
 		Logger.trace("Update query: " + updateQuery);
 		
 		// update object
@@ -171,6 +170,15 @@ public class WeatherDayDocumentDaoImpl implements WeatherDayDocumentDao {
 	 */
 	protected String getJson(WeatherDay day) throws JsonProcessingException {
 		return new ObjectMapper().writer().writeValueAsString(day).replace("'", "\\'");
+	}
+	
+	/**
+	 * Get the SQL date from a String
+	 * @param date string date
+	 * @return sql date
+	 */
+	protected String getDate(String date) {
+		return "to_date('" + date + "', '" + WeatherDay.DATE_PATTERN + "')";
 	}
 	
 	/**

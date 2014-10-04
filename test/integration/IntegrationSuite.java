@@ -16,6 +16,7 @@ import org.junit.runners.Suite;
 	TestApiPing.class,
 	TestApiWeatherCities.class,
 	TestApiWeatherForecast.class,
+	TestApiWeatherHistory.class,
 	TestServiceCipher.class,
 	TestServiceConfig.class
 })

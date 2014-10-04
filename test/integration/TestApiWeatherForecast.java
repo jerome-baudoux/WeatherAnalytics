@@ -28,7 +28,7 @@ public class TestApiWeatherForecast extends AbstractIntegrationTest {
 
 	/**
 	 * Fetch forecast for cities that does not exist
-	 * Expected result -> 5 empty forecast
+	 * Expected result -> error code
 	 */
     @Test
     public void testForecastNoData() {

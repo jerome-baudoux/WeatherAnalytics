@@ -7,7 +7,9 @@ import static play.test.Helpers.running;
 import static play.test.Helpers.testServer;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Singleton;
 
+import dao.WeatherDayDocumentDaoImpl;
 import engines.MainEngine;
 import play.libs.Json;
 import play.test.TestBrowser;
@@ -90,5 +92,23 @@ public abstract class AbstractIntegrationTest extends AbstractTest {
 	 */
 	interface BrowserCallback {
 		public void test(TestBrowser browser);
+	}
+	
+	/**
+	 * Specific DAO for H2 Database
+	 * @author Jerome Baudoux
+	 *
+	 */
+	@Singleton
+	public static class WeatherDayDocumentDaoImplH2 extends WeatherDayDocumentDaoImpl {
+
+		/**
+		 * Get the SQL date from a String
+		 * @param date string date
+		 * @return sql date
+		 */
+		protected String getDate(String date) {
+			return "'"+date+"'";
+		}
 	}
 }
