@@ -3,7 +3,7 @@ sbt_args: -sbt-version 0.13.0
 jdk:
   - oraclejdk8
 env:
-  - PLAY_VERSION=2.2.0 WWO_API_KEY=FAKE_TOKEN DATABASE_URL=FAKE_URL
+  - PLAY_VERSION=2.2.0 WWO_API_KEY=FAKE_TOKEN DATABASE_URL=FAKE_URL TRAVIS_SCALA_VERSION=0.13.0
 before_script:
   - wget http://downloads.typesafe.com/play/${PLAY_VERSION}/play-${PLAY_VERSION}.zip
   - unzip -q play-${PLAY_VERSION}.zip
