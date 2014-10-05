@@ -355,12 +355,24 @@ graphmetrics, .metric-graph {
 		font-size: 15px;
 		line-height: 15px;
 	}
+	
+	footer {
+		margin-left: -15px;
+	}
+	
+	.container {
+		overflow-x: hidden;
+	}
 }
 
 @media(max-width:767px) {
 	
 	body {
 	    padding-top: 70px;
+	}
+	
+	.view {
+	    margin-bottom: 120px;
 	}
 	
 	.navbar-fixed-top .navbar-brand {
