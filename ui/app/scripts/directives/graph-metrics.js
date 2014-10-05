@@ -449,7 +449,7 @@ angular.module('weatherAnalytics')
     		            	$scope.hover.y = getYValue(d.value) ;
     		            	
     		            	// If selection if after the middle, align left
-    		            	if(i > $scope.savedHitory.data.length/2) {
+    		            	if(i >= $scope.savedHitory.data.length/2) {
     		            		$scope.hover.x -= 185;
     		            	} else {
     		            		$scope.hover.x += 10;
