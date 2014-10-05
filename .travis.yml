@@ -1,8 +1,6 @@
 language: scala
 env:
-  - PLAY_VERSION=2.2.4
-  - WWO_API_KEY=FAKE_TOKEN
-  - DATABASE_URL=FAKE_URL
+  - PLAY_VERSION=2.2.4 WWO_API_KEY=FAKE_TOKEN DATABASE_URL=FAKE_URL
 before_script:
   - wget http://downloads.typesafe.com/play/${PLAY_VERSION}/play-${PLAY_VERSION}.zip
   - unzip -q play-${PLAY_VERSION}.zip
