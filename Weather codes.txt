@@ -1,0 +1,92 @@
+1. sunny
+2. sunny intervals
+3. white cloud
+4. black low cloud
+5. hazy sun
+6. mist
+7. fog
+8. clear sky (night)
+9. light rain showers
+10. heavy rain showers
+11. light snow showers
+12. heavy snow showers
+13. sleet showers
+14. light hail showers
+15. heavy hail showers
+16. thundery showers
+17. cloudy with light rain
+18. cloudy with heavy rain
+19. cloudy with light snow
+20. cloudy with heavy snow
+21. cloudy with sleet
+22. cloudy with light hail
+23. cloudy with heavy hail
+24. thunderstorms
+25. light rain showers (night)
+26. heavy rain showers (night)
+27. light snow showers (night)
+28. heavy snow showers (night)
+29. sleet showers (night)
+30. light hail showers (night)
+31. heavy hail showers (night)
+32. thundery showers (night)
+33. cloudy with light rain (night)
+34. cloudy with heavy rain (night)
+35. cloudy with light snow (night)
+36. cloudy with heavy snow (night)
+37. cloudy with sleet (night)
+38. cloudy with light hail (night)
+39. cloudy with heavy hail (night)
+40. thunderstorms (night)
+41. partly cloudy (night)
+42. cloudy (night)
+43. mostly cloudy
+44. mostly cloudy (night)
+45. hot
+46. cold
+47. freezing fog
+48. drizzle
+49. freezing drizzle
+50. freezing rain
+51. extreme rain
+52. extreme snow
+53. blowing snow
+54. blizzard
+55. smoke
+56. dust / sand
+57. thundery snow showers
+58. thunderstorms with snow
+59. thunderstorms with hail
+60. windy
+61. hot (night)
+62. cold (night)
+63. mist (night)
+64. fog (night)
+65. freezing fog (night)
+66. drizzle (night)
+67. freezing drizzle (night)
+68. freezing rain (night)
+69. extreme rain (night)
+70. extreme snow (night)
+71. blowing snow (night)
+72. blizzard (night)
+73. smoke (night)
+74. dust / sand (night)
+75. thundery snow showers (night)
+76. thunderstorms with snow (night)
+77. thunderstorms with hail (night)
+78. windy (night)
+79. tornado
+80. tropical storm / hurricane
+81. heavy drizzle
+82. heavy drizzle (night)
+83. heavy freezing drizzle
+84. heavy freezing drizzle (night)
+85. extreme rain showers
+86. extreme rain showers (night)
+87. heavy sleet showers
+88. heavy sleet showers (night)
+89. heavy sleet
+90. heavy sleet (night)
+91. volcanic ash
+999. null/unknown

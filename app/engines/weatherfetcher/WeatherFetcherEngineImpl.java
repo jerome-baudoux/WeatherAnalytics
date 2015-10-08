@@ -103,8 +103,8 @@ public class WeatherFetcherEngineImpl implements WeatherFetcherEngine {
 		fillConditionMap(WeatherDayConditions.MODERATE_SLEET, "320", "365");
 		fillConditionMap(WeatherDayConditions.MODERATE_ICE_PELLET, "350");
 		fillConditionMap(WeatherDayConditions.MODERATE_FROZEN_RAIN_OR_DRIZZLE, "314", "281");
-		fillConditionMap(WeatherDayConditions.MODERATE_OR_HEAVY_RAIN_WITH_THUNDER, "395");
-		fillConditionMap(WeatherDayConditions.MODERATE_OR_HEAVY_SNOW_WITH_THUNDER, "389");
+		fillConditionMap(WeatherDayConditions.MODERATE_OR_HEAVY_RAIN_WITH_THUNDER, "389");
+		fillConditionMap(WeatherDayConditions.MODERATE_OR_HEAVY_SNOW_WITH_THUNDER, "395");
 		fillConditionMap(WeatherDayConditions.HEAVY_RAIN, "308", "359", "305");
 		fillConditionMap(WeatherDayConditions.HEAVY_SNOW, "230", "338", "371", "335");
 		fillConditionMap(WeatherDayConditions.HEAVY_ICE_PELLET, "377");
